@@ -1,9 +1,12 @@
 package com.tsl.kyc.controller;
 
+import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.Role;
+import com.tsl.kyc.entity.Role.ERole;
 import com.tsl.kyc.entity.User;
+import com.tsl.kyc.service.RoleService;
 import com.tsl.kyc.service.UserService;
-import com.tsl.kyc.security.JwtUtils; // Import your JWT utility class
+import com.tsl.kyc.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -27,19 +31,22 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private JwtUtils jwtUtils; // Your JWT utility class
+    private JwtUtils jwtUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
-        String role = request.get("role");
+    public ResponseEntity<?> register(@Validated @RequestBody UserRegistrationDto registrationDTO) {
+        String username = registrationDTO.getUsername();
+        String password = registrationDTO.getPassword();
+        String roleStr = registrationDTO.getRole();
 
         if (userService.findByUsername(username).isPresent()) {
             return ResponseEntity.badRequest().body(Map.of("message", "Username is already taken!"));
@@ -47,15 +54,22 @@ public class AuthController {
 
         User newUser = new User();
         newUser.setUsername(username);
-        newUser.setPassword(passwordEncoder.encode(password)); // Encrypt the password
+        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setEnabled(registrationDTO.isEnabled());
+        newUser.setDesignation(registrationDTO.getDesignation());
+//        newUser.setCompanyProfile(registrationDTO.getCompanyProfileId());
+        newUser.setFailedLoginCount(registrationDTO.getFailedLoginCount());
+        //newUser.setLastLoginDate(registrationDTO.getLastLoginDate() != null ? LocalDateTime.parse(registrationDTO.getLastLoginDate()) : null);
+        newUser.setLocked(registrationDTO.isLocked());
+
         userService.saveUser(newUser);
-        
-        System.out.println("ROLE: " + role);
-        System.out.println("ROLE: " + Role.ERole.valueOf(role));
 
-        userService.assignRole(newUser, Role.ERole.valueOf(role));
+        ERole roleEnum = ERole.valueOf(roleStr.toUpperCase());
+        Role role = roleService.findByName(roleEnum)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        userService.assignRole(newUser, roleEnum);
 
-        return ResponseEntity.ok(Map.of("message", "User registered successfully with role " + role));
+        return ResponseEntity.ok(Map.of("message", "User registered successfully with role " + roleEnum.name()));
     }
 
     @PostMapping("/login")
@@ -63,16 +77,16 @@ public class AuthController {
         String username = request.get("username");
         String password = request.get("password");
 
-        // Authenticate the user
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Generate JWT token
         String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
-        System.out.println("jwt token: " + jwt);
-        return ResponseEntity.ok(Map.of("token", jwt));
+        User user = userService.findByUsername(username).orElseThrow();
+        Role role = user.getRoles().stream().findFirst().orElseThrow();
+
+        return ResponseEntity.ok(Map.of("token", jwt, "role", role.getName()));
     }
 
     @GetMapping("/success")
