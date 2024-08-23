@@ -1,9 +1,11 @@
 package com.tsl.kyc.controller;
 
 import com.tsl.kyc.dto.UserRegistrationDto;
+import com.tsl.kyc.entity.CompanyProfile;
 import com.tsl.kyc.entity.Role;
 import com.tsl.kyc.entity.Role.ERole;
 import com.tsl.kyc.entity.User;
+import com.tsl.kyc.service.CompanyProfileService;
 import com.tsl.kyc.service.RoleService;
 import com.tsl.kyc.service.UserService;
 import com.tsl.kyc.security.JwtUtils;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +35,9 @@ public class AuthController {
 
     @Autowired
     private RoleService roleService;
+    
+    @Autowired
+    private CompanyProfileService companyProfileService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -57,9 +63,23 @@ public class AuthController {
         newUser.setPassword(passwordEncoder.encode(password));
         newUser.setEnabled(registrationDTO.isEnabled());
         newUser.setDesignation(registrationDTO.getDesignation());
-//        newUser.setCompanyProfile(registrationDTO.getCompanyProfileId());
+
+
+        CompanyProfile companyProfile = null;
+		try {
+			companyProfile = companyProfileService.findById(registrationDTO.getCompanyProfileId());
+		} catch (Exception e) {
+			new RuntimeException("Error: CompanyProfile not found.");
+		}
+        newUser.setCompanyProfile(companyProfile);
+
         newUser.setFailedLoginCount(registrationDTO.getFailedLoginCount());
-        //newUser.setLastLoginDate(registrationDTO.getLastLoginDate() != null ? LocalDateTime.parse(registrationDTO.getLastLoginDate()) : null);
+
+        // Convert the lastLoginDate string to LocalDateTime
+        if (registrationDTO.getLastLoginDate() != null) {
+            newUser.setLastLoginDate(LocalDateTime.parse(registrationDTO.getLastLoginDate()));
+        }
+
         newUser.setLocked(registrationDTO.isLocked());
 
         userService.saveUser(newUser);
@@ -71,6 +91,7 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of("message", "User registered successfully with role " + roleEnum.name()));
     }
+
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {

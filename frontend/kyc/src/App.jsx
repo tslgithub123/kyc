@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import Login from './components/auth/login/Login'
 import ProtectedRoute from './components/auth/login/ProtectedRoute'
 import Dashboard from './components/home/HomeDashboard'
@@ -11,22 +11,24 @@ import HomeNavbar from './components/home/HomeNavbar'
 import CompanyProfiles from './components/admin/CompanyProfiles'
 import UserProfiles from './components/admin/UserProfiles'
 import AdminNavbar from './components/admin/AdminNavbar'
+import AdminDrawer from './components/admin/AdminDrawer'
 
 function App() {
+  const location = useLocation();
+  // const showHomeNavbar = location.pathname === '/' || location.pathname === '/login';
+  // const showAdminDrawer = location.pathname === '/admin-home';
+
   return (
     <>
-    <HomeNavbar/>
+      {/* {showHomeNavbar && <HomeNavbar />} */}
+      {/* {showAdminDrawer && <AdminDrawer/>} */}
       <Routes>
-      
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/company-profiles" element={<CompanyProfiles />} />
-        <Route path="/user-profiles" element={<UserProfiles />} />
-
-        <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/environment-officer-dashboard" element={<ProtectedRoute><EnvDashboard/></ProtectedRoute>} />
+        <Route path="/admin/*" element={<ProtectedRoute><AdminDrawer /></ProtectedRoute>}/>
+        <Route path="/environment-officer-dashboard" element={<ProtectedRoute><EnvDashboard /></ProtectedRoute>} />
         <Route path="/management-dashboard" element={<ProtectedRoute><ManagementDashboard /></ProtectedRoute>} />
-        <Route path="/third-party-dashboard" element={<ProtectedRoute><ThirdPartyDashboard/></ProtectedRoute>} />
+        <Route path="/third-party-dashboard" element={<ProtectedRoute><ThirdPartyDashboard /></ProtectedRoute>} />
       </Routes>
     </>
   )
@@ -37,7 +39,6 @@ function KycApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-      
         <App />
       </BrowserRouter>
     </QueryClientProvider>

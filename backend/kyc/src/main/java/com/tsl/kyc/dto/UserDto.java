@@ -1,11 +1,15 @@
 package com.tsl.kyc.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 public class UserDto implements Serializable {
 
     private Long id;
     private String username;
+
+    @JsonIgnore
     private String password;
     private Boolean enabled;
     private String designation;
@@ -17,10 +21,28 @@ public class UserDto implements Serializable {
     // Default constructor
     public UserDto() {
     }
+    
+    
 
     // Getters and Setters
 
-    public Long getId() {
+    public UserDto(Long id, String username, String password, Boolean enabled, String designation,
+			Long companyProfileId, Integer failedLoginCount, String lastLoginDate, Boolean locked) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.designation = designation;
+		this.companyProfileId = companyProfileId;
+		this.failedLoginCount = failedLoginCount;
+		this.lastLoginDate = lastLoginDate;
+		this.locked = locked;
+	}
+
+
+
+	public Long getId() {
         return id;
     }
 

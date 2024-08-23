@@ -14,7 +14,28 @@ public class UserRegistrationDto {
     private String lastLoginDate;
     private boolean locked;
 
-    // Getters and Setters
+    public UserRegistrationDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public UserRegistrationDto(String username, String password, String role, boolean enabled, String designation,
+			Long companyProfileId, int failedLoginCount, String lastLoginDate, boolean locked) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.role = role;
+		this.enabled = enabled;
+		this.designation = designation;
+		this.companyProfileId = companyProfileId;
+		this.failedLoginCount = failedLoginCount;
+		this.lastLoginDate = lastLoginDate;
+		this.locked = locked;
+	}
+
+
+
+	// Getters and Setters
     public String getUsername() {
         return username;
     }

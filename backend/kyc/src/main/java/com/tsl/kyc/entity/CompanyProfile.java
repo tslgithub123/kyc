@@ -97,7 +97,7 @@ public class CompanyProfile {
 		this.yearEstb = yearEstb;
 		this.idustryType = idustryType;
 		this.compEmail = compEmail;
-		this.users = users;
+//		this.users = users;
 	}
 
 	public Long getId() {
@@ -364,15 +364,15 @@ public class CompanyProfile {
 		this.compEmail = compEmail;
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
+//	public Set<User> getUsers() {
+//		return users;
+//	}
+//
+//	public void setUsers(Set<User> users) {
+//		this.users = users;
+//	}
 
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-
-    @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<User> users;
+//    @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Set<User> users;
 
 }

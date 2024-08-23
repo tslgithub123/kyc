@@ -1,12 +1,17 @@
 package com.tsl.kyc.controller;
 
 import com.tsl.kyc.dto.CompanyProfileDto;
+import com.tsl.kyc.dto.UserDto;
+import com.tsl.kyc.entity.CompanyProfile;
+import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.CompanyProfileService;
+import com.tsl.kyc.service.UserService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +20,14 @@ public class CompanyProfileController {
 
     @Autowired
     private CompanyProfileService companyProfileService;
+    
+    @Autowired
+    private UserService userService;
+    
+    @GetMapping("/all")
+    public List<CompanyProfile> getAllCompanyProfiles() {
+        return companyProfileService.getAll();
+    }
     
     @GetMapping("/{id}")
     public ResponseEntity<CompanyProfileDto> getCompanyProfileById(@PathVariable("id") Long id) {
@@ -32,5 +45,11 @@ public class CompanyProfileController {
     public ResponseEntity<CompanyProfileDto> updateCompanyProfile(@PathVariable Long id, @RequestBody CompanyProfileDto companyProfileDto) {
         CompanyProfileDto updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileDto);
         return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
+    }
+    
+    @GetMapping("/users/{id}")
+    public List<UserDto> getUsersByCompanyProfileId(@PathVariable Integer id){
+    	System.out.println("cf id: "+id);
+    	return userService.getUserByCompanyProfileId(id);
     }
 }

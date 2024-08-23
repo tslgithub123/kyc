@@ -21,6 +21,16 @@ public class CompanyProfileService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    public CompanyProfile findById(Long id) {
+        return companyProfileRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found with id: " + id));
+    }
+    
+    public List<CompanyProfile> getAll(){
+    	return companyProfileRepository.findAll();
+    }
+    
 
     public CompanyProfileDto createCompanyProfile(CompanyProfileDto companyProfileDto) {
         CompanyProfile companyProfile = new CompanyProfile();
@@ -58,23 +68,6 @@ public class CompanyProfileService {
 
         // Save CompanyProfile
         CompanyProfile savedCompanyProfile = companyProfileRepository.save(companyProfile);
-
-        // Save Users
-        //List<UserDto> userDtos = companyProfileDto.getUsers();
-//        List<User> users = userDtos.stream().map(dto -> {
-//            User user = new User();
-//            user.setUsername(dto.getUsername());
-//            user.setPassword(dto.getPassword());
-//            user.setEnabled(dto.getEnabled());
-//            user.setDesignation(dto.getDesignation());
-//            user.setCompanyProfile(savedCompanyProfile);
-//            user.setFailedLoginCount(dto.getFailedLoginCount());
-//            //user.setLastLoginDate(dto.getLastLoginDate());
-//            user.setLocked(dto.getLocked());
-//            return user;
-//        }).collect(Collectors.toList());
-
-//        userRepository.saveAll(users);
 
         return convertToDto(savedCompanyProfile);
     }
@@ -114,23 +107,6 @@ public class CompanyProfileService {
         companyProfile.setYearEstb(companyProfileDto.getYearEstb());
         companyProfile.setIdustryType(companyProfileDto.getIdustryType());
         companyProfile.setCompEmail(companyProfileDto.getCompEmail());
-
-        // Update Users
-//        List<UserDto> userDtos = companyProfileDto.getUsers();
-//        List<User> users = userDtos.stream().map(dto -> {
-//            User user = new User();
-//            user.setUsername(dto.getUsername());
-//            user.setPassword(dto.getPassword());
-//            user.setEnabled(dto.getEnabled());
-//            user.setDesignation(dto.getDesignation());
-//            user.setCompanyProfile(companyProfile);
-//            user.setFailedLoginCount(dto.getFailedLoginCount());
-//            //user.setLastLoginDate(dto.getLastLoginDate());
-//            user.setLocked(dto.getLocked());
-//            return user;
-//        }).collect(Collectors.toList());
-//
-//        userRepository.saveAll(users);
 
         CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
 

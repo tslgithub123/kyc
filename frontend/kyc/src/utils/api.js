@@ -5,7 +5,7 @@ export const base_api = axios.create({
   baseURL: BASE_API,
 });
 
-export const loginApi = {
+const loginApi = {
   login: (credentials) => base_api.post('/auth/login', credentials),
 };
 
@@ -23,9 +23,21 @@ const fetchCurrentUser = async (token) => {
   }
 };
 
+const fetchCompanies = async () => {
+  const fetchedCompanies = await base_api.get('/company-profile/all').then(res => res.data);
+  return fetchedCompanies;
+}
+
+const fetchUsersByCompanyId = async (companyId) => {
+  const fetchedUsers = await base_api.get(`/company-profile/users/${companyId}`).then(res => res.data);
+  return fetchedUsers;
+}
+
 const api = {
   loginApi,
   fetchCurrentUser,
+  fetchCompanies,
+  fetchUsersByCompanyId
 };
 
 export default api;

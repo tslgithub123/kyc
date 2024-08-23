@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,8 @@ public class User implements UserDetails {
     
     @Column(nullable = false, unique = true)
     private String username;
-    
+
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -36,6 +38,7 @@ public class User implements UserDetails {
     private Boolean enabled;
 
     private String designation;
+    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
