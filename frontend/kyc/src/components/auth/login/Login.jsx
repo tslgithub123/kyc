@@ -42,7 +42,7 @@ const defaultTheme = createTheme({
   palette: {
     mode: 'light',
     background: {
-      default: '#eff2f6',
+      default: '#e2f7d4'
     },
   },
 });
@@ -91,7 +91,7 @@ export default function LogIn() {
   };
 
   return (
-    <div style={{ backgroundColor: '#eff2f6', height: '100vh' }}>
+    <div style={{ backgroundColor: '#e2f7d4', height: '100vh' }}>
       <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs" >
           <CssBaseline />

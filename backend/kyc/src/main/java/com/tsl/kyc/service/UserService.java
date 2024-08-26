@@ -1,5 +1,6 @@
 package com.tsl.kyc.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
-    
+
     public static UserDto convertToDto(User user) {
         if (user == null) {
             return null;
@@ -38,6 +39,7 @@ public class UserService {
         userDto.setFailedLoginCount(user.getFailedLoginCount());
         userDto.setLastLoginDate(user.getLastLoginDate() != null ? user.getLastLoginDate().toString() : null);
         userDto.setLocked(user.getLocked());
+        userDto.setCompanyName(user.getCompanyProfile() != null ? user.getCompanyProfile().getCompName() : null);
 
         return userDto;
     }
@@ -45,7 +47,6 @@ public class UserService {
     public List<UserDto> getAll() {
         return userRepository.findAll().stream().map(UserService::convertToDto).collect(Collectors.toList());
     }
-
 
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -55,27 +56,43 @@ public class UserService {
         return user.getPassword().equals(rawPassword);
     }
 
+    @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void assignRole(User user, Role.ERole roleName) {
         System.out.println("In User Service: " + user.toString() + " rolename: " + roleName);
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
-        
+
         if (user.getRoles() == null) {
             user.setRoles(new HashSet<>());
         }
         user.getRoles().add(role);
         userRepository.save(user);
     }
-    
+
     public List<UserDto> getUserByCompanyProfileId(Integer id) {
         List<User> users = userRepository.findByCompanyProfileId(id);
         return users.stream()
-                    .map(UserService::convertToDto)
-                    .collect(Collectors.toList());
+                .map(UserService::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public User changeLockStatus(Long userId, Boolean locked) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setLocked(locked);
+            return userRepository.save(user);
+        }
+        throw new IllegalArgumentException("User not found with id: " + userId);
+    }
+
+    public boolean checkUsernameExists(String username) {
+        return userRepository.existsByUsername(username);
     }
 }
-

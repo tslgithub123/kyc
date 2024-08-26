@@ -12,6 +12,9 @@ import CompanyProfiles from './components/admin/CompanyProfiles'
 import UserProfiles from './components/admin/UserProfiles'
 import AdminNavbar from './components/admin/AdminNavbar'
 import AdminDrawer from './components/admin/AdminDrawer'
+import '@mantine/core/styles.css';
+
+import { MantineProvider } from '@mantine/core';
 
 function App() {
   const location = useLocation();
@@ -39,7 +42,9 @@ function KycApp() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <MantineProvider>
+          <App />
+        </MantineProvider>
       </BrowserRouter>
     </QueryClientProvider>
   )

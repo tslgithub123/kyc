@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/company-profile")
 public class CompanyProfileController {
 
-    @Autowired
-    private CompanyProfileService companyProfileService;
+    private final CompanyProfileService companyProfileService;
     
-    @Autowired
-    private UserService userService;
-    
+    private final UserService userService;
+
+    public CompanyProfileController(CompanyProfileService companyProfileService, UserService userService) {
+        this.companyProfileService = companyProfileService;
+        this.userService = userService;
+    }
+
     @GetMapping("/all")
     public List<CompanyProfile> getAllCompanyProfiles() {
         return companyProfileService.getAll();

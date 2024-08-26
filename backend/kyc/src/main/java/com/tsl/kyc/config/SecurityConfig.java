@@ -3,6 +3,7 @@ package com.tsl.kyc.config;
 import java.util.Arrays;
 import java.util.List;
 
+import com.tsl.kyc.security.filter.RequestLoggingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +22,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.tsl.kyc.security.AuthEntryPointJwt;
-import com.tsl.kyc.security.JwtAuthenticationFilter;
+import com.tsl.kyc.security.filter.JwtAuthenticationFilter;
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.service.CustomUserDetailsService;
-import com.tsl.kyc.utils.Constant;
 
 @Configuration
 @EnableWebSecurity
@@ -76,7 +76,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/user/all").permitAll()
                                 .anyRequest().authenticated()
                 );
-
+        http.addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

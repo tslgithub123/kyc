@@ -22,74 +22,91 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
     
-    @Autowired
-    private CompanyProfileService companyProfileService;
+    private final CompanyProfileService companyProfileService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Validated @RequestBody UserRegistrationDto registrationDTO) {
-        String username = registrationDTO.getUsername();
-        String password = registrationDTO.getPassword();
-        String roleStr = registrationDTO.getRole();
+    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService) {
+        this.jwtUtils = jwtUtils;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
+        this.roleService = roleService;
+        this.companyProfileService = companyProfileService;
+    }
 
-        if (userService.findByUsername(username).isPresent()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Username is already taken!"));
+    @PostMapping({"/register-multiple"})
+    public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
+        for (UserRegistrationDto registrationDTO : registrationDTOs) {
+            String username = registrationDTO.getUsername();
+            String password = registrationDTO.getPassword();
+            String roleStr = registrationDTO.getRole();
+
+            if (userService.findByUsername(username).isPresent()) {
+                return ResponseEntity.badRequest().body(Map.of("message", "Username is already taken!"));
+            }
+
+            User newUser = new User();
+            newUser.setUsername(username);
+            newUser.setPassword(passwordEncoder.encode(password));
+            newUser.setEnabled(registrationDTO.isEnabled());
+
+            switch (registrationDTO.getRole()) {
+                case "ROLE_ADMIN" -> newUser.setDesignation("Administrator");
+                case "ROLE_ENVIRONMENT_OFFICER" -> newUser.setDesignation("Environment Officer");
+                case "ROLE_MANAGEMENT" -> newUser.setDesignation("Management");
+                case "ROLE_THIRD_PARTY" -> newUser.setDesignation("Third Party");
+                default -> {
+                    return ResponseEntity.badRequest().body(Map.of("message", "Invalid designation"));
+                }
+            }
+
+            CompanyProfile companyProfile = null;
+            try {
+                companyProfile = companyProfileService.findById(registrationDTO.getCompanyProfileId());
+            } catch (Exception e) {
+                throw new RuntimeException("Error: CompanyProfile not found.");
+            }
+            newUser.setCompanyProfile(companyProfile);
+
+            newUser.setFailedLoginCount(registrationDTO.getFailedLoginCount());
+
+            if (registrationDTO.getLastLoginDate() != null) {
+                newUser.setLastLoginDate(LocalDateTime.parse(registrationDTO.getLastLoginDate()));
+            }
+
+            newUser.setLocked(registrationDTO.isLocked());
+
+            userService.saveUser(newUser);
+
+            ERole roleEnum = ERole.valueOf(roleStr.toUpperCase());
+            Role role = roleService.findByName(roleEnum)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            userService.assignRole(newUser, roleEnum);
         }
 
-        User newUser = new User();
-        newUser.setUsername(username);
-        newUser.setPassword(passwordEncoder.encode(password));
-        newUser.setEnabled(registrationDTO.isEnabled());
-        newUser.setDesignation(registrationDTO.getDesignation());
+        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
+        return ResponseEntity.ok(Map.of("message", message));
+    }
 
-
-        CompanyProfile companyProfile = null;
-		try {
-			companyProfile = companyProfileService.findById(registrationDTO.getCompanyProfileId());
-		} catch (Exception e) {
-			new RuntimeException("Error: CompanyProfile not found.");
-		}
-        newUser.setCompanyProfile(companyProfile);
-
-        newUser.setFailedLoginCount(registrationDTO.getFailedLoginCount());
-
-        // Convert the lastLoginDate string to LocalDateTime
-        if (registrationDTO.getLastLoginDate() != null) {
-            newUser.setLastLoginDate(LocalDateTime.parse(registrationDTO.getLastLoginDate()));
-        }
-
-        newUser.setLocked(registrationDTO.isLocked());
-
-        userService.saveUser(newUser);
-
-        ERole roleEnum = ERole.valueOf(roleStr.toUpperCase());
-        Role role = roleService.findByName(roleEnum)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        userService.assignRole(newUser, roleEnum);
-
-        return ResponseEntity.ok(Map.of("message", "User registered successfully with role " + roleEnum.name()));
+    @PostMapping("/register-single")
+    public ResponseEntity<?> registerSingleUser(@Validated @RequestBody UserRegistrationDto registrationDTO) {
+        return registerUsers(List.of(registrationDTO));
     }
 
 
@@ -102,10 +119,14 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
         User user = userService.findByUsername(username).orElseThrow();
+        if(user.getLocked()){
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User is locked"));
+        }
         Role role = user.getRoles().stream().findFirst().orElseThrow();
+        String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
+
 
         return ResponseEntity.ok(Map.of("token", jwt, "role", role.getName()));
     }

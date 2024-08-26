@@ -17,6 +17,7 @@ public class UserDto implements Serializable {
     private Integer failedLoginCount;
     private String lastLoginDate;
     private Boolean locked;
+    private String companyName;
 
     // Default constructor
     public UserDto() {
@@ -27,7 +28,7 @@ public class UserDto implements Serializable {
     // Getters and Setters
 
     public UserDto(Long id, String username, String password, Boolean enabled, String designation,
-			Long companyProfileId, Integer failedLoginCount, String lastLoginDate, Boolean locked) {
+			Long companyProfileId, Integer failedLoginCount, String lastLoginDate, Boolean locked, String companyName) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -38,6 +39,7 @@ public class UserDto implements Serializable {
 		this.failedLoginCount = failedLoginCount;
 		this.lastLoginDate = lastLoginDate;
 		this.locked = locked;
+        this.companyName = companyName;
 	}
 
 
@@ -112,5 +114,29 @@ public class UserDto implements Serializable {
 
     public void setLocked(Boolean locked) {
         this.locked = locked;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", designation='" + designation + '\'' +
+                ", companyProfileId=" + companyProfileId +
+                ", failedLoginCount=" + failedLoginCount +
+                ", lastLoginDate='" + lastLoginDate + '\'' +
+                ", locked=" + locked +
+                ", companyName='" + companyName + '\'' +
+                '}';
     }
 }

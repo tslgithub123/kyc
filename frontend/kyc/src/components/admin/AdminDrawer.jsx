@@ -16,7 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import CompanyProfiles from './CompanyProfiles';
 import UserProfiles from './UserProfiles';
 import ProtectedRoute from '../auth/login/ProtectedRoute';
@@ -25,27 +25,52 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoutButton from '../ui/LogoutButton';
-import { useMediaQuery, useTheme } from '@mui/material';
+import { Collapse, useMediaQuery, useTheme } from '@mui/material';
 import { useState } from 'react';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import logo from '../../../public/logo_small.png';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 
 const drawerWidth = 260;
 
+
+
 function AdminDrawer(props) {
+
+    const [selectedSubIndex, setSelectedSubIndex] = useState(null);
+
+
+
+    const handleSubOptionClick = (event, subIndex) => {
+        setSelectedSubIndex(subIndex);
+        // Add additional logic for sub-option selection if needed
+    };
+
+
     const theme = useTheme();
 
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const navigate = useNavigate();
+
+    const getInitialSelectedIndex = () => {
+        const path = location.pathname;
+        if (path.includes('company-profiles')) return 1;
+        if (path.includes('user-profiles')) return 2;
+        return 0; // Default to Home
+    };
+
+    const [selectedIndex, setSelectedIndex] = useState(getInitialSelectedIndex());
     const isMobile = useMediaQuery('(max-width:600px)');
 
-    const handleListItemClick = (event, index) => {
+    const handleListItemClick = (event, index, path) => {
         setSelectedIndex(index);
+        navigate(path);
         if (isMobile) {
             setAnchorEl(null);
         }
-        handleDrawerClose();    
+        handleDrawerClose();
     };
 
     const { window } = props;
@@ -82,59 +107,114 @@ function AdminDrawer(props) {
         setAnchorEl(null);
     };
 
+    const [open, setOpen] = useState(false);
+
+    const handleClick = () => {
+        setOpen(!open);
+    };
+
     const drawer = (
         <div>
-          <Toolbar>
-                {/* <Typography variant="h6" noWrap>
-                KYC
-                </Typography> */}
-            <img src={logo} alt="logo" style={{ width: '100px', height: 'auto', marginLeft: '8px' }} />
-
-          </Toolbar>
-      
-          <List>
-            {[
-              { text: "Home", icon: <HomeOutlinedIcon />, path: "." },
-              { text: "Company Profiles", icon: <BusinessOutlinedIcon />, path: "company-profiles" },
-              { text: "User Profiles", icon: <PeopleAltOutlinedIcon />, path: "user-profiles" },
-            ].map((item, index) => (
-              <ListItem key={item.text} disablePadding sx={{ marginBottom: '8px' }}>
-                <ListItemButton
-                  component={Link}
-                  to={item.path}
-                  selected={selectedIndex === index}
-                  onClick={(event) => handleListItemClick(event, index)}
-                  sx={{
-                    mx: '16px',
-                    borderRadius: '12px',
-                    '&.Mui-selected, &:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                      color: 'primary.main',
-                      '& .MuiListItemIcon-root': {
-                        color: 'primary.main',
-                      },
-                    },
-                    '&.Mui-selected:hover': {
-                      backgroundColor: 'rgba(0, 0, 0, 0.15)',
-                    },
-                  }}
+            <Toolbar>
+                <Typography 
+                    variant="h6" 
+                    noWrap 
+                    component="div" 
+                    sx={{ 
+                        flexGrow: 1, 
+                        textAlign: 'center',
+                        fontFamily: "'Montserrat', sans-serif",
+                        fontSize: '24px',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        color: 'white',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+                        backgroundColor: '#ff515a',
+                        borderRadius: '8px',
+                        padding: '8px',
+                        marginTop: '32px',
+                    }}
                 >
-                  <ListItemIcon sx={{ color: 'inherit' , marginLeft: '8px'}}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
+                    admin
+                </Typography>
+            </Toolbar>
+    
+            <List sx={{marginTop: '32px'}}>
+                {[
+                    { text: "Home", icon: <HomeOutlinedIcon />, path: "." },
+                    { text: "Company Profiles", icon: <BusinessOutlinedIcon />, path: "company-profiles", subOptions: ["Company Overview", "Manage Companies"] },
+                    { text: "User Profiles", icon: <PeopleAltOutlinedIcon />, path: "user-profiles", subOptions: ["View Users", "Manage Users"] },
+                ].map((item, index) => (
+                    <div key={item.text}>
+                        <ListItem key={item.text} disablePadding sx={{ marginBottom: '8px' }}>
+                            <ListItemButton
+                                selected={selectedIndex === index}
+                                onClick={(event) => handleListItemClick(event, index, item.path)}
+                                sx={{
+                                    mx: '16px',
+                                    borderRadius: '12px',
+                                    '&.Mui-selected, &:hover': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                        color: 'error.main',
+                                        '& .MuiListItemIcon-root': {
+                                            color: 'error.main',
+                                        },
+                                    },
+                                    '&.Mui-selected:hover': {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                                    },
+                                }}
+                            >
+                                <ListItemIcon sx={{ color: 'inherit', marginLeft: '8px' }}>
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItemButton>
+                        </ListItem>
+    
+                        {item.subOptions && (
+                            <Collapse in={selectedIndex === index}>
+                                <List sx={{ marginLeft: '32px'}}>
+                                    {item.subOptions.map((subOption, subIndex) => (
+                                        <ListItem  key={subOption} disablePadding>
+                                            <ListItemButton
+                                                selected={selectedSubIndex === subIndex}
+                                                onClick={(event) => handleSubOptionClick(event, subIndex)}
+                                                sx={{
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                                    mx: '16px',
+                                                    marginBottom: '8px',
+                                                    borderRadius: '12px',
+                                                    '&.Mui-selected, &:hover': {
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                                                        color: 'error.main',
+                                                        '& .MuiListItemIcon-root': {
+                                                            color: 'error.main',
+                                                        },
+                                                    },
+                                                    '&.Mui-selected:hover': {
+                                                        backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                                                    },
+                                                }}
+                                            >
+                                                <ListItemText primary={subOption} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Collapse>
+                        )}
+                    </div>
+                ))}
+            </List>
         </div>
-      );
+    );
+    
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        
-        <Box sx={{ display: 'flex'}}>
+        <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar
                 position="fixed"
@@ -153,10 +233,11 @@ function AdminDrawer(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Admin
-                    </Typography>
-                    <div style={{ flexGrow: 1 }}></div>
+                    <div style={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+                            <img src={logo} alt="logo" style={{ width: 'auto', height: '64px', marginLeft: '8px' }} />
+                        </Typography>
+                    </div>
                     {auth && (
                         <div>
                             <IconButton
@@ -166,11 +247,19 @@ function AdminDrawer(props) {
                                 aria-haspopup="true"
                                 onClick={handleMenu}
                                 color="inherit"
+                                sx={{ marginRight: '8px', color: 'error.main'}}
                             >
                                 <AccountCircle />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
+                                sx={{
+                                    marginTop: '48px',
+                                    '& .MuiMenu-paper': {
+                                        borderRadius: '8px',
+                                        boxShadow: '0px 4px 4px 4px rgba(0, 0, 0, 0.25)',
+                                    },
+                                }}
                                 anchorEl={anchorEl}
                                 anchorOrigin={{
                                     vertical: 'top',
@@ -230,21 +319,19 @@ function AdminDrawer(props) {
                     flexGrow: 1,
                     p: 3,
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    backgroundColor: '#eff2f6',
+                    backgroundColor: '#fbe9e7',
                     borderRadius: '10px',
                     margin: '0px 8px 0px 8px',
                     marginTop: '64px',
-                    height: '100vh',
+                    height: '100%',
                 }}
             >
-
                 <Routes>
                     <Route path="/" element={<AdminDashboard />} />
                     {/* <Route path="company-profiles" element={<CompanyProfiles />} /> */}
                     <Route path="user-profiles" element={<UserProfiles />} />
                 </Routes>
-                <Toolbar /> {/* Ensure Toolbar takes up space */}
-
+                <Toolbar />
             </Box>
         </Box>
     );

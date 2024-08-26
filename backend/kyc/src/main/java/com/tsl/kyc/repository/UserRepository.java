@@ -12,6 +12,8 @@ import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(String username);
     
     Boolean existsByUsername(String username);
@@ -20,4 +22,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query("SELECT u FROM User u WHERE u.companyProfile.id = :companyProfileId")
     List<User> findByCompanyProfileId(Integer companyProfileId);
+
 }

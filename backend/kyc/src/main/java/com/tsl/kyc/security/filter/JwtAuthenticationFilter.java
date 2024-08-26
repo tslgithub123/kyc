@@ -1,10 +1,13 @@
-package com.tsl.kyc.security;
+package com.tsl.kyc.security.filter;
 
+import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.service.CustomUserDetailsService;
+import com.tsl.kyc.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +19,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtUtils jwtUtils;
+
+    @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
+
 
     public JwtAuthenticationFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService) {
         this.jwtUtils = jwtUtils;
@@ -29,6 +37,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+//                if (tokenBlacklistService.isBlacklisted(jwt)) {
+//                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                    return;
+//                }
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 
