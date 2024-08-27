@@ -50,63 +50,61 @@ public class AuthController {
         this.companyProfileService = companyProfileService;
     }
 
-    @PostMapping({"/register-multiple"})
+    @PostMapping({"/register"})
     public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
-        for (UserRegistrationDto registrationDTO : registrationDTOs) {
-            String username = registrationDTO.getUsername();
-            String password = registrationDTO.getPassword();
-            String roleStr = registrationDTO.getRole();
+        List<String> errors = new ArrayList<>();
 
-            if (userService.findByUsername(username).isPresent()) {
-                return ResponseEntity.badRequest().body(Map.of("message", "Username is already taken!"));
-            }
-
-            User newUser = new User();
-            newUser.setUsername(username);
-            newUser.setPassword(passwordEncoder.encode(password));
-            newUser.setEnabled(registrationDTO.isEnabled());
-
-            switch (registrationDTO.getRole()) {
-                case "ROLE_ADMIN" -> newUser.setDesignation("Administrator");
-                case "ROLE_ENVIRONMENT_OFFICER" -> newUser.setDesignation("Environment Officer");
-                case "ROLE_MANAGEMENT" -> newUser.setDesignation("Management");
-                case "ROLE_THIRD_PARTY" -> newUser.setDesignation("Third Party");
-                default -> {
-                    return ResponseEntity.badRequest().body(Map.of("message", "Invalid designation"));
-                }
-            }
-
-            CompanyProfile companyProfile = null;
+        for (UserRegistrationDto dto : registrationDTOs) {
             try {
-                companyProfile = companyProfileService.findById(registrationDTO.getCompanyProfileId());
-            } catch (Exception e) {
-                throw new RuntimeException("Error: CompanyProfile not found.");
+                registerUser(dto);
+            } catch (RuntimeException e) {
+                errors.add(e.getMessage());
             }
-            newUser.setCompanyProfile(companyProfile);
+        }
 
-            newUser.setFailedLoginCount(registrationDTO.getFailedLoginCount());
-
-            if (registrationDTO.getLastLoginDate() != null) {
-                newUser.setLastLoginDate(LocalDateTime.parse(registrationDTO.getLastLoginDate()));
-            }
-
-            newUser.setLocked(registrationDTO.isLocked());
-
-            userService.saveUser(newUser);
-
-            ERole roleEnum = ERole.valueOf(roleStr.toUpperCase());
-            Role role = roleService.findByName(roleEnum)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            userService.assignRole(newUser, roleEnum);
+        if (!errors.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("errors", errors));
         }
 
         String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
         return ResponseEntity.ok(Map.of("message", message));
     }
 
-    @PostMapping("/register-single")
-    public ResponseEntity<?> registerSingleUser(@Validated @RequestBody UserRegistrationDto registrationDTO) {
-        return registerUsers(List.of(registrationDTO));
+    private void registerUser(UserRegistrationDto dto) {
+        if (userService.findByUsername(dto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username is already taken!");
+        }
+
+        User newUser = new User();
+        newUser.setUsername(dto.getUsername());
+        newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        newUser.setEnabled(dto.isEnabled());
+
+        newUser.setDesignation(switch (dto.getRole()) {
+            case "ROLE_ADMIN" -> "Administrator";
+            case "ROLE_ENVIRONMENT_OFFICER" -> "Environment Officer";
+            case "ROLE_MANAGEMENT" -> "Management";
+            case "ROLE_THIRD_PARTY" -> "Third Party";
+            default -> throw new RuntimeException("Invalid designation");
+        });
+
+        CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
+        newUser.setCompanyProfile(companyProfile);
+
+        newUser.setFailedLoginCount(dto.getFailedLoginCount());
+
+        if (dto.getLastLoginDate() != null) {
+            newUser.setLastLoginDate(LocalDateTime.parse(dto.getLastLoginDate()));
+        }
+
+        newUser.setLocked(dto.isLocked());
+
+        userService.saveUser(newUser);
+
+        ERole roleEnum = ERole.valueOf(dto.getRole().toUpperCase());
+        Role role = roleService.findByName(roleEnum)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        userService.assignRole(newUser, roleEnum);
     }
 
 
@@ -127,7 +125,7 @@ public class AuthController {
         Role role = user.getRoles().stream().findFirst().orElseThrow();
         String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
 
-
+        userService.saveLastLoginDate(username);
         return ResponseEntity.ok(Map.of("token", jwt, "role", role.getName()));
     }
 

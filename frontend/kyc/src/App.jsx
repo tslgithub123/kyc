@@ -8,8 +8,6 @@ import EnvDashboard from './components/env/EnvDashboard'
 import ManagementDashboard from './components/management/ManagementDashboard'
 import ThirdPartyDashboard from './components/thirdparty/ThirdPartyDashboard'
 import HomeNavbar from './components/home/HomeNavbar'
-import CompanyProfiles from './components/admin/CompanyProfiles'
-import UserProfiles from './components/admin/UserProfiles'
 import AdminNavbar from './components/admin/AdminNavbar'
 import AdminDrawer from './components/admin/AdminDrawer'
 import '@mantine/core/styles.css';

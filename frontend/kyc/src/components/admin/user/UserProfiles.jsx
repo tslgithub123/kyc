@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import UserProfilesTable from './UserProfilesTable';
 import UserProfileForm from './UserProfileForm';
 
 export default function UserProfiles() {

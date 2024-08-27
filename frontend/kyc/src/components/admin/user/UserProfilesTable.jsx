@@ -3,8 +3,8 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, TablePagination, Grid, Typography
 } from '@mui/material';
-import CustomSwitch from '../ui/CustomSwitch';
-import SearchField from '../ui/SearchField';
+import CustomSwitch from '../../ui/CustomSwitch';
+import SearchField from '../../ui/SearchField';
 import axios from 'axios';
 
 export default function UserProfilesTable({ userProfiles, setUserProfiles }) {

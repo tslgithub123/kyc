@@ -1,5 +1,5 @@
-import CompanyProfileForm from "./CompanyProfileForm";
-import ProfileForm from "./CompanyProfileForm";
+import CompanyProfileForm from "./company/CompanyProfileForm";
+import ProfileForm from "./company/CompanyProfileForm";
 
 export default function CompanyProfiles() {
   return (

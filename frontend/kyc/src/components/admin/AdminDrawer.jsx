@@ -17,8 +17,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import CompanyProfiles from './CompanyProfiles';
-import UserProfiles from './UserProfiles';
 import ProtectedRoute from '../auth/login/ProtectedRoute';
 import AdminDashboard from './AdminDashboard';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -26,39 +24,33 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LogoutButton from '../ui/LogoutButton';
 import { Collapse, useMediaQuery, useTheme } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import logo from '../../../public/logo_small.png';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import RoomPreferencesOutlinedIcon from '@mui/icons-material/RoomPreferencesOutlined';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
+import UserProfiles from './user/UserProfiles';
+import CompanyProfileForm from './company/CompanyProfileForm';
+import UserProfileForm from './user/UserProfileForm';
 
 const drawerWidth = 260;
 
-
-
 function AdminDrawer(props) {
-
-    const [selectedSubIndex, setSelectedSubIndex] = useState(null);
-
-
-
-    const handleSubOptionClick = (event, subIndex) => {
-        setSelectedSubIndex(subIndex);
-        // Add additional logic for sub-option selection if needed
-    };
-
-
+    const [selectedSubIndices, setSelectedSubIndices] = useState({});
     const theme = useTheme();
-
     const navigate = useNavigate();
+    const location = useLocation();
 
     const getInitialSelectedIndex = () => {
         const path = location.pathname;
         if (path.includes('company-profiles')) return 1;
         if (path.includes('user-profiles')) return 2;
-        return 0; // Default to Home
+        return 0;
     };
 
     const [selectedIndex, setSelectedIndex] = useState(getInitialSelectedIndex());
@@ -66,11 +58,24 @@ function AdminDrawer(props) {
 
     const handleListItemClick = (event, index, path) => {
         setSelectedIndex(index);
-        navigate(path);
+        setSelectedSubIndices({}); // Clear all suboption selections
+        if (path != 'company-profiles' && path != 'user-profiles') {
+
+            navigate(path);
+        }
         if (isMobile) {
             setAnchorEl(null);
         }
         handleDrawerClose();
+    };
+
+    const handleSubOptionClick = (event, mainIndex, subIndex, path) => {
+        setSelectedIndex(mainIndex);
+        setSelectedSubIndices(prevState => ({
+            ...prevState,
+            [mainIndex]: subIndex
+        }));
+        navigate(path);
     };
 
     const { window } = props;
@@ -82,7 +87,7 @@ function AdminDrawer(props) {
 
     const handleDrawerClose = () => {
         setIsClosing(true);
-        setMobileOpen(false);
+        // setMobileOpen(false);
     };
 
     const handleDrawerTransitionEnd = () => {
@@ -107,21 +112,79 @@ function AdminDrawer(props) {
         setAnchorEl(null);
     };
 
-    const [open, setOpen] = useState(false);
+    const [openSubMenus, setOpenSubMenus] = useState({});
 
-    const handleClick = () => {
-        setOpen(!open);
+    const handleClick = (index) => {
+
+        setOpenSubMenus(prevState => ({
+            ...prevState,
+            [index]: !prevState[index]
+
+        }));
+
     };
+
+    useEffect(() => {
+        const path = location.pathname;
+        let initialMainIndex = 0;
+        let initialSubIndex = undefined;
+
+        if (path.includes('company-profiles')) {
+            initialMainIndex = 1;
+            if (path.includes('create')) initialSubIndex = 0;
+            else if (path.includes('manage')) initialSubIndex = 1;
+        } else if (path.includes('user-profiles')) {
+            initialMainIndex = 2;
+            if (path.includes('create')) initialSubIndex = 0;
+            else if (path.includes('manage')) initialSubIndex = 1;
+        }
+
+        setSelectedIndex(initialMainIndex);
+        setSelectedSubIndices(prevState => ({
+            ...prevState,
+            [initialMainIndex]: initialSubIndex
+        }));
+
+        // Open the submenu if a suboption is selected
+        if (initialSubIndex !== undefined) {
+            setOpenSubMenus(prevState => ({
+                ...prevState,
+                [initialMainIndex]: true
+            }));
+        }
+    }, [location.pathname]);
+
+    const menuItems = [
+        { text: "Home", icon: <HomeOutlinedIcon />, path: "." },
+        {
+            text: "Company Profiles",
+            icon: <BusinessOutlinedIcon />,
+            path: "company-profiles",
+            subOptions: [
+                { text: "Create Company Profile", icon: <AddCircleOutlineIcon />, path: "company-profiles/create" },
+                { text: "Manage Companies", icon: <RoomPreferencesOutlinedIcon />, path: "company-profiles/manage" }
+            ]
+        },
+        {
+            text: "User Profiles",
+            icon: <PeopleAltOutlinedIcon />,
+            path: "user-profiles",
+            subOptions: [
+                { text: "Create Users", icon: <AddCircleOutlineIcon />, path: "user-profiles/create" },
+                { text: "Manage Users", icon: <ManageAccountsOutlinedIcon />, path: "user-profiles/manage" }
+            ]
+        },
+    ];
 
     const drawer = (
         <div>
             <Toolbar>
-                <Typography 
-                    variant="h6" 
-                    noWrap 
-                    component="div" 
-                    sx={{ 
-                        flexGrow: 1, 
+                <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{
+                        flexGrow: 1,
                         textAlign: 'center',
                         fontFamily: "'Montserrat', sans-serif",
                         fontSize: '24px',
@@ -138,20 +201,21 @@ function AdminDrawer(props) {
                     admin
                 </Typography>
             </Toolbar>
-    
-            <List sx={{marginTop: '32px'}}>
-                {[
-                    { text: "Home", icon: <HomeOutlinedIcon />, path: "." },
-                    { text: "Company Profiles", icon: <BusinessOutlinedIcon />, path: "company-profiles", subOptions: ["Company Overview", "Manage Companies"] },
-                    { text: "User Profiles", icon: <PeopleAltOutlinedIcon />, path: "user-profiles", subOptions: ["View Users", "Manage Users"] },
-                ].map((item, index) => (
+
+            <List sx={{ marginTop: '32px' }}>
+                {menuItems.map((item, index) => (
                     <div key={item.text}>
-                        <ListItem key={item.text} disablePadding sx={{ marginBottom: '8px' }}>
+                        <ListItem disablePadding sx={{ marginBottom: '8px' }}>
                             <ListItemButton
-                                selected={selectedIndex === index}
-                                onClick={(event) => handleListItemClick(event, index, item.path)}
+                                selected={selectedIndex === index && selectedSubIndices[index] === undefined}
+                                onClick={(event) => {
+                                    handleListItemClick(event, index, item.path);
+                                    if (item.subOptions) {
+                                        handleClick(index);
+                                    }
+                                }}
                                 sx={{
-                                    mx: '16px',
+                                    mx: '12px',
                                     borderRadius: '12px',
                                     '&.Mui-selected, &:hover': {
                                         backgroundColor: 'rgba(0, 0, 0, 0.08)',
@@ -165,23 +229,25 @@ function AdminDrawer(props) {
                                     },
                                 }}
                             >
-                                <ListItemIcon sx={{ color: 'inherit', marginLeft: '8px' }}>
+                                <ListItemIcon sx={{ color: 'inherit' }}>
                                     {item.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={item.text} />
+                                {item.subOptions && (
+                                    openSubMenus[index] ? <ExpandLessOutlinedIcon /> : <ExpandMoreOutlinedIcon />
+                                )}
                             </ListItemButton>
                         </ListItem>
-    
+
                         {item.subOptions && (
-                            <Collapse in={selectedIndex === index}>
-                                <List sx={{ marginLeft: '32px'}}>
+                            <Collapse in={openSubMenus[index]}>
+                                <List sx={{ marginLeft: '8px' }}>
                                     {item.subOptions.map((subOption, subIndex) => (
-                                        <ListItem  key={subOption} disablePadding>
+                                        <ListItem key={subOption.text} disablePadding>
                                             <ListItemButton
-                                                selected={selectedSubIndex === subIndex}
-                                                onClick={(event) => handleSubOptionClick(event, subIndex)}
+                                                selected={selectedIndex === index && selectedSubIndices[index] === subIndex}
+                                                onClick={function (event) { setMobileOpen(false); handleSubOptionClick(event, index, subIndex, subOption.path) }}
                                                 sx={{
-                                                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
                                                     mx: '16px',
                                                     marginBottom: '8px',
                                                     borderRadius: '12px',
@@ -197,7 +263,10 @@ function AdminDrawer(props) {
                                                     },
                                                 }}
                                             >
-                                                <ListItemText primary={subOption} />
+                                                <ListItemIcon sx={{ color: 'inherit' }}>
+                                                    {subOption.icon}
+                                                </ListItemIcon>
+                                                <ListItemText primary={subOption.text} />
                                             </ListItemButton>
                                         </ListItem>
                                     ))}
@@ -209,9 +278,9 @@ function AdminDrawer(props) {
             </List>
         </div>
     );
-    
 
     const container = window !== undefined ? () => window().document.body : undefined;
+
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -247,7 +316,7 @@ function AdminDrawer(props) {
                                 aria-haspopup="true"
                                 onClick={handleMenu}
                                 color="inherit"
-                                sx={{ marginRight: '8px', color: 'error.main'}}
+                                sx={{ marginRight: '8px', color: 'error.main' }}
                             >
                                 <AccountCircle />
                             </IconButton>
@@ -326,15 +395,31 @@ function AdminDrawer(props) {
                     height: '100%',
                 }}
             >
+                {/* <Routes>
+                    <Route path="/" element={<AdminDashboard />} />
+                    <Route path="company-profiles" element={<CompanyProfiles />} />
+                    <Route path="user-profiles" element={<UserProfiles />} />
+                </Routes> */}
+
                 <Routes>
                     <Route path="/" element={<AdminDashboard />} />
-                    {/* <Route path="company-profiles" element={<CompanyProfiles />} /> */}
-                    <Route path="user-profiles" element={<UserProfiles />} />
+                    <Route path="company-profiles">
+                        {/* <Route path="create" element={<CreateCompanyProfile />} /> */}
+                        <Route path="manage" element={<CompanyProfileForm />} />
+                    </Route>
+                    <Route path="user-profiles">
+                        <Route path="create" element={<UserProfileForm />} />
+                        {/* <Route path="manage" element={<ManageUsers />} /> */}
+                    </Route>
                 </Routes>
                 <Toolbar />
             </Box>
         </Box>
     );
 }
+
+AdminDrawer.propTypes = {
+    window: PropTypes.func,
+};
 
 export default AdminDrawer;

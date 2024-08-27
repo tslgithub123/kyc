@@ -10,6 +10,7 @@ import com.tsl.kyc.entity.User;
 import com.tsl.kyc.repository.RoleRepository;
 import com.tsl.kyc.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +19,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     public static UserDto convertToDto(User user) {
         if (user == null) {
@@ -95,4 +99,14 @@ public class UserService {
     public boolean checkUsernameExists(String username) {
         return userRepository.existsByUsername(username);
     }
+
+    public boolean saveLastLoginDate(String username) {
+    Optional<User> user = userRepository.findByUsername(username);
+    if (user.isPresent()) {
+        user.get().setLastLoginDate(LocalDateTime.now());
+        userRepository.save(user.get());
+        return true;
+    }
+    return false;
+}
 }

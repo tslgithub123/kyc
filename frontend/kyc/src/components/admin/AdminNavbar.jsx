@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import CompanyProfiles from './CompanyProfiles';
-import UserProfiles from './UserProfiles';
 
 const AdminNavbar = () => {
   return (

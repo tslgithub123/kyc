@@ -82,8 +82,8 @@ const UserProfileForm = () => {
         try {
             console.log('Submitting form:', submitData);
 
-            let endpoint = submitData.length === 1 ? '/register-single' : '/register-multiple';
-            const response = await axios.post(`http://localhost:8080/api/auth${endpoint}`, submitData);
+            // let endpoint = submitData.length === 1 ? '/register-single' : '/register-multiple';
+            const response = await axios.post(`http://localhost:8080/api/auth/register`, submitData);
             console.log('Response:', response.data);
             setAlertInfo({ type: 'success', message: 'User(s) created successfully!' });
             form.reset();
