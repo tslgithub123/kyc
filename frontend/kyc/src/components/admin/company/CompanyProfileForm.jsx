@@ -1,61 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box, Text, Accordion, Table, Pagination, Paper,
   Group, Title, Loader,
   Pill
 } from '@mantine/core';
+import axios from 'axios';
 
 const CompanyProfileForm = () => {
-  const profiles = [
-    {
-      id: 1,
-      branch: "Main Branch",
-      category: "IT",
-      city: "Pune",
-      compName: "Techknowgreen Ltd.",
-      country: "India",
-      email: "it@techknowgreen.com",
-      phoneNo: "1234567890",
-      state: "Maharashtra",
-    },
-    {
-      id: 2,
-      branch: "Main Branch",
-      category: "IT",
-      city: "Tech City",
-      compName: "Techknowgreen Ltd.",
-      contPerDesig: "Manager",
-      contPerName: "John Doe",
-      contPerNo: "+1234567890",
-      country: "Countryland",
-      district: "Tech District",
-      email: "contact@techknowgreen.com",
-      fax: "+0987654321",
-      indPrimary: "Software Development",
-      indSecondary: "Consulting",
-      industryType: "Technology",
-      lastEnv: "2024-08-21",
-      noWorkDays: 5,
-      phoneNo: "+1234567890",
-      pincode: "123456",
-      plotNo: "Plot 123",
-      ro: "RO123",
-      sro: "SRO456",
-      state: "Tech State",
-      street: "Tech Street",
-      taluka: "Tech Taluka",
-      uan: "UAN123456",
-      village: "Tech Village",
-      website: "https://www.techknowgreen.com",
-      workingHour: 40,
-      yearEstb: 2010,
-    },
-  ];
 
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  const[profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    const data = axios.get('http://localhost:8080/api/company-profile/all')
+      .then(response => {
+        setProfiles(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the company profiles!', error);
+      });
+
+  }, []);
 
   const fetchUsersByCompanyId = async (companyId) => {
     setLoading((prev) => ({ ...prev, [companyId]: true }));
@@ -90,9 +59,9 @@ const CompanyProfileForm = () => {
       <Title order={3} mb="md">
         Company Profiles ({profiles.length})
       </Title>
-      <Accordion variant="contained" radius={'8px'} multiple onChange={handleAccordionChange}>
+      <Accordion  variant="contained" radius={'8px'} multiple >
         {paginatedProfiles.map((profile, index) => (
-          <Accordion.Item key={profile.id} value={`${profile.id}`}>
+          <Accordion.Item  key={profile.id} value={`${profile.id}` } onChange={handleAccordionChange(profile.id)}>
             <Accordion.Control>
               <Group position="apart" style={{ width: '100%' }}>
                 <Pill size='lg'>

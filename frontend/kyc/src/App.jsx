@@ -2,13 +2,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import Login from './components/auth/login/Login'
 import ProtectedRoute from './components/auth/login/ProtectedRoute'
-import Dashboard from './components/home/HomeDashboard'
-import AdminDashboard from './components/admin/AdminDashboard'
 import EnvDashboard from './components/env/EnvDashboard'
 import ManagementDashboard from './components/management/ManagementDashboard'
 import ThirdPartyDashboard from './components/thirdparty/ThirdPartyDashboard'
-import HomeNavbar from './components/home/HomeNavbar'
-import AdminNavbar from './components/admin/AdminNavbar'
 import AdminDrawer from './components/admin/AdminDrawer'
 import '@mantine/core/styles.css';
 

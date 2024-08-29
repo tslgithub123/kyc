@@ -6,7 +6,7 @@ export default function CreateCompanyProfileCard() {
       <Card padding="lg" radius="lg" style={styles.card}>
         <Stack align="center" spacing="md">
           <Image
-          style={{ width: 100 }}
+          style={{ width: 65 }}
             src={CreateProfileIcon}
             alt="Create Company Profile"
           />
@@ -24,7 +24,7 @@ export default function CreateCompanyProfileCard() {
 const styles = {
   card: {
     width: '100%',
-    maxWidth: '400px',
+    maxWidth: '300px',
     margin: '0',
   }
 };

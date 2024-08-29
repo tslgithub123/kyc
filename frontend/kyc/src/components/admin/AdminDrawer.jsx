@@ -37,6 +37,7 @@ import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
 import UserProfiles from './user/UserProfiles';
 import CompanyProfileForm from './company/CompanyProfileForm';
 import UserProfileForm from './user/UserProfileForm';
+import UserProfilesTable from './user/UserProfilesTable';
 
 const drawerWidth = 260;
 
@@ -409,7 +410,7 @@ function AdminDrawer(props) {
                     </Route>
                     <Route path="user-profiles">
                         <Route path="create" element={<UserProfileForm />} />
-                        {/* <Route path="manage" element={<ManageUsers />} /> */}
+                        <Route path="manage" element={<UserProfilesTable />} />
                     </Route>
                 </Routes>
                 <Toolbar />

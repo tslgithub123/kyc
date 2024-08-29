@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -132,10 +133,9 @@ public class AuthController {
     @GetMapping("/success")
     public ResponseEntity<?> loginSuccess() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
 
-            Set<String> roles = userDetails.getAuthorities().stream().map(authority -> authority.getAuthority())
+            Set<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toSet());
 
             Map<String, Object> response = Map.of("message", "Login successful", "username", userDetails.getUsername(),
@@ -150,10 +150,9 @@ public class AuthController {
     @GetMapping("/current-user")
     public ResponseEntity<?> getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof UserDetails userDetails) {
 
-            Set<String> roles = userDetails.getAuthorities().stream().map(authority -> authority.getAuthority())
+            Set<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                     .collect(Collectors.toSet());
 
             Map<String, Object> response = Map.of("username", userDetails.getUsername(), "roles", roles);

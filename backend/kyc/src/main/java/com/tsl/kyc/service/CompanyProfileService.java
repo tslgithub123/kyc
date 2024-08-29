@@ -16,12 +16,15 @@ import java.util.stream.Collectors;
 @Service
 public class CompanyProfileService {
 
-    @Autowired
-    private CompanyProfileRepository companyProfileRepository;
+    private final CompanyProfileRepository companyProfileRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-    
+    private final UserRepository userRepository;
+
+    public CompanyProfileService(CompanyProfileRepository companyProfileRepository, UserRepository userRepository) {
+        this.companyProfileRepository = companyProfileRepository;
+        this.userRepository = userRepository;
+    }
+
     public CompanyProfile findById(Long id) {
         return companyProfileRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found with id: " + id));

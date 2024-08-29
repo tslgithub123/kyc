@@ -29,9 +29,7 @@ import com.tsl.kyc.service.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	@Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
-
+	private final AuthEntryPointJwt unauthorizedHandler;
     private final CustomUserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
@@ -40,9 +38,10 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtUtils jwtUtils, AuthEntryPointJwt unauthorizedHandler) {
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
+        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean

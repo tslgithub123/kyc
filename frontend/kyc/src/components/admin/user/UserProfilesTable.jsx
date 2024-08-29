@@ -1,35 +1,36 @@
-import React, { useState, useMemo } from 'react';
-import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  Paper, TablePagination, Grid, Typography
-} from '@mui/material';
-import CustomSwitch from '../../ui/CustomSwitch';
-import SearchField from '../../ui/SearchField';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Table, Paper, Grid, Title, TextInput, Switch, Pagination, Select } from '@mantine/core';
 import axios from 'axios';
 
-export default function UserProfilesTable({ userProfiles, setUserProfiles }) {
-  const [page, setPage] = useState(0);
+export default function UserProfilesTable() {
+  const [userProfiles, setUserProfiles] = useState([]);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangePage = (newPage) => setPage(newPage);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const handleChangeRowsPerPage = (value) => {
+    setRowsPerPage(parseInt(value, 10));
+    setPage(1);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-    setPage(0);
-  };
+  useEffect(() => {
+    axios.get('http://localhost:8080/api/user/all')
+      .then(response => {
+        setUserProfiles(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the user profiles!', error);
+      });
+  }, []);
 
   const handleLockChange = async (id, currentLockedStatus) => {
     try {
       const response = await axios.put(`http://localhost:8080/api/user/${id}/lock`, null, {
         params: { locked: !currentLockedStatus },
       });
-      
+
       setUserProfiles((prevProfiles) =>
         prevProfiles.map((profile) =>
           profile.id === id ? { ...profile, locked: response.data.locked } : profile
@@ -49,71 +50,76 @@ export default function UserProfilesTable({ userProfiles, setUserProfiles }) {
     [userProfiles, searchTerm]
   );
 
+  const paginatedProfiles = filteredProfiles.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
   return (
-    <TableContainer component={Paper} sx={{ boxShadow: 'none', borderRadius: 3, overflowX: 'auto' }}>
-      <Grid container>
-        <Grid item xs={12} md={6}>
-          <Typography sx={{ padding: '16px 12px 0px 24px' }} variant="h6" fontWeight="bold">User Profiles</Typography>
-        </Grid>
+    <Paper shadow="none" radius="md" p="md">
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Title order={4} fw={700}>User Profiles</Title>
+        </Grid.Col>
       </Grid>
       <hr />
-      <div style={{ margin: '16px' }}>
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <SearchField
-              searchTerm={searchTerm}
-              handleSearchChange={handleSearchChange}
-            />
-          </Grid>
-        </Grid>
-        <Table stickyHeader sx={{ border: 2, borderColor: '#e9e9ea', borderRadius: 3, marginTop: 2 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Username</TableCell>
-              <TableCell>Company Name</TableCell>
-              <TableCell>Enabled</TableCell>
-              <TableCell>Designation</TableCell>
-              <TableCell>Last Login Date</TableCell>
-              <TableCell>Lock</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredProfiles
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((profile) => (
-                <TableRow key={profile.id}>
-                  <TableCell>{profile.id}</TableCell>
-                  <TableCell>{profile.username}</TableCell>
-                  <TableCell>{profile.companyName}</TableCell>
-                  <TableCell>{profile.enabled ? 'Yes' : 'No'}</TableCell>
-                  <TableCell>{profile.designation}</TableCell>
-                  <TableCell>
-                    {profile.lastLoginDate
-                      ? new Date(profile.lastLoginDate).toLocaleString()
-                      : 'N/A'}
-                  </TableCell>
-                  <TableCell>
-                    <CustomSwitch
-                      checked={profile.locked}
-                      color="#ff515a"
-                      onChange={() => handleLockChange(profile.id, profile.locked)}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredProfiles.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </div>
-    </TableContainer>
+      <Grid mt="md">
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.currentTarget.value)}
+          />
+        </Grid.Col>
+      </Grid>
+      <Table striped highlightOnHover mt="md">
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>ID</Table.Th>
+            <Table.Th>Username</Table.Th>
+            <Table.Th>Company Name</Table.Th>
+            <Table.Th>Designation</Table.Th>
+            <Table.Th>Last Login Date</Table.Th>
+            <Table.Th>Lock</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {paginatedProfiles.map((profile) => (
+            <Table.Tr key={profile.id}>
+              <Table.Td>{profile.id}</Table.Td>
+              <Table.Td>{profile.username}</Table.Td>
+              <Table.Td>{profile.companyName}</Table.Td>
+              <Table.Td>{profile.designation}</Table.Td>
+              <Table.Td>
+                {profile.lastLoginDate
+                  ? new Date(profile.lastLoginDate).toLocaleString()
+                  : 'N/A'}
+              </Table.Td>
+              <Table.Td>
+                <Switch
+                  checked={profile.locked}
+                  onChange={() => handleLockChange(profile.id, profile.locked)}
+                  color="red"
+                />
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+      <Grid mt="md" justify="space-between" align="center">
+        <Grid.Col span="content">
+          <Select
+            value={rowsPerPage.toString()}
+            onChange={handleChangeRowsPerPage}
+            data={['5', '10', '25']}
+            label="Rows per page"
+          />
+        </Grid.Col>
+        <Grid.Col span="content">
+          <Pagination
+            total={Math.ceil(filteredProfiles.length / rowsPerPage)}
+            value={page}
+            onChange={handleChangePage}
+          />
+        </Grid.Col>
+      </Grid>
+    </Paper>
   );
 }
