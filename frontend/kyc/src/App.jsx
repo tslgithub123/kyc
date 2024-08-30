@@ -9,6 +9,7 @@ import AdminDrawer from './components/admin/AdminDrawer'
 import '@mantine/core/styles.css';
 
 import { MantineProvider } from '@mantine/core';
+import Navbar from './components/admin/navigation/Navbar'
 
 function App() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
       {/* {showHomeNavbar && <HomeNavbar />} */}
       {/* {showAdminDrawer && <AdminDrawer/>} */}
       <Routes>
+        <Route path='/nav' element={<Navbar/>}></Route>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin/*" element={<ProtectedRoute><AdminDrawer /></ProtectedRoute>}/>
