@@ -20,7 +20,9 @@ public class RequestLoggingFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        // Initialization logic if needed
+        // Initialization logic
+
+
     }
 
     @Override

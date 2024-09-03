@@ -73,7 +73,7 @@ export default function LogIn() {
           navigate('/admin');
           break;
         case 'ROLE_ENVIRONMENT_OFFICER':
-          navigate('/environment-officer-dashboard');
+          navigate('/env');
           break;
         case 'ROLE_MANAGEMENT':
           navigate('/management-dashboard');

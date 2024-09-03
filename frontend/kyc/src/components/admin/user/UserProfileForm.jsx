@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import axios from 'axios';
 import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX } from '@tabler/icons-react';
+import api from '../../../utils/api';
 
 const UserProfileForm = () => {
     const [companies, setCompanies] = useState([]);
@@ -41,16 +41,16 @@ const UserProfileForm = () => {
         if (alertInfo) {
             const timer = setTimeout(() => {
                 setAlertInfo(null);
-            }, 5000); // Alert will disappear after 5 seconds
+            }, 5000);
 
-            return () => clearTimeout(timer); // Cleanup the timeout on unmount or when alertInfo changes
+            return () => clearTimeout(timer);
         }
     }, [alertInfo]);
 
     const fetchCompanies = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/company-profile/all');
-            setCompanies(response.data.map(company => ({ value: company.id.toString(), label: company.compName })));
+            const response = await api.fetchCompanies();
+            setCompanies(response.map(company => ({ value: company.id.toString(), label: company.compName })));
         } catch (error) {
             console.error('Error fetching companies:', error);
             setAlertInfo({ type: 'error', message: 'Failed to fetch companies. Please try again.' });
@@ -58,14 +58,12 @@ const UserProfileForm = () => {
     };
 
     const checkUsernameExists = async (username, index) => {
-        if (username === '') {
-            return;
-        }
         try {
-            const response = await axios.get(`http://localhost:8080/api/user/username-exists/${username}`);
+            const response = await api.checkUsernameExists(username);
+            console.log('Response:', response);
             setUsernameExists(prevState => ({
                 ...prevState,
-                [index]: response.data
+                [index]: response
             }));
         } catch (error) {
             console.error('Error checking username:', error);
@@ -82,8 +80,7 @@ const UserProfileForm = () => {
         try {
             console.log('Submitting form:', submitData);
 
-            // let endpoint = submitData.length === 1 ? '/register-single' : '/register-multiple';
-            const response = await axios.post(`http://localhost:8080/api/auth/register`, submitData);
+            const response = await api.registerUser(submitData);
             console.log('Response:', response.data);
             setAlertInfo({ type: 'success', message: 'User(s) created successfully!' });
             form.reset();
@@ -227,6 +224,6 @@ const UserProfileForm = () => {
             </form>
         </Paper>
     );
-};
+};  
 
 export default UserProfileForm;

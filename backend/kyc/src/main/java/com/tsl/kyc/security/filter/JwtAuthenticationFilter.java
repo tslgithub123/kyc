@@ -2,12 +2,12 @@ package com.tsl.kyc.security.filter;
 
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.service.CustomUserDetailsService;
-import com.tsl.kyc.service.TokenBlacklistService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +18,10 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
-    @Autowired
-    private TokenBlacklistService tokenBlacklistService;
 
 
     public JwtAuthenticationFilter(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService) {
@@ -32,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
@@ -41,6 +39,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 //                    return;
 //                }
+                // check if the token is expired with getExpirationDateFromToken method from jwtUtils
+                // if the token is expired, renew the token
+
+//                Date expirationDate = jwtUtils.getExpirationDateFromToken(jwt);
+//                Date now = new Date();
+//                long diff = expirationDate.getTime() - now.getTime();
+//                if (diff < 0) {
+//                    String username = jwtUtils.getUsernameFromJwtToken(jwt);
+//                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+//                    jwt = jwtUtils.generateToken(userDetails);
+//                    response.setHeader("Authorization", "Bearer " + jwt);
+//                }
+
+
+
+
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 

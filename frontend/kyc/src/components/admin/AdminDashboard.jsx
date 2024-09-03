@@ -5,13 +5,6 @@ import CreateCompanyProfileCard from './cards/CreateCompanyProfileCard';
 
 function AdminDashboard() {
   const { data: currentUser, isLoading, error } = useCurrentUser();
-
-  useEffect(() => {
-    if (currentUser) {
-      console.log('User data loaded:', currentUser);
-    }
-  }, [currentUser]);
-
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching user data: {error.message}</p>;
 

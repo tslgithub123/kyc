@@ -5,32 +5,31 @@ import {
   Pill
 } from '@mantine/core';
 import axios from 'axios';
+import api from '../../../utils/api';
 
-const CompanyProfileForm = () => {
+const CompanyProfileAccordian = () => {
 
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
-  const[profiles, setProfiles] = useState([]);
+  const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    const data = axios.get('http://localhost:8080/api/company-profile/all')
-      .then(response => {
-        setProfiles(response.data);
+    api.fetchCompanies()
+      .then(fetchedProfiles => {
+        setProfiles(fetchedProfiles);
       })
       .catch(error => {
         console.error('There was an error fetching the company profiles!', error);
       });
-
   }, []);
 
   const fetchUsersByCompanyId = async (companyId) => {
     setLoading((prev) => ({ ...prev, [companyId]: true }));
     try {
       console.log(`Fetching users for company ID: ${companyId}`);
-      const fetchedUsers = await fetch(`http://localhost:8080/api/company-profile/users/${companyId}`).then(res => res.json());
+      const fetchedUsers = await api.fetchUsersByCompanyId(companyId);
       setUsers((prevUsers) => ({ ...prevUsers, [companyId]: fetchedUsers }));
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -117,4 +116,4 @@ const CompanyProfileForm = () => {
   );
 };
 
-export default CompanyProfileForm;
+export default CompanyProfileAccordian;

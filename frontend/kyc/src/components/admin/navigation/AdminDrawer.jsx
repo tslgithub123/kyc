@@ -1,49 +1,36 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
+import CssBaseline from '@mui/material/CssBaseline';;
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import ProtectedRoute from '../auth/login/ProtectedRoute';
-import AdminDashboard from './AdminDashboard';
+import ProtectedRoute from '../../auth/login/ProtectedRoute';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import LogoutButton from '../ui/LogoutButton';
-import { Collapse, useMediaQuery, useTheme } from '@mui/material';
+import LogoutButton from '../../ui/LogoutButton';
+import { Collapse, Divider, useMediaQuery, useTheme } from '@mui/material';
 import { useState, useEffect } from 'react';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
-import logo from '../../../public/logo_small.png';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import RoomPreferencesOutlinedIcon from '@mui/icons-material/RoomPreferencesOutlined';
+import logo from '/logo_small.png';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
-import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';
-import UserProfiles from './user/UserProfiles';
-import CompanyProfileForm from './company/CompanyProfileForm';
-import UserProfileForm from './user/UserProfileForm';
-import UserProfilesTable from './user/UserProfilesTable';
+import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';;
+import { getMenuItems } from './menuItems.jsx';
+import AdminRoutes from './AdminRoutes.jsx';
 
-const drawerWidth = 260;
+const menuItems = getMenuItems();
+const drawerWidth = 240;
 
 function AdminDrawer(props) {
     const [selectedSubIndices, setSelectedSubIndices] = useState({});
-    const theme = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -59,7 +46,7 @@ function AdminDrawer(props) {
 
     const handleListItemClick = (event, index, path) => {
         setSelectedIndex(index);
-        setSelectedSubIndices({}); // Clear all suboption selections
+        setSelectedSubIndices({});
         if (path != 'company-profiles' && path != 'user-profiles') {
 
             navigate(path);
@@ -88,7 +75,6 @@ function AdminDrawer(props) {
 
     const handleDrawerClose = () => {
         setIsClosing(true);
-        // setMobileOpen(false);
     };
 
     const handleDrawerTransitionEnd = () => {
@@ -146,7 +132,6 @@ function AdminDrawer(props) {
             [initialMainIndex]: initialSubIndex
         }));
 
-        // Open the submenu if a suboption is selected
         if (initialSubIndex !== undefined) {
             setOpenSubMenus(prevState => ({
                 ...prevState,
@@ -155,29 +140,10 @@ function AdminDrawer(props) {
         }
     }, [location.pathname]);
 
-    const menuItems = [
-        { text: "Home", icon: <HomeOutlinedIcon />, path: "." },
-        {
-            text: "Company Profiles",
-            icon: <BusinessOutlinedIcon />,
-            path: "company-profiles",
-            subOptions: [
-                { text: "Create Company Profile", icon: <AddCircleOutlineIcon />, path: "company-profiles/create" },
-                { text: "Manage Companies", icon: <RoomPreferencesOutlinedIcon />, path: "company-profiles/manage" }
-            ]
-        },
-        {
-            text: "User Profiles",
-            icon: <PeopleAltOutlinedIcon />,
-            path: "user-profiles",
-            subOptions: [
-                { text: "Create Users", icon: <AddCircleOutlineIcon />, path: "user-profiles/create" },
-                { text: "Manage Users", icon: <ManageAccountsOutlinedIcon />, path: "user-profiles/manage" }
-            ]
-        },
-    ];
+    
 
     const drawer = (
+        
         <div>
             <Toolbar>
                 <Typography
@@ -193,7 +159,7 @@ function AdminDrawer(props) {
                         textTransform: 'uppercase',
                         color: 'white',
                         textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
-                        backgroundColor: '#ff515a',
+                        backgroundColor: 'error.light',
                         borderRadius: '8px',
                         padding: '8px',
                         marginTop: '32px',
@@ -213,6 +179,9 @@ function AdminDrawer(props) {
                                     handleListItemClick(event, index, item.path);
                                     if (item.subOptions) {
                                         handleClick(index);
+                                    }
+                                    if (item.path === '.') {
+                                        setMobileOpen(false);
                                     }
                                 }}
                                 sx={{
@@ -270,6 +239,7 @@ function AdminDrawer(props) {
                                                 <ListItemText primary={subOption.text} />
                                             </ListItemButton>
                                         </ListItem>
+                                        
                                     ))}
                                 </List>
                             </Collapse>
@@ -389,38 +359,21 @@ function AdminDrawer(props) {
                     flexGrow: 1,
                     p: 3,
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    backgroundColor: '#fbe9e7',
+                    backgroundColor: '#e2f7d4',
                     borderRadius: '10px',
                     margin: '0px 8px 0px 8px',
                     marginTop: '64px',
-                    height: '100%',
+                    height: '100vh',
                 }}
             >
-                {/* <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="company-profiles" element={<CompanyProfiles />} />
-                    <Route path="user-profiles" element={<UserProfiles />} />
-                </Routes> */}
-
-                <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="company-profiles">
-                        {/* <Route path="create" element={<CreateCompanyProfile />} /> */}
-                        <Route path="manage" element={<CompanyProfileForm />} />
-                    </Route>
-                    <Route path="user-profiles">
-                        <Route path="create" element={<UserProfileForm />} />
-                        <Route path="manage" element={<UserProfilesTable />} />
-                    </Route>
-                </Routes>
+                <ProtectedRoute>
+                  <AdminRoutes/>
+                </ProtectedRoute>
                 <Toolbar />
             </Box>
         </Box>
     );
 }
 
-AdminDrawer.propTypes = {
-    window: PropTypes.func,
-};
 
 export default AdminDrawer;

@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Table, Paper, Grid, Title, TextInput, Switch, Pagination, Select } from '@mantine/core';
-import axios from 'axios';
+import api from '../../../utils/api';
 
 export default function UserProfilesTable() {
   const [userProfiles, setUserProfiles] = useState([]);
@@ -15,25 +15,26 @@ export default function UserProfilesTable() {
     setPage(1);
   };
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/api/user/all')
-      .then(response => {
-        setUserProfiles(response.data);
-      })
-      .catch(error => {
+  const fetchUserProfiles = async () => {
+    try {
+        const response = await api.getAllUserProfiles();
+        setUserProfiles(response);
+    } catch (error) {
         console.error('There was an error fetching the user profiles!', error);
-      });
+        setAlertInfo({ type: 'error', message: 'Failed to fetch user profiles. Please try again.' });
+    }
+};
+
+  useEffect(() => {
+    fetchUserProfiles();
   }, []);
 
   const handleLockChange = async (id, currentLockedStatus) => {
     try {
-      const response = await axios.put(`http://localhost:8080/api/user/${id}/lock`, null, {
-        params: { locked: !currentLockedStatus },
-      });
-
+      const response = await api.updateUserLockStatus(id, !currentLockedStatus);
       setUserProfiles((prevProfiles) =>
         prevProfiles.map((profile) =>
-          profile.id === id ? { ...profile, locked: response.data.locked } : profile
+          profile.id === id ? { ...profile, locked: response.locked } : profile
         )
       );
     } catch (error) {
