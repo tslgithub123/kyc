@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/store';
-import Button from '@mui/material/Button';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Link } from '@mui/material';
 
 
@@ -22,7 +20,7 @@ const LogoutButton = () => {
       color='error'
       underline='none'
     >
-      <LogoutIcon/>  Logout
+      Logout
     </Link>
   );
 };

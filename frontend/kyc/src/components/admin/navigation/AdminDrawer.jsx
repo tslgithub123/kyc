@@ -15,9 +15,6 @@ import Typography from '@mui/material/Typography';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import ProtectedRoute from '../../auth/login/ProtectedRoute';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import LogoutButton from '../../ui/LogoutButton';
 import { Collapse, Divider, useMediaQuery, useTheme } from '@mui/material';
 import { useState, useEffect } from 'react';
 import logo from '/logo_small.png';
@@ -25,6 +22,7 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';;
 import { getMenuItems } from './menuItems.jsx';
 import AdminRoutes from './AdminRoutes.jsx';
+import AdminMenu from './AdminMenu.jsx';
 
 const menuItems = getMenuItems();
 const drawerWidth = 240;
@@ -280,43 +278,7 @@ function AdminDrawer(props) {
                     </div>
                     {auth && (
                         <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                                sx={{ marginRight: '8px', color: 'error.main' }}
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                sx={{
-                                    marginTop: '48px',
-                                    '& .MuiMenu-paper': {
-                                        borderRadius: '8px',
-                                        boxShadow: '0px 4px 4px 4px rgba(0, 0, 0, 0.25)',
-                                    },
-                                }}
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
-                                <MenuItem><LogoutButton /></MenuItem>
-                            </Menu>
+                            <AdminMenu/>
                         </div>
                     )}
                 </Toolbar>

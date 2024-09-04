@@ -50,6 +50,7 @@ const defaultTheme = createTheme({
 export default function LogIn() {
   const navigate = useNavigate();
   const setToken = useAuthStore((state) => state.setToken);
+  const setUserId = useAuthStore((state) => state.setUserId);
   const loginMutation = useLogin();
 
 
@@ -65,8 +66,9 @@ export default function LogIn() {
 
     try {
       const loginResponse = await loginMutation.mutateAsync(credentials);
-      const { token, role } = loginResponse.data;
+      const { token, role, userId } = loginResponse.data;
       setToken(token);
+      setUserId(userId);
       console.log("role: ", role);
       switch (role) {
         case 'ROLE_ADMIN':

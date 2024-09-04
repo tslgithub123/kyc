@@ -3,6 +3,7 @@ import AdminDashboard from '../AdminDashboard';
 import CompanyProfileAccordian from '../company/CompanyProfileAccordian';
 import UserProfileForm from '../user/UserProfileForm';
 import UserProfilesTable from '../user/UserProfilesTable';
+import AdminProfile from '../profile/AdminProfile';
 
 function AdminRoutes() {
     return (
@@ -15,6 +16,9 @@ function AdminRoutes() {
             <Route path="user-profiles">
                 <Route path="create" element={<UserProfileForm />} />
                 <Route path="manage" element={<UserProfilesTable />} />
+            </Route>
+            <Route path=''>
+                <Route path="/profile" element={<AdminProfile/>} />
             </Route>
         </Routes>
     );
