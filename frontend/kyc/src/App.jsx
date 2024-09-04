@@ -9,6 +9,7 @@ import AdminDrawer from './components/admin/navigation/AdminDrawer'
 import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
 import EnvDrawer from './components/env/navigation/EnvDrawer'
+import AdminProfile from './components/admin/profile/AdminProfile'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/env" element={<ProtectedRoute><EnvDrawer/></ProtectedRoute>} />
         <Route path="/management-dashboard" element={<ProtectedRoute><ManagementDashboard /></ProtectedRoute>} />
         <Route path="/third-party-dashboard" element={<ProtectedRoute><ThirdPartyDashboard /></ProtectedRoute>} />
+        
       </Routes>
     </>
   )

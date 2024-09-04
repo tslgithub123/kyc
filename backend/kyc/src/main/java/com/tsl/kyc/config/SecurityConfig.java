@@ -73,6 +73,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/company-profile/**").permitAll()
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/api/user/all").permitAll()
+//                                .requestMatchers("/api/employee/**").permitAll()
                                 .anyRequest().authenticated()
                 );
         http.addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class);

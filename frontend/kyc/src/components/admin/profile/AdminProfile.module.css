@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column; /* Stack components on top of each other by default */
+    gap: 20px; /* Space between the components */
+  }
+  
+  @media (min-width: 768px) {
+    .container {
+      flex-direction: row; /* Place components side by side on larger screens */
+      justify-content: flex-start; /* Align items from the start */
+      align-items: flex-start; /* Align items at the top */
+    }
+  }
+
+.title{
+    gap: 20px;
+}
