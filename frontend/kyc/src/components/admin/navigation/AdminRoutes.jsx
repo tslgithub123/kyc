@@ -9,14 +9,11 @@ function AdminRoutes() {
     return (
         <Routes>
             <Route path="/" element={<AdminDashboard />} />
-            <Route path="company-profiles">
+
                 {/* <Route path="create" element={<CreateCompanyProfile />} /> */}
-                <Route path="manage" element={<CompanyProfileAccordian />} />
-            </Route>
-            <Route path="user-profiles">
-                <Route path="create" element={<UserProfileForm />} />
-                <Route path="manage" element={<UserProfilesTable />} />
-            </Route>
+                <Route path="admin/company/manage" element={<CompanyProfileAccordian />} />
+                <Route path="admin/user/create" element={<UserProfileForm />} />
+                <Route path="admin/user/manage" element={<UserProfilesTable />} />
             <Route path=''>
                 <Route path="/profile" element={<AdminProfile/>} />
             </Route>

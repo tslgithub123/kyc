@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton } from '@mantine/core';
+import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton, PasswordInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX } from '@tabler/icons-react';
 import api from '../../../utils/api';
 
 const UserProfileForm = () => {
     const [companies, setCompanies] = useState([]);
+    const [roles, setRoles] = useState([]);
     const [usernameExists, setUsernameExists] = useState({});
     const [alertInfo, setAlertInfo] = useState(null);
 
@@ -14,7 +15,7 @@ const UserProfileForm = () => {
         users: [{
             username: '',
             password: '',
-            role: 'ROLE_ADMIN',
+            role: '', // Initially empty
             enabled: true,
             failedLoginCount: 0,
             locked: false
@@ -35,17 +36,33 @@ const UserProfileForm = () => {
 
     useEffect(() => {
         fetchCompanies();
+        fetchRoles(); // Fetch roles when the component mounts
     }, []);
 
-    useEffect(() => {
-        if (alertInfo) {
-            const timer = setTimeout(() => {
-                setAlertInfo(null);
-            }, 5000);
+    const fetchRoles = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/role/all');
+            const data = await response.json();
+            
+            if (Array.isArray(data)) {
+                const formattedRoles = data.map(role => ({
+                    value: role.authority, 
+                    label: role.authority.replace('ROLE_', '') // Remove 'ROLE_' prefix
+                }));
+                
+                setRoles(formattedRoles);
 
-            return () => clearTimeout(timer);
+                // Set the first role as default
+                form.setFieldValue('users.0.role', formattedRoles[0]?.value);
+            } else {
+                console.error('Unexpected response format:', data);
+                setAlertInfo({ type: 'error', message: 'Failed to fetch roles. Unexpected format.' });
+            }
+        } catch (error) {
+            console.error('Error fetching roles:', error);
+            setAlertInfo({ type: 'error', message: 'Failed to fetch roles. Please try again.' });
         }
-    }, [alertInfo]);
+    };
 
     const fetchCompanies = async () => {
         try {
@@ -95,7 +112,7 @@ const UserProfileForm = () => {
         form.insertListItem('users', {
             username: '',
             password: '',
-            role: 'ROLE_ADMIN',
+            role: roles.length > 0 ? roles[0].value : '', // Set default role to first fetched role
             enabled: true,
             failedLoginCount: 0,
             locked: false
@@ -144,15 +161,11 @@ const UserProfileForm = () => {
                                 label="Role"
                                 leftSection={<IconUserCircle size="1rem" />}
                                 {...form.getInputProps(`users.${index}.role`)}
-                                data={[
-                                    { value: 'ROLE_ADMIN', label: 'Admin' },
-                                    { value: 'ROLE_ENVIRONMENT_OFFICER', label: 'Environment Officer' },
-                                    { value: 'ROLE_MANAGEMENT', label: 'Management' },
-                                    { value: 'ROLE_THIRD_PARTY', label: 'Third Party' },
-                                ]}
+                                data={roles} // Use the fetched roles
                                 required
                             />
                         </Grid.Col>
+
                         <Grid.Col span={6}>
                             <TextInput
                                 label="Username"
@@ -164,32 +177,26 @@ const UserProfileForm = () => {
                                     user.username ? (
                                         <CloseButton
                                             aria-label="Clear input"
-                                            onClick={() => form.setFieldValue(`users.${index}.username`, '')} // Clear the username field
+                                            onClick={() => form.setFieldValue(`users.${index}.username`, '')}
                                         />
                                     ) : null
                                 }
                             />
                             {usernameExists[index] && (
-                                <Text color="red" size="sm">Username already exists</Text>
+                                <Text c="red" size="sm">Username already exists</Text>
                             )}
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <TextInput
+                            <PasswordInput
                                 label="Password"
                                 leftSection={<IconLock size="1rem" />}
                                 type="password"
                                 {...form.getInputProps(`users.${index}.password`)}
                                 required
-                                rightSection={
-                                    user.password ? (
-                                        <CloseButton
-                                            aria-label="Clear input"
-                                            onClick={() => form.setFieldValue(`users.${index}.password`, '')} // Clear the password field
-                                        />
-                                    ) : null
-                                }
+                                
                             />
                         </Grid.Col>
+
                         {index > 0 && (
                             <Grid.Col span={12}>
                                 <Button
@@ -224,6 +231,6 @@ const UserProfileForm = () => {
             </form>
         </Paper>
     );
-};  
+};
 
 export default UserProfileForm;

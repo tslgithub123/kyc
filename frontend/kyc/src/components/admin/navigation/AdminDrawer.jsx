@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import ProtectedRoute from '../../auth/login/ProtectedRoute';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Collapse, Divider, useMediaQuery, useTheme } from '@mui/material';
+import { Collapse, useMediaQuery, useTheme } from '@mui/material';
 import { useState, useEffect } from 'react';
 import logo from '/logo_small.png';
 import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
@@ -23,6 +23,7 @@ import ExpandLessOutlinedIcon from '@mui/icons-material/ExpandLessOutlined';;
 import { getMenuItems } from './menuItems.jsx';
 import AdminRoutes from './AdminRoutes.jsx';
 import AdminMenu from './AdminMenu.jsx';
+import { Divider } from '@mantine/core';
 
 const menuItems = getMenuItems();
 const drawerWidth = 240;
@@ -46,7 +47,6 @@ function AdminDrawer(props) {
         setSelectedIndex(index);
         setSelectedSubIndices({});
         if (path != 'company-profiles' && path != 'user-profiles') {
-
             navigate(path);
         }
         if (isMobile) {
@@ -170,9 +170,11 @@ function AdminDrawer(props) {
             <List sx={{ marginTop: '32px' }}>
                 {menuItems.map((item, index) => (
                     <div key={item.text}>
-                        <ListItem disablePadding sx={{ marginBottom: '8px' }}>
+                        {/* <Divider ta="center"   /> */}
+                        <ListItem disablePadding sx={{marginTop: '16px', marginBottom: '8px'}}>
                             <ListItemButton
                                 selected={selectedIndex === index && selectedSubIndices[index] === undefined}
+                                
                                 onClick={(event) => {
                                     handleListItemClick(event, index, item.path);
                                     if (item.subOptions) {
@@ -184,12 +186,13 @@ function AdminDrawer(props) {
                                 }}
                                 sx={{
                                     mx: '12px',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.08)', 
                                     borderRadius: '12px',
                                     '&.Mui-selected, &:hover': {
                                         backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                                        color: 'error.main',
+                                        color: 'success.light',
                                         '& .MuiListItemIcon-root': {
-                                            color: 'error.main',
+                                            color: 'success.light',
                                         },
                                     },
                                     '&.Mui-selected:hover': {
@@ -219,11 +222,13 @@ function AdminDrawer(props) {
                                                     mx: '16px',
                                                     marginBottom: '8px',
                                                     borderRadius: '12px',
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.08)', 
+                                                    
                                                     '&.Mui-selected, &:hover': {
                                                         backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                                                        color: 'error.main',
+                                                        color: 'success.light',
                                                         '& .MuiListItemIcon-root': {
-                                                            color: 'error.main',
+                                                            color: 'success.light',
                                                         },
                                                     },
                                                     '&.Mui-selected:hover': {
@@ -242,6 +247,7 @@ function AdminDrawer(props) {
                                 </List>
                             </Collapse>
                         )}
+                        
                     </div>
                 ))}
             </List>

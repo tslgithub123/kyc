@@ -10,18 +10,19 @@ import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
 import EnvDrawer from './components/env/navigation/EnvDrawer'
 import AdminProfile from './components/admin/profile/AdminProfile'
+import Navigation from './components/admin/new_nav/Navigation'
 
 function App() {
   return (
     <>
       <Routes>
+        <Route path='/test/*' element={<Navigation/>}></Route>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin/*" element={<ProtectedRoute><AdminDrawer /></ProtectedRoute>}/>
         <Route path="/env" element={<ProtectedRoute><EnvDrawer/></ProtectedRoute>} />
         <Route path="/management-dashboard" element={<ProtectedRoute><ManagementDashboard /></ProtectedRoute>} />
         <Route path="/third-party-dashboard" element={<ProtectedRoute><ThirdPartyDashboard /></ProtectedRoute>} />
-        
       </Routes>
     </>
   )

@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ public class Role implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+	@JsonIgnore
     @Enumerated(EnumType.STRING)
     private ERole name;
 
@@ -29,7 +31,6 @@ public class Role implements GrantedAuthority {
     
     public Role() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
     
 	public Role(Long id, ERole name) {

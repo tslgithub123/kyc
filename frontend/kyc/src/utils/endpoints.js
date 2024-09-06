@@ -14,6 +14,14 @@ const endpoints = {
     usernameExists: (username) => `${BASE_API}/user/username-exists/${username}`,
     allProfiles: `${BASE_API}/user/all`,
     updateLockStatus: (id) => `${BASE_API}/user/${id}/lock`,
+    deleteProfiles: `${BASE_API}/user/delete`,
+  },
+  employee: {
+    all: `${BASE_API}/employee/all`,
+    user: (id) => `${BASE_API}/employee/user/${id}`,
+  },
+  role: {
+    all: `${BASE_API}/role/all`,
   },
 };
 

@@ -2,7 +2,6 @@ import axios from 'axios';
 import endpoints from './endpoints';
 import { useAuthStore } from '../store/store';
 
-
 const base_api = axios.create({
   baseURL: endpoints.BASE_API,
 });
@@ -100,6 +99,25 @@ const updateUserLockStatus = async (id, locked) => {
   }
 };
 
+const fetchAllRoles = async () => {
+  try {
+    const response = await base_api.get(endpoints.role.all);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching roles:', error);
+    throw error;
+  }
+}
+
+const deleteUserProfiles = async (ids) => {
+  try {
+    await base_api.delete(endpoints.user.deleteProfiles, { data: { ids } });
+  } catch (error) {
+    console.error('Error deleting profiles:', error);
+    throw error;
+  }
+}
+
 const api = {
   loginApi,
   fetchCurrentUser,
@@ -109,6 +127,7 @@ const api = {
   registerUser,
   getAllUserProfiles,
   updateUserLockStatus,
+  fetchAllRoles
 };
 
 export default api;
