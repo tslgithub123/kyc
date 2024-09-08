@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton, PasswordInput } from '@mantine/core';
+import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton, PasswordInput, Divider, Tooltip } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX } from '@tabler/icons-react';
+import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX, IconQuestionMark } from '@tabler/icons-react';
 import api from '../../../utils/api';
 
 const UserProfileForm = () => {
@@ -131,8 +131,17 @@ const UserProfileForm = () => {
     };
 
     return (
-        <Paper radius="lg" p="md" style={{ maxWidth: 700, margin: '24px auto' }}>
-            <Title order={3} mb="md">User Information</Title>
+        <Paper withBorder  radius="sm">
+            <Grid p="lg" justify="space-between" align="center">
+        <Grid.Col span={6}>
+          <Title order={3} fw={700}  color="dark">Create Users</Title>
+        </Grid.Col>
+        <Grid.Col span={6} style={{ textAlign: 'right' }}>
+          <Text size="sm" c="dimmed">Total Profiles</Text>
+        </Grid.Col>
+      </Grid>
+      <Divider />
+      <Paper p="lg" radius="lg">
             {alertInfo && (
                 <Alert icon={alertInfo.type === 'success' ? <IconCheck size="1rem" /> : <IconX size="1rem" />}
                     title={alertInfo.type === 'success' ? "Success" : "Error"}
@@ -229,6 +238,7 @@ const UserProfileForm = () => {
                     </Button>
                 </Group>
             </form>
+            </Paper>
         </Paper>
     );
 };

@@ -133,11 +133,11 @@ export default function UserProfilesTable() {
   };
 
   return (
-    <Paper shadow="sm" radius="lg">
+    <Paper withBorder  radius="sm">
 
       <Grid p="lg" justify="space-between" align="center">
         <Grid.Col span={6}>
-          <Title order={3} fw={700} mb="sm" color="dark">User Profiles</Title>
+          <Title order={3} fw={700}  color="dark">User Profiles</Title>
         </Grid.Col>
         <Grid.Col span={6} style={{ textAlign: 'right' }}>
           <Text size="sm" c="dimmed">Total Profiles: {userProfiles.length}</Text>

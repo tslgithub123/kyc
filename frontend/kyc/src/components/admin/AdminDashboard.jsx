@@ -15,6 +15,7 @@ function AdminDashboard() {
       <div style={styles.cardContainer}>
         <CreateUserProfileCard />
         <CreateCompanyProfileCard /> 
+        
       </div>
     </div>
   );

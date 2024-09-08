@@ -19,10 +19,7 @@ export default function PromptModal({ title, description,color,icon,disabled,exp
         onClose={close}
         title={title}
         centered
-        overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
-        }}
+        
       >
         <Text align="center" mb="md">{description}</Text>
         <Group position="center">

@@ -25,19 +25,19 @@ export default function AdminMenu() {
 
     return (
         <Box>
-            <Group >
+            <Group>
                 <Menu
                     withArrow
                     arrowSize={20}
-                    shadow='md'
-                    radius={10}
-                    width={250}
-                    position="bottom"
+                    shadow='lg'
+
+                    position="bottom-end"
                     transitionProps={{ transition: 'pop' }}
                     withinPortal
+                    
                 >
                     <Menu.Target>
-                        <ActionIcon variant="default">
+                        <ActionIcon variant="default" size={'xl'}>
                             <IconDots style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
                         </ActionIcon>
                     </Menu.Target>

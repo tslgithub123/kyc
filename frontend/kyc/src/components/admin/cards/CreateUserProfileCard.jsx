@@ -3,7 +3,7 @@ import CreateProfileIcon from '../../../assets/icons/create_profile.png';
 
 export default function CreateUserProfileCard() {
   return (
-    <Card padding="lg" radius="lg" style={styles.card}>
+    <Card withBorder padding="lg" radius="lg" style={styles.card}>
       <Stack align="center" spacing="md">
         <Image
           style={{ width: 65 }}
