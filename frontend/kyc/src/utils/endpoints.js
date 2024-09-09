@@ -1,4 +1,4 @@
-const BASE_API = 'http://localhost:8080/api';
+const BASE_API = import.meta.env.VITE_BASE_API;
 
 const endpoints = {
   auth: {

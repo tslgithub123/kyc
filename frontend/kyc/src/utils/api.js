@@ -118,6 +118,16 @@ const deleteUserProfiles = async (ids) => {
   }
 }
 
+const fetchUser = async (id) => {
+  try {
+    const response = await base_api.get(endpoints.employee.user(id));
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    throw error;
+  }
+}
+
 const api = {
   loginApi,
   fetchCurrentUser,
@@ -127,7 +137,8 @@ const api = {
   registerUser,
   getAllUserProfiles,
   updateUserLockStatus,
-  fetchAllRoles
+  fetchAllRoles,
+  fetchUser
 };
 
 export default api;

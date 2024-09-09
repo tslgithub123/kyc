@@ -3,6 +3,7 @@ import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert,
 import { useForm } from '@mantine/form';
 import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX, IconQuestionMark } from '@tabler/icons-react';
 import api from '../../../utils/api';
+import { notifications } from '@mantine/notifications';
 
 const UserProfileForm = () => {
     const [companies, setCompanies] = useState([]);
@@ -15,7 +16,7 @@ const UserProfileForm = () => {
         users: [{
             username: '',
             password: '',
-            role: '', // Initially empty
+            role: '',
             enabled: true,
             failedLoginCount: 0,
             locked: false
@@ -36,23 +37,23 @@ const UserProfileForm = () => {
 
     useEffect(() => {
         fetchCompanies();
-        fetchRoles(); // Fetch roles when the component mounts
+        fetchRoles();
     }, []);
 
     const fetchRoles = async () => {
         try {
-            const response = await fetch('http://localhost:8080/api/role/all');
-            const data = await response.json();
+            const data = await api.fetchAllRoles();
+            //console.log('Response:', response);
+            //const data = await response.json;
+            console.log('Roles:', data);
             
             if (Array.isArray(data)) {
                 const formattedRoles = data.map(role => ({
                     value: role.authority, 
-                    label: role.authority.replace('ROLE_', '') // Remove 'ROLE_' prefix
+                    label: role.authority.replace('ROLE_', '')
                 }));
-                
                 setRoles(formattedRoles);
 
-                // Set the first role as default
                 form.setFieldValue('users.0.role', formattedRoles[0]?.value);
             } else {
                 console.error('Unexpected response format:', data);
@@ -96,7 +97,7 @@ const UserProfileForm = () => {
 
         try {
             console.log('Submitting form:', submitData);
-
+            
             const response = await api.registerUser(submitData);
             console.log('Response:', response.data);
             setAlertInfo({ type: 'success', message: 'User(s) created successfully!' });

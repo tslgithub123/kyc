@@ -8,11 +8,11 @@ import {
   Pill,
   ScrollArea,
   Skeleton,
+  Space,
   Text,
   ThemeIcon,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import AdminRoutes from "../navigation/AdminRoutes";
 import {
   IconAdjustments,
   IconBrandMantine,
@@ -28,8 +28,11 @@ import {
 import AdminMenu from "../navigation/AdminMenu";
 import NavbarLinksGroup from "./NavbarLinksGroup";
 import ThemeButton from "../../ui/ThemeButton";
+import AdminRoutes from "../../../routes/Routes";
+import { ActionsGrid } from "../services/ActionsGrid";
+import Notifications from "../../notifications/Notifications";
 export default function Navigation() {
-  const [opened, { toggle, close }] = useDisclosure(); // Added close for manual control
+  const [opened, { toggle, close }] = useDisclosure();
 
   const mockdata = [
     { label: "Dashboard", icon: IconGauge, links: '/admin' },
@@ -51,9 +54,8 @@ export default function Navigation() {
       ],
     }
   ];
-  
+
   const handleLinkClick = () => {
-    // This will close the menu after a link is clicked
     if (opened) {
       close();
     }
@@ -62,10 +64,10 @@ export default function Navigation() {
   const links = mockdata.map((item) => (
     <NavbarLinksGroup {...item} key={item.label} onLinkClick={handleLinkClick} />
   ));
-  
+
   return (
     <AppShell
-      header={{ height: { base: 60, md: 70, lg: 80 } }}
+      header={{ height: { base: 60, md: 70, lg: 60 } }}
       navbar={{
         width: { base: 200, md: 300, lg: 250 },
         breakpoint: "sm",
@@ -76,26 +78,33 @@ export default function Navigation() {
       {/* Header */}
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
+          <div>
+            <Group>
+              <Burger
+                opened={opened}
+                onClick={toggle}
+                hiddenFrom="sm"
+                size="sm"
+              />
+              <IconBrandMantine size={30} />
+            </Group></div>
           <Group>
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              hiddenFrom="sm"
-              size="sm"
-            />
-            <IconBrandMantine size={30} />
+            {/* <Text
+              size="xl"
+              fw={900}
+              variant="gradient"
+              gradient={{ from: 'red', to: 'green', deg: 90 }}
+            >
+              Administrator
+            </Text> */}
           </Group>
-          <ThemeButton/>
-          <Text
-          
-      size="xl"
-      fw={900}
-      variant="gradient"
-      gradient={{ from: 'red', to: 'green', deg: 90 }}
-    >
-      Admin
-    </Text>
-          <AdminMenu />
+          <Group>
+          <ActionsGrid/>
+          <Notifications/>
+            <ThemeButton />
+            <AdminMenu />
+            
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">

@@ -37,7 +37,7 @@ export default function AdminMenu() {
                     
                 >
                     <Menu.Target>
-                        <ActionIcon variant="default" size={'xl'}>
+                        <ActionIcon variant="default" size={'lg'}>
                             <IconDots style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
                         </ActionIcon>
                     </Menu.Target>

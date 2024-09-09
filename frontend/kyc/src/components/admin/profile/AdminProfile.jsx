@@ -4,6 +4,8 @@ import axios from 'axios';
 import UserDetails from '../../ui/cards/UserDetails';
 import EmployeDetails from '../../ui/cards/EmployeeDetails';
 import classes from './AdminProfile.module.css';
+import api from '../../../utils/api';
+import BreadcrumbsComponent from '../../ui/Breadcrumbs';
 
 const AdminProfile = () => {
     const [profile, setProfile] = useState(null);
@@ -11,8 +13,8 @@ const AdminProfile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/employee/user/1');
-                setProfile(response.data);
+                const response = await api.fetchUser(1);
+                setProfile(response);
             } catch (error) {
                 console.error('Error fetching profile data:', error);
             }

@@ -14,8 +14,7 @@ function AdminDashboard() {
       <p>Your role: {currentUser?.roles.join(', ')}</p>
       <div style={styles.cardContainer}>
         <CreateUserProfileCard />
-        <CreateCompanyProfileCard /> 
-        
+        <CreateCompanyProfileCard />  
       </div>
     </div>
   );
