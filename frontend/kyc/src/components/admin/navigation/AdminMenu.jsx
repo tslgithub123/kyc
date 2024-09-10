@@ -1,3 +1,4 @@
+import React from 'react';
 import { Menu, Group, Text, Avatar, useMantineTheme, ActionIcon, rem, Box } from '@mantine/core';
 import {
     IconLogout,
@@ -8,10 +9,40 @@ import {
     IconSwitchHorizontal,
     IconChevronRight,
     IconDots,
+    IconHistory,
+    IconPhone,
+    IconHelp,
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/store';
 
+const menuItems = [
+    
+    {
+        label: 'History',
+        icon: (theme) => <IconHistory style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.blue[6]} />,
+        link: '/admin/comments',
+        
+    },
+    {
+        label: 'Help',
+        icon: (theme) => <IconHelp style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.red[6]} />,
+        link: '/admin/liked-posts',
+        section: 'Techknowgreen',
+    },
+    {
+        label: 'Contact us',
+        icon: (theme) => <IconPhone style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.yellow[6]} />,
+        link: '/admin/saved-posts',
+    },
+    
+    {
+        label: 'Account settings',
+        icon: () => <IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />,
+        link: '/admin/account-settings',
+        section: 'Settings',
+    },
+];
 
 export default function AdminMenu() {
     const theme = useMantineTheme();
@@ -29,96 +60,51 @@ export default function AdminMenu() {
                 <Menu
                     withArrow
                     arrowSize={20}
-                    shadow='lg'
-
-                    position="bottom-end"
+                    shadow="lg"
+                    position="bottom"
                     transitionProps={{ transition: 'pop' }}
                     withinPortal
-                    
                 >
                     <Menu.Target>
-                        <ActionIcon variant="default" size={'lg'}>
+                        <ActionIcon variant="default" size="lg">
                             <IconDots style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
                         </ActionIcon>
                     </Menu.Target>
-                    <Box >
-                        <Menu.Dropdown >
+                    <Box>
+                        <Menu.Dropdown>
                             <Menu.Item
                                 rightSection={
                                     <IconChevronRight style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
                                 }
-                                color='blue'
+                                color="blue"
                                 onClick={() => navigate('/admin/profile')}
                             >
                                 <Group>
-                                    <Avatar
-                                        radius="xl"
-                                        src=""
-                                    />
-
+                                    <Avatar radius="xl" src="" />
                                     <div>
-                                        <Text fw={500}>View Profile</Text>
-                                        
+                                        <Text fw={500}>Profile</Text>
                                     </div>
                                 </Group>
                             </Menu.Item>
 
                             <Menu.Divider />
 
-                            <Menu.Item
-                                leftSection={
-                                    <IconHeart
-                                        style={{ width: rem(16), height: rem(16) }}
-                                        stroke={1.5}
-                                        color={theme.colors.red[6]}
-                                    />
-                                }
-                            >
-                                Liked posts
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={
-                                    <IconStar
-                                        style={{ width: rem(16), height: rem(16) }}
-                                        stroke={1.5}
-                                        color={theme.colors.yellow[6]}
-                                    />
-                                }
-                            >
-                                Saved posts
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={
-                                    <IconMessage
-                                        style={{ width: rem(16), height: rem(16) }}
-                                        stroke={1.5}
-                                        color={theme.colors.blue[6]}
-                                    />
-                                }
-                            >
-                                Your comments
-                            </Menu.Item>
+                            {menuItems.map((item, index) => (
+                                <React.Fragment key={index}>
+                                    {item.section && <Menu.Label>{item.section}</Menu.Label>}
+                                    <Menu.Item
+                                        leftSection={item.icon(theme)}
+                                        onClick={() => navigate(item.link)}
+                                    >
+                                        {item.label}
+                                    </Menu.Item>
+                                </React.Fragment>
+                            ))}
 
-                            <Menu.Label>Settings</Menu.Label>
-                            <Menu.Item
-                                leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-                            >
-                                Account settings
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={
-                                    <IconSwitchHorizontal style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-                                }
-                            >
-                                Change account
-                            </Menu.Item>
-
-                            {/* Make the entire Menu.Item clickable for logout */}
                             <Menu.Item
                                 color="red"
                                 leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-                                icon={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
-                                onClick={handleLogout} // Directly handle logout here
+                                onClick={handleLogout}
                             >
                                 Logout
                             </Menu.Item>

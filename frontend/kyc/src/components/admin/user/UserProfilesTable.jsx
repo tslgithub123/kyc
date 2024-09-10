@@ -17,7 +17,7 @@ import {
 } from '@mantine/core';
 import { IconArrowUp, IconArrowDown, IconSearch, IconTrash, IconClearFormatting, IconClearAll, IconSend, IconSend2 } from '@tabler/icons-react';
 import api from '../../../utils/api';
-import PromptModal from './PromptModal';
+import PromptModal from '../../ui/PromptModal';
 
 export default function UserProfilesTable() {
   const [userProfiles, setUserProfiles] = useState([]);

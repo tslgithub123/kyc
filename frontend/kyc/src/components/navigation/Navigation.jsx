@@ -25,43 +25,21 @@ import {
   IconPresentationAnalytics,
   IconUser,
 } from "@tabler/icons-react";
-import AdminMenu from "../navigation/AdminMenu";
+import AdminMenu from "../admin/navigation/AdminMenu";
 import NavbarLinksGroup from "./NavbarLinksGroup";
-import ThemeButton from "../../ui/ThemeButton";
-import AdminRoutes from "../../../routes/Routes";
-import { ActionsGrid } from "../services/ActionsGrid";
-import Notifications from "../../notifications/Notifications";
-export default function Navigation() {
+import ThemeButton from "../ui/ThemeButton";
+import Notifications from "../notifications/Notifications";
+export default function Navigation({navdata,routes, actions, menu}) {
   const [opened, { toggle, close }] = useDisclosure();
 
-  const mockdata = [
-    { label: "Dashboard", icon: IconGauge, links: '/admin' },
-    {
-      label: "Users",
-      icon: IconUser,
-      initiallyOpened: true,
-      links: [
-        { label: "Create", link: "test/admin/user/create" },
-        { label: "Manage", link: "test/admin/user/manage" },
-      ],
-    },
-    {
-      label: "Companies",
-      icon: IconBuilding,
-      links: [
-        { label: "Create", link: "test/admin/company/create" },
-        { label: "Manage", link: "test/admin/company/manage" },
-      ],
-    }
-  ];
-
+  
   const handleLinkClick = () => {
     if (opened) {
       close();
     }
   };
 
-  const links = mockdata.map((item) => (
+  const links = navdata.map((item) => (
     <NavbarLinksGroup {...item} key={item.label} onLinkClick={handleLinkClick} />
   ));
 
@@ -75,7 +53,6 @@ export default function Navigation() {
       }}
       padding="md"
     >
-      {/* Header */}
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
           <div>
@@ -99,10 +76,10 @@ export default function Navigation() {
             </Text> */}
           </Group>
           <Group>
-          <ActionsGrid/>
+          {actions}
           <Notifications/>
             <ThemeButton />
-            <AdminMenu />
+            {menu}
             
           </Group>
         </Group>
@@ -111,7 +88,7 @@ export default function Navigation() {
         {links}
       </AppShell.Navbar>
       <AppShell.Main>
-        <AdminRoutes />
+        {routes}
       </AppShell.Main>
     </AppShell>
   );
