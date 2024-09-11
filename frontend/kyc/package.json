@@ -6,7 +6,7 @@
   "scripts": {
     "start": "vite",
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -15,8 +15,10 @@
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.0.14",
     "@mantine/core": "^7.12.1",
+    "@mantine/dates": "^7.12.2",
     "@mantine/form": "^7.12.1",
     "@mantine/hooks": "^7.12.1",
+    "@mantine/notifications": "^7.12.2",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
@@ -24,6 +26,8 @@
     "@tanstack/react-query": "^5.52.0",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.5",
     "install": "^0.13.0",
     "npm": "^10.8.2",
     "react": "^18.3.1",
@@ -37,7 +41,7 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@tanstack/eslint-plugin-query": "^5.52.0",
-    "@types/react": "^18.3.3",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "@vitejs/plugin-react-swc": "^3.7.0",
@@ -49,6 +53,8 @@
     "postcss": "^8.4.41",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
   }
 }

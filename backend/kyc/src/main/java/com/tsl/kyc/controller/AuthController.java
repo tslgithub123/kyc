@@ -81,12 +81,13 @@ public class AuthController {
         newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
         newUser.setEnabled(dto.isEnabled());
 
+        // for the time being, set the designation to the role
         newUser.setDesignation(switch (dto.getRole()) {
             case "ROLE_ADMIN" -> "Administrator";
             case "ROLE_ENVIRONMENT_OFFICER" -> "Environment Officer";
             case "ROLE_MANAGEMENT" -> "Management";
             case "ROLE_THIRD_PARTY" -> "Third Party";
-            default -> throw new RuntimeException("Invalid designation");
+            default -> "Unknown";
         });
 
         CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
