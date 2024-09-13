@@ -7,7 +7,9 @@ import Login from './components/auth/login/Login'
 import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/dates/styles.css';
-import AdminNav from './components/admin/navigation/AdminNav';
+import AdminNav from './components/tsl/admin/navigation/AdminNav';
+import EnvNav from './components/tsl/env/navigation/EnvNav';
+import ManNav from './components/tsl/management/navigation/ManNav';
 
 function App() {
   return (
@@ -15,7 +17,27 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin/*" element={<ProtectedRoute><AdminNav/></ProtectedRoute>}/>
+        <Route path="/admin/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+            <AdminNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/env/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_ENVIRONMENT_OFFICER']}>
+            <EnvNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/man/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_MANAGEMENT']}>
+            <ManNav/>
+          </ProtectedRoute>
+        }/>
+        {/* <Route path="/thp/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_THIRD_PARTY']}>
+            <ThpNav/>
+          </ProtectedRoute>
+        }/> */}
+        {/* <Route path="/unauthorized" element={<Unauthorized />} /> */}
       </Routes>
     </>
   )

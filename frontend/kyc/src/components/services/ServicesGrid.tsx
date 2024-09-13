@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Card,
   Text,
@@ -10,50 +11,35 @@ import {
   Box,
   Modal,
 } from '@mantine/core';
-import {
-  IconFile,
-  IconMail,
-  IconCalendar,
-  IconCategory,
-} from '@tabler/icons-react';
+import { IconCategory } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import Files from './actions/FilesAction';
-import classes from './ActionsGrid.module.css';
-import { useState } from 'react';
-import CalendarAction from './actions/CalendarAction';
-import EmailAction from './actions/EmailAction';
+import classes from './ServicesGrid.module.css';
 
-const mockdata = [
-  { title: 'Files', icon: IconFile, color: 'violet' },
-  { title: 'Email', icon: IconMail, color: 'indigo' },
-  { title: 'Calendar', icon: IconCalendar, color: 'blue' },
-];
+interface ActionItem {
+  title: string;
+  icon: React.ElementType;
+  color: string;
+  component: React.ReactNode;
+}
 
-export function ActionsGrid() {
+interface ActionsGridProps {
+  data: ActionItem[];
+}
+
+export default function ServicesGrid({ data = [] }: ActionsGridProps) {
   const theme = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
-  const [modalContent, setModalContent] = useState<string | null>(null);
+  const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
   const [menuOpened, setMenuOpened] = useState(false);
 
   const openAction = (action: string) => {
     setMenuOpened(false);
-    switch (action) {
-      case 'Files':
-        setModalContent('Files');
-        break;
-      case 'Email':
-        setModalContent('Email');
-        break;
-      case 'Calendar':
-        setModalContent('Calendar');
-        break;
-      default:
-        setModalContent(null);
-    }
+    const selectedAction = data.find(item => item.title === action);
+    setModalContent(selectedAction ? selectedAction.component : null);
     open();
   };
 
-  const items = mockdata.map((item) => (
+  const items = data.map((item) => (
     <UnstyledButton onClick={() => openAction(item.title)} p={'lg'} key={item.title} className={classes.item}>
       <item.icon color={theme.colors[item.color][6]} size="2rem" />
       <Text size="xs" mt={7}>
@@ -95,12 +81,8 @@ export function ActionsGrid() {
         </Box>
       </Menu>
       <Modal opened={opened} onClose={close} centered>
-        {modalContent === 'Files' && <Files />}
-        {modalContent === 'Email' && <EmailAction/>}
-        {modalContent === 'Calendar' && <CalendarAction />}
+        {modalContent}
       </Modal>
     </Group>
   );
 }
-
-export default ActionsGrid;

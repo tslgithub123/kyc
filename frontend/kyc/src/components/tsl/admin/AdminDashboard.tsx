@@ -1,5 +1,5 @@
 import {CSSProperties } from 'react';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 
 function AdminDashboard() {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Text,Paper} from '@mantine/core';
 import classes from './AdminProfile.module.css';
-import api from '../../../utils/api';
-import { User } from '../../../utils/types';
+import api from '../../../../utils/api';
+import { User } from '../../../../utils/types';
 
 
 

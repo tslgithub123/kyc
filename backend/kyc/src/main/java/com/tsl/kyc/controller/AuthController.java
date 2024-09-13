@@ -128,7 +128,8 @@ public class AuthController {
         String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
 
         userService.saveLastLoginDate(username);
-        return ResponseEntity.ok(Map.of("token", jwt, "role", role.getName(), "userId", user.getId()));
+
+        return ResponseEntity.ok(Map.of("token", jwt, "user",UserService.convertToDto(user)));
     }
 
     @GetMapping("/success")

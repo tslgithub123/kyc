@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { TextInput, Button, Grid, Select, Paper, Title, Text, Box, Group, Alert, CloseButton, PasswordInput, Divider } from '@mantine/core';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { IconBuilding, IconUser, IconLock, IconUserPlus, IconSend, IconUserCircle, IconTrash, IconCheck, IconX } from '@tabler/icons-react';
-import api from '../../../utils/api';
-import { CompanyProfile, Role, User } from '../../../utils/types';
+import api from '../../../../utils/api';
+import { CompanyProfile, Role, User } from '../../../../utils/types';
 
 
 interface FormValues {

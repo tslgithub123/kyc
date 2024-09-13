@@ -42,7 +42,6 @@ CREATE TABLE company_profile (
     website VARCHAR(255),
     working_hour INT,
     year_estb INT,
-    idustry_type VARCHAR(255),
     comp_email VARCHAR(255)
 );
 
@@ -107,6 +106,7 @@ INSERT INTO roles (name) VALUES
 INSERT INTO company_profile (comp_name, branch, category, city, country, state, email, phone_no)
 VALUES
 ('Techknowgreen Ltd.', 'Main Branch', 'IT', 'Pune', 'India', 'Maharashtra', 'it@techknowgreen.com', '1234567890');
+('Techknowblue Ltd.', 'Main Branch', 'IT', 'Pune', 'India', 'Maharashtra', 'it@techknowgreen.com', '1234567890');
 
 -- Insert Users with all fields filled
 INSERT INTO users (username, password, enabled, designation, company_profile_id, failed_login_count, last_login_date, locked)

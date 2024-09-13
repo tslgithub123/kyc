@@ -1,9 +1,9 @@
 import { IconBuilding, IconGauge, IconUser } from "@tabler/icons-react";
 
-import { AdminRoutes} from "../../../routes/Routes";
-import ActionsGrid from "../services/ActionsGrid";
-import Navigation from "../../navigation/Navigation";
+import { AdminRoutes} from "../../../../routes/Routes";
+import Navigation from "../../../navigation/Navigation";
 import AdminMenu from "./AdminMenu";
+import AdminServices from "../services/AdminServices";
 
 
 const adminNavData = [
@@ -32,7 +32,7 @@ export default function AdminNav() {
     <Navigation 
       navdata={adminNavData} 
       routes={<AdminRoutes />} 
-      actions={<ActionsGrid />} 
+      actions={<AdminServices/>} 
       menu={<AdminMenu/>}
     />
   );

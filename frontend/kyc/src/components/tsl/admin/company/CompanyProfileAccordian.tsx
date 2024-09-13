@@ -4,8 +4,8 @@ import {
   Group, Title, Loader,
   Pill
 } from '@mantine/core';
-import api from '../../../utils/api';
-import { CompanyProfile, User } from '../../../utils/types';
+import api from '../../../../utils/api';
+import { CompanyProfile, User } from '../../../../utils/types';
 
 
 const CompanyProfileAccordian: React.FC = () => {

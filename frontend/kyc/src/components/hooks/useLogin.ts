@@ -1,22 +1,17 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import api from '../../utils/api';
+import { AuthResponse, Credentials } from '../../utils/types';
 
-interface LoginResponse {
-  data: {
-    userId: string;
-    token: string;
-    role: string;
-  };
-}
 
-interface Credentials {
-  username: string;
-  password: string;
-}
-
-export function useLogin(): UseMutationResult<LoginResponse, unknown, Credentials, unknown> {
-  const loginMutation = useMutation<LoginResponse, unknown, Credentials>({
-    mutationFn: api.loginApi.login
+export function useLogin(): UseMutationResult<AuthResponse, unknown, Credentials, unknown> {
+  const loginMutation = useMutation<AuthResponse, unknown, Credentials>({
+    mutationFn: async (credentials: Credentials) => {
+      const response = await api.loginApi.login(credentials);
+      return {
+        token: response.data.token,
+        user: response.data.user,
+      } as AuthResponse;
+    }
   });
 
   return loginMutation;

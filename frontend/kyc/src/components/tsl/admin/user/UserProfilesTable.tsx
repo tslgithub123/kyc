@@ -16,8 +16,8 @@ import {
   Center
 } from '@mantine/core';
 import { IconArrowUp, IconArrowDown, IconSearch, IconTrash, IconClearAll, IconSend2 } from '@tabler/icons-react';
-import api from '../../../utils/api';
-import PromptModal from '../../ui/PromptModal';
+import api from '../../../../utils/api';
+import PromptModal from '../../../ui/PromptModal';
 
 interface UserProfile {
   id: number;

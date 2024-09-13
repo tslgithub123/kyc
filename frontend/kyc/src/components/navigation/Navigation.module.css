@@ -2,8 +2,20 @@
     display: flex;
     position: absolute;
     bottom: 0%;
-    width: 90%;
-    padding: var(--mantine-spacing-lg);
+    width: 100%;
+    padding-bottom: var(--mantine-spacing-md);
     border-top: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
     padding-top: var(--mantine-spacing-md);
+    justify-content: center;
+    align-items: center;    
+}
+
+.footer p {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    margin: 0;
+    font-size: var(--mantine-font-size-sm);
+    color: var(--mantine-color-gray-6);
 }

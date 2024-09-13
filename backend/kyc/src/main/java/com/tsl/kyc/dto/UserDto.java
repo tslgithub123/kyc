@@ -1,8 +1,12 @@
 package com.tsl.kyc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tsl.kyc.entity.CompanyProfile;
+import com.tsl.kyc.entity.Role;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDto implements Serializable {
 
@@ -13,11 +17,12 @@ public class UserDto implements Serializable {
     private String password;
     private Boolean enabled;
     private String designation;
-    private Long companyProfileId;
+    private CompanyProfile companyProfile;
     private Integer failedLoginCount;
     private String lastLoginDate;
     private Boolean locked;
     private String companyName;
+    private Set<Role> roles = new HashSet<>();
 
     // Default constructor
     public UserDto() {
@@ -28,19 +33,19 @@ public class UserDto implements Serializable {
     // Getters and Setters
 
     public UserDto(Long id, String username, String password, Boolean enabled, String designation,
-			Long companyProfileId, Integer failedLoginCount, String lastLoginDate, Boolean locked, String companyName) {
+			CompanyProfile companyProfile, Integer failedLoginCount, String lastLoginDate, Boolean locked, String companyName,Set<Role> role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.enabled = enabled;
 		this.designation = designation;
-		this.companyProfileId = companyProfileId;
+		this.companyProfile = companyProfile;
 		this.failedLoginCount = failedLoginCount;
 		this.lastLoginDate = lastLoginDate;
 		this.locked = locked;
         this.companyName = companyName;
-	}
+    }
 
 
 
@@ -84,13 +89,8 @@ public class UserDto implements Serializable {
         this.designation = designation;
     }
 
-    public Long getCompanyProfileId() {
-        return companyProfileId;
-    }
 
-    public void setCompanyProfileId(Long companyProfileId) {
-        this.companyProfileId = companyProfileId;
-    }
+
 
     public Integer getFailedLoginCount() {
         return failedLoginCount;
@@ -124,6 +124,22 @@ public class UserDto implements Serializable {
         this.companyName = companyName;
     }
 
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public CompanyProfile getCompanyProfile() {
+        return companyProfile;
+    }
+
+    public void setCompanyProfile(CompanyProfile companyProfile) {
+        this.companyProfile = companyProfile;
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -132,7 +148,7 @@ public class UserDto implements Serializable {
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", designation='" + designation + '\'' +
-                ", companyProfileId=" + companyProfileId +
+                ", companyProfile=" + companyProfile +
                 ", failedLoginCount=" + failedLoginCount +
                 ", lastLoginDate='" + lastLoginDate + '\'' +
                 ", locked=" + locked +

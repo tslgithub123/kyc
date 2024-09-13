@@ -2,6 +2,7 @@ package com.tsl.kyc.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,7 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @Table(name = "company_profile")
 public class CompanyProfile {
@@ -49,7 +50,6 @@ public class CompanyProfile {
     private String website;
     private Integer workingHour;
     private Integer yearEstb;
-    private String idustryType;
     private String compEmail;
 
     public CompanyProfile() {
@@ -61,8 +61,7 @@ public class CompanyProfile {
 			String contPerDesig, String contPerName, String contPerNo, String country, String district, String email,
 			String fax, String indPrimary, String indSecondary, String industryType, String lastEnv, Integer noWorkDays,
 			String phoneNo, String pincode, String plotNo, String ro, String sro, String state, String street,
-			String taluka, String uan, String village, String website, Integer workingHour, Integer yearEstb,
-			String idustryType, String compEmail, Set<User> users) {
+			String taluka, String uan, String village, String website, Integer workingHour, Integer yearEstb, String compEmail, Set<User> users) {
 		super();
 		this.id = id;
 		this.mpcbid = mpcbid;
@@ -95,7 +94,7 @@ public class CompanyProfile {
 		this.website = website;
 		this.workingHour = workingHour;
 		this.yearEstb = yearEstb;
-		this.idustryType = idustryType;
+
 		this.compEmail = compEmail;
 //		this.users = users;
 	}
@@ -348,13 +347,6 @@ public class CompanyProfile {
 		this.yearEstb = yearEstb;
 	}
 
-	public String getIdustryType() {
-		return idustryType;
-	}
-
-	public void setIdustryType(String idustryType) {
-		this.idustryType = idustryType;
-	}
 
 	public String getCompEmail() {
 		return compEmail;

@@ -1,50 +1,22 @@
-import React from 'react';
-import { Menu, Group, Text, Avatar, useMantineTheme, ActionIcon, rem, Box, MantineTheme } from '@mantine/core';
-import {
-    IconLogout,
-    IconHeart,
-    IconStar,
-    IconMessage,
-    IconSettings,
-    IconSwitchHorizontal,
-    IconChevronRight,
-    IconDots,
-    IconHistory,
-    IconPhone,
-    IconHelp,
-} from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../../store/store';
+import { useMantineTheme, Box, Group, Menu, ActionIcon, rem, Avatar, Text } from "@mantine/core";
+import { IconDots, IconChevronRight, IconLogout } from "@tabler/icons-react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/store";
 
-const menuItems = [
-    
-    {
-        label: 'History',
-        icon: (theme: MantineTheme) => <IconHistory style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.blue[6]} />,
-        link: '/admin/comments',
-        
-    },
-    {
-        label: 'Help',
-        icon: (theme: MantineTheme) => <IconHelp style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.red[6]} />,
-        link: '/admin/liked-posts',
-        section: 'Techknowgreen',
-    },
-    {
-        label: 'Contact us',
-        icon: (theme: MantineTheme) => <IconPhone style={{ width: rem(16), height: rem(16) }} stroke={1.5} color={theme.colors.yellow[6]} />,
-        link: '/admin/saved-posts',
-    },
-    
-    {
-        label: 'Account settings',
-        icon: () => <IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />,
-        link: '/admin/account-settings',
-        section: 'Settings',
-    },
-];
+interface MenuItem {
+    section?: string;
+    icon: (theme: any) => JSX.Element;
+    link: string;
+    label: string;
+    mainOption?: {}
+}
 
-export default function AdminMenu() {
+interface NavOptionsProps {
+    menuItems: MenuItem[];
+}
+
+export default function NavOptions({ menuItems }: NavOptionsProps) {
     const theme = useMantineTheme();
     const navigate = useNavigate();
     const logout = useAuthStore((state) => state.logout);
