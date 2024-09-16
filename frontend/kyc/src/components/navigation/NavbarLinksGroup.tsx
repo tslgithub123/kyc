@@ -49,10 +49,6 @@ const NavbarLinksGroup = ({
     </NavLink>
   ));
 
-  useEffect(() => { 
-    console.log("is signle link"+isSingleLink)
-  })
-
   const content = (
     <Group justify="space-between" gap={0}>
       <Box style={{ display: 'flex', alignItems: 'center' }}>

@@ -1,0 +1,4 @@
+.modalHeader {
+    background-color:var(--mantine-color-green-5);
+    color: light-dark(var(--mantine-color-white), var(--mantine-color-dark));
+}

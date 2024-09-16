@@ -23,6 +23,8 @@ public class Role implements GrantedAuthority {
     }
 
     public enum ERole {
+		ROLE_SUPERADMIN,
+		ROLE_MPCB,
         ROLE_ADMIN,
         ROLE_ENVIRONMENT_OFFICER,
         ROLE_MANAGEMENT,

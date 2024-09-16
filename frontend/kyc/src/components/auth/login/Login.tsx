@@ -36,6 +36,7 @@ export default function Login() {
 
     try {
       const loginResponse = await loginMutation.mutateAsync({ username, password });
+      console.log('loginResponse: '+JSON.stringify(loginResponse));
       setToken(loginResponse.token);
       setUser(loginResponse.user);
       const data = loginResponse;
