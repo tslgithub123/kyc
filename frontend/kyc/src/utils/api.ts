@@ -88,6 +88,7 @@ const getAllUserProfiles = async (): Promise<User[]> => {
   }
 };
 
+
 const updateUserLockStatus = async (id: string, locked: boolean): Promise<any> => {
   try {
     const response = await base_api.put(endpoints.user.updateLockStatus(id), null, {

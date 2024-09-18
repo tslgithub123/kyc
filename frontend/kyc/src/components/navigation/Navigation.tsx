@@ -38,18 +38,21 @@ export default function Navigation({
   ));
 
   return (
+    
     <AppShell
+    layout="default"
       header={{ height: { base: 60, md: 70, lg: 60 } }}
       navbar={{
         width: { base: 200, md: 300, lg: 250 },
         breakpoint: "sm",
         collapsed: { mobile: !opened },
+        
       }}
       padding="md"
     >
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
-          <div>
+      
             <Group>
               <Burger
                 opened={opened}
@@ -59,7 +62,8 @@ export default function Navigation({
               />
               <IconBrandMantine size={30} />
             </Group>
-          </div>
+            
+         
           <Group>
             {actions}
             <Notifications />
@@ -68,7 +72,7 @@ export default function Navigation({
           </Group>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p="md">
+      <AppShell.Navbar  p="md">
         {links}
         <AppShellFooter className={classes.footer}>
             <div className={classes.footerContent}>
@@ -77,7 +81,7 @@ export default function Navigation({
             </div>
         </AppShellFooter>
       </AppShell.Navbar>
-      <AppShell.Main>{routes}</AppShell.Main>
+      <AppShell.Main >{routes}</AppShell.Main>
     </AppShell>
   );
 }

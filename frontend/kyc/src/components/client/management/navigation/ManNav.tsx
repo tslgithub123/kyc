@@ -7,7 +7,7 @@ import ManServices from "../services/ManServices";
 
 
 const manNavData = [
-  { label: "Dashboard", icon: IconGauge, links: '/env' },
+  { label: "Dashboard", icon: IconGauge, links: '/man' },
   {
     label: "Example",
     icon: IconUser,
