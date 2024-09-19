@@ -34,11 +34,11 @@ public class Employee {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id")
     private CompanyProfile companyProfile;
 
     @Column(name = "employee_name", length = 500)
@@ -68,7 +68,7 @@ public class Employee {
     @Column(name = "email", length = 500)
     private String email;
 
-    @Column(name = "status", length = 20, nullable = false)
+    @Column(name = "status", length = 20)
     private String status = "active";
 
     @Column(name = "email_status", length = 20)

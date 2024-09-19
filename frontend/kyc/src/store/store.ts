@@ -1,12 +1,13 @@
 // src/store/store.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { User } from '../utils/types';
 
 interface AuthState {
+  setToken: any;
+  setUser: any;
   token: string | null;
-  userId: string | null;
-  setToken: (token: string | null) => void;
-  setUserId: (userId: string | null) => void;
+  user: User | null;
   logout: () => void;
 }
 
@@ -14,10 +15,10 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       token: null,
-      userId: null,
-      setToken: (token) => set({ token }),
-      setUserId: (userId) => set({ userId }),
-      logout: () => set({ token: null, userId: null }),
+      user: null,
+      setToken: (token: string) => set({ token }),
+      setUser: (user: User) => set({ user }),
+      logout: () => set({ token: null, user: null }),
     }),
     {
       name: 'auth-storage',

@@ -7,7 +7,12 @@ import Login from './components/auth/login/Login'
 import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/dates/styles.css';
-import AdminNav from './components/admin/navigation/AdminNav';
+import AdminNav from './components/client/admin/navigation/AdminNav';
+import EnvNav from './components/client/env/navigation/EnvNav';
+import ManNav from './components/client/management/navigation/ManNav';
+import SuperAdminNav from './components/superadmin/navigation/SuperAdminNav';
+import MpcbNav from './components/mpcb/navigation/MpcbNav';
+import Unauthorized from './components/auth/Unauthorized';
 
 function App() {
   return (
@@ -15,7 +20,38 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/admin/*" element={<ProtectedRoute><AdminNav/></ProtectedRoute>}/>
+        
+        <Route path="/superadmin/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_SUPERADMIN']}>
+            <SuperAdminNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/mpcb/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_MPCB']}>
+            <MpcbNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/admin/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_ADMIN']}>
+            <AdminNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/env/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_ENVIRONMENT_OFFICER']}>
+            <EnvNav/>
+          </ProtectedRoute>
+        }/>
+        <Route path="/man/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_MANAGEMENT']}>
+            <ManNav/>
+          </ProtectedRoute>
+        }/>
+        {/* <Route path="/thp/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_THIRD_PARTY']}>
+            <ThpNav/>
+          </ProtectedRoute>
+        }/> */}
+        <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </>
   )

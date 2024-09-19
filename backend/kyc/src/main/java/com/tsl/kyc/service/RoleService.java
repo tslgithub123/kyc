@@ -14,6 +14,10 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
+    public Role findById(Long id) {
+        return roleRepository.findById(id).orElse(null);
+    }
+
     public RoleService(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }

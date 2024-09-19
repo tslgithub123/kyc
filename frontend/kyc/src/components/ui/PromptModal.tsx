@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button, Group, Text } from '@mantine/core';
-import { IconTrash, IconTrashFilled } from '@tabler/icons-react';
 
 interface PromptModalProps {
   title: string;
@@ -50,7 +49,7 @@ const PromptModal: React.FC<PromptModalProps> = ({
 
       <Button
         mr={'sm'}
-        style={{ width: '100%' }}
+        style={{ minWidth: '140px' }}
         disabled={disabled}
         color={color}
         leftSection={icon}

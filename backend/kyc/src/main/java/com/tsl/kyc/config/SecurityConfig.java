@@ -52,7 +52,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://192.168.1.8:5173","http://localhost:5173","http://192.168.1.8:5174","http://localhost:5174","http://192.168.1.8:5175","http://localhost:5175"));
+        configuration.setAllowedOrigins(List.of("http://192.168.1.14:5173","http://localhost:5173","http://192.168.1.14:5174","http://localhost:5174","http://192.168.1.14:5175","http://localhost:5175"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
         configuration.setExposedHeaders(List.of("x-auth-token"));
@@ -73,6 +73,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/company-profile/**").permitAll()
                                 .requestMatchers("/api/**").permitAll()
                                 .requestMatchers("/api/user/all").permitAll()
+                                .requestMatchers("/**").permitAll()
 //                                .requestMatchers("/api/employee/**").permitAll()
                                 .anyRequest().authenticated()
                 );

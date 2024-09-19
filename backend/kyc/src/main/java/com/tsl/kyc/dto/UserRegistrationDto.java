@@ -2,40 +2,34 @@ package com.tsl.kyc.dto;
 
 
 public class UserRegistrationDto {
+    private String employeeName;
     private String username;
-    private String password;
-
-    private String role;
-
-    private boolean enabled;
-    private String designation;
+    private String email;
+    private Long roleId;
     private Long companyProfileId;
-    private int failedLoginCount;
-    private String lastLoginDate;
-    private boolean locked;
+    private String phoneNumber;
 
     public UserRegistrationDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public UserRegistrationDto(String username, String password, String role, boolean enabled, String designation,
-			Long companyProfileId, int failedLoginCount, String lastLoginDate, boolean locked) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.role = role;
-		this.enabled = enabled;
-		this.designation = designation;
-		this.companyProfileId = companyProfileId;
-		this.failedLoginCount = failedLoginCount;
-		this.lastLoginDate = lastLoginDate;
-		this.locked = locked;
-	}
+    public UserRegistrationDto(String employeeName, String username, String email, Long roleId, Long companyProfileId, String phoneNumber) {
+        this.employeeName = employeeName;
+        this.username = username;
+        this.email = email;
+        this.roleId = roleId;
+        this.phoneNumber = phoneNumber;
+        this.companyProfileId = companyProfileId;
+    }
 
+    public String getEmployeeName() {
+        return employeeName;
+    }
 
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
 
-	// Getters and Setters
     public String getUsername() {
         return username;
     }
@@ -44,36 +38,28 @@ public class UserRegistrationDto {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getCompanyProfileId() {
@@ -84,37 +70,15 @@ public class UserRegistrationDto {
         this.companyProfileId = companyProfileId;
     }
 
-    public int getFailedLoginCount() {
-        return failedLoginCount;
+    @Override
+    public String toString() {
+        return "UserRegistrationDto{" +
+                "employeeName='" + employeeName + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", roleId=" + roleId +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", companyProfileId=" + companyProfileId +
+                '}';
     }
-
-    public void setFailedLoginCount(int failedLoginCount) {
-        this.failedLoginCount = failedLoginCount;
-    }
-
-    public String getLastLoginDate() {
-        return lastLoginDate;
-    }
-
-    public void setLastLoginDate(String lastLoginDate) {
-        this.lastLoginDate = lastLoginDate;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-	@Override
-	public String toString() {
-		return "UserRegistrationDto [username=" + username + ", password=" + password + ", role=" + role + ", enabled="
-				+ enabled + ", designation=" + designation + ", companyProfileId=" + companyProfileId
-				+ ", failedLoginCount=" + failedLoginCount + ", lastLoginDate=" + lastLoginDate + ", locked=" + locked
-				+ "]";
-	}
-    
-    
 }

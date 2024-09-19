@@ -66,7 +66,6 @@ public class CompanyProfileService {
         companyProfile.setWebsite(companyProfileDto.getWebsite());
         companyProfile.setWorkingHour(companyProfileDto.getWorkingHour());
         companyProfile.setYearEstb(companyProfileDto.getYearEstb());
-        companyProfile.setIdustryType(companyProfileDto.getIdustryType());
         companyProfile.setCompEmail(companyProfileDto.getCompEmail());
 
         // Save CompanyProfile
@@ -108,7 +107,6 @@ public class CompanyProfileService {
         companyProfile.setWebsite(companyProfileDto.getWebsite());
         companyProfile.setWorkingHour(companyProfileDto.getWorkingHour());
         companyProfile.setYearEstb(companyProfileDto.getYearEstb());
-        companyProfile.setIdustryType(companyProfileDto.getIdustryType());
         companyProfile.setCompEmail(companyProfileDto.getCompEmail());
 
         CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
@@ -155,7 +153,6 @@ public class CompanyProfileService {
         dto.setWebsite(companyProfile.getWebsite());
         dto.setWorkingHour(companyProfile.getWorkingHour());
         dto.setYearEstb(companyProfile.getYearEstb());
-        dto.setIdustryType(companyProfile.getIdustryType());
         dto.setCompEmail(companyProfile.getCompEmail());
         return dto;
     }

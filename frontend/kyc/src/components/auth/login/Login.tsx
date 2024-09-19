@@ -13,18 +13,17 @@ import {
   Alert,
 } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../../store/store';
 import { useLogin } from '../../hooks/useLogin';
-
+import {useAuthStore} from '../../../store/store';
 
 export default function Login() {
   const navigate = useNavigate();
-  const setToken = useAuthStore((state) => state.setToken);
-  const setUserId = useAuthStore((state) => state.setUserId);
   const loginMutation = useLogin();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
+  const setUser = useAuthStore((state) => state.setUser);
+  const setToken = useAuthStore((state) => state.setToken);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,12 +36,19 @@ export default function Login() {
 
     try {
       const loginResponse = await loginMutation.mutateAsync({ username, password });
-      const { token, role, userId } = loginResponse.data;
-      setToken(token);
-      setUserId(userId);
-      console.log("role: ", role);
-
-      switch (role) {
+      console.log('loginResponse: '+JSON.stringify(loginResponse));
+      setToken(loginResponse.token);
+      setUser(loginResponse.user);
+      const data = loginResponse;
+      const roles: string[] = data.user.roles.map((role: any) => role.authority);
+      console.log('roles: '+JSON.stringify(roles[0]));
+      switch (roles[0]) {
+        case 'ROLE_SUPERADMIN':
+          navigate('/superadmin');
+          break;
+        case 'ROLE_MPCB':
+          navigate('/mpcb');
+          break;
         case 'ROLE_ADMIN':
           navigate('/admin');
           break;
@@ -50,10 +56,10 @@ export default function Login() {
           navigate('/env');
           break;
         case 'ROLE_MANAGEMENT':
-          navigate('/management-dashboard');
+          navigate('/man');
           break;
         case 'ROLE_THIRD_PARTY':
-          navigate('/third-party-dashboard');
+          navigate('/thp');
           break;
         default:
           navigate('/dashboard');

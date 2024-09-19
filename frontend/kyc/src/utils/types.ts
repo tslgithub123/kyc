@@ -21,13 +21,14 @@ export interface User {
 }
 
 export interface Role {
+    some(arg0: (role: { authority: string; }) => boolean): unknown;
+    map(arg0: (role: any) => any): string[];
     authority: string;
 }
 
-export interface LoginResponse {
-    userId: number;
+export interface AuthResponse {
     token: string;
-    role: string;
+    user: User;
 }
 export interface CurrentUser {
     roles: string[];
@@ -52,7 +53,7 @@ export interface CompanyProfile {
     indSecondary: string | null;
     industryType: string | null;
     lastEnv: string | null;
-    noWorkDays: number | null;
+    noWorkDays: string | null;
     phoneNo: string;
     pincode: string | null;
     plotNo: string | null;
@@ -65,7 +66,7 @@ export interface CompanyProfile {
     village: string | null;
     website: string | null;
     workingHour: string | null;
-    yearEstb: number | null;
+    yearEstb: string | null;
     compEmail: string | null;
 }
 

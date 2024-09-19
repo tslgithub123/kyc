@@ -42,7 +42,6 @@ CREATE TABLE company_profile (
     website VARCHAR(255),
     working_hour INT,
     year_estb INT,
-    idustry_type VARCHAR(255),
     comp_email VARCHAR(255)
 );
 
@@ -54,7 +53,7 @@ CREATE TABLE users (
     enabled TINYINT(1),
     designation VARCHAR(45),
     company_profile_id BIGINT,
-    failed_login_count INT NOT NULL,
+    failed_login_count INT,
     last_login_date DATETIME,
     locked BIT,
     CONSTRAINT FK_users_company_profile FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE SET NULL
@@ -83,7 +82,7 @@ CREATE TABLE emp_data (
     cont_per_no VARCHAR(500),
     email VARCHAR(500),
     company_id BIGINT,
-    status VARCHAR(20) DEFAULT 'active' NOT NULL,
+    status VARCHAR(20) DEFAULT 'active',
     email_status VARCHAR(20),
     profile_status VARCHAR(100),
     profile_pic VARCHAR(30),
@@ -98,19 +97,24 @@ CREATE INDEX idx_emp_data_user ON emp_data (user_id);
 
 -- Insert Roles
 INSERT INTO roles (name) VALUES
+('ROLE_SUPERADMIN'),
 ('ROLE_ADMIN'),
 ('ROLE_ENVIRONMENT_OFFICER'),
 ('ROLE_MANAGEMENT'),
-('ROLE_THIRD_PARTY');
+('ROLE_THIRD_PARTY'),
+('ROLE_MPCB');
 
 -- Insert into Company Profile
 INSERT INTO company_profile (comp_name, branch, category, city, country, state, email, phone_no)
 VALUES
-('Techknowgreen Ltd.', 'Main Branch', 'IT', 'Pune', 'India', 'Maharashtra', 'it@techknowgreen.com', '1234567890');
+('Techknowgreen Ltd.', 'Main Branch', 'IT', 'Pune', 'India', 'Maharashtra', 'it@techknowgreen.com', '1234567890'),
+('Techknowblue Ltd.', 'Main Branch', 'IT', 'Pune', 'India', 'Maharashtra', 'it@techknowblue.com', '1234567890');
 
 -- Insert Users with all fields filled
 INSERT INTO users (username, password, enabled, designation, company_profile_id, failed_login_count, last_login_date, locked)
 VALUES
+('superadmin', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 1, 'Super Admin', 1, 0, NOW(), 0),
+('mpcb', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 1, 'MPCB', 1, 0, NOW(), 0),
 ('admin', '$2a$10$EpSzg7LgnWJnhmwTz7LpS.ag/QoKCMklUoFYactrDAY7XH3floeFy', 1, 'Administrator', 1, 0, NOW(), 0),
 ('env', '$2a$10$tZdWNzgjivHVMSYE08xcRenbu2TS/AGj57JOV1l.ZowrK3wOheLxa', 1, 'Environment Officer', 1, 0, NOW(), 0),
 ('man', '$2a$10$9mlMDltOWKW.avowJvbzXOr3100kYk90xbBrUfPoXG65UQoD29y6q', 1, 'Manager', 1, 0, NOW(), 0),
@@ -118,10 +122,12 @@ VALUES
 
 -- Map Users to Roles
 INSERT INTO user_roles (user_id, role_id) VALUES
-(1, 1), -- Admin -> ROLE_ADMIN
-(2, 2), -- Environment Officer -> ROLE_ENVIRONMENT_OFFICER
-(3, 3), -- Manager -> ROLE_MANAGEMENT
-(4, 4); -- Third Party -> ROLE_THIRD_PARTY
+(1, 1), -- Super Admin -> ROLE_SUPERADMIN
+(2, 6), -- MPCB -> ROLE_MPCB
+(3, 2), -- Admin -> ROLE_ADMIN
+(4, 3), -- Environment Officer -> ROLE_ENVIRONMENT_OFFICER
+(5, 4), -- Manager -> ROLE_MANAGEMENT
+(6, 5); -- Third Party -> ROLE_THIRD_PARTY
 
 -- Insert Dummy Employee Data
 INSERT INTO emp_data (user_id, employee_name, gender, birthday, address, address2, address3, cont_per_desig, cont_per_no, email, company_id, email_status, profile_status, profile_pic, marital_status)

@@ -1,0 +1,22 @@
+
+
+.item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid light-dark(var(--mantine-color-gray-2));
+    width: rem(360px);
+    color: light-dark(var(--mantine-color-dark), var(--mantine-color-white));
+    border-radius: var(--mantine-radius-md);
+    height: rem(90px);
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+    transition:
+      box-shadow 150ms ease,
+      transform 100ms ease;
+  
+    @mixin hover {
+      box-shadow: var(--mantine-shadow-sm);
+      transform: scale(1.05);
+    }
+}

@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
     private CompanyProfile companyProfile;
 
-    @Column(nullable = false)
+    @Column
     private Integer failedLoginCount;
 
     private LocalDateTime lastLoginDate;

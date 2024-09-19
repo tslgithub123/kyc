@@ -39,12 +39,12 @@ public class UserService {
         userDto.setPassword(user.getPassword());
         userDto.setEnabled(user.getEnabled());
         userDto.setDesignation(user.getDesignation());
-        userDto.setCompanyProfileId(user.getCompanyProfile() != null ? user.getCompanyProfile().getId() : null);
+        userDto.setCompanyProfile(user.getCompanyProfile());
         userDto.setFailedLoginCount(user.getFailedLoginCount());
         userDto.setLastLoginDate(user.getLastLoginDate() != null ? user.getLastLoginDate().toString() : null);
         userDto.setLocked(user.getLocked());
         userDto.setCompanyName(user.getCompanyProfile() != null ? user.getCompanyProfile().getCompName() : null);
-
+        userDto.setRoles(user.getRoles());
         return userDto;
     }
 
