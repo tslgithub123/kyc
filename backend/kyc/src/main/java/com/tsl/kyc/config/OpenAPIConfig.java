@@ -19,13 +19,13 @@ public class OpenAPIConfig {
         server.setDescription("Development");
 
         Contact myContact = new Contact();
-        myContact.setName("Jane Doe");
-        myContact.setEmail("your.email@gmail.com");
+        myContact.setName("Dhananjay Yelwande");
+        myContact.setEmail("yelwandedhananjay@gmail.com");
 
         Info information = new Info()
-                .title("Employee Management System API")
+                .title("KYC Management System API")
                 .version("1.0")
-                .description("This API exposes endpoints to manage employees.")
+                .description("This API exposes endpoints of KYC application.")
                 .contact(myContact);
         return new OpenAPI().info(information).servers(List.of(server));
     }

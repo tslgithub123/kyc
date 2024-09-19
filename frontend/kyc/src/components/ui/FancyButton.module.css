@@ -16,7 +16,7 @@
       transform 100ms ease;
   
     @mixin hover {
-      box-shadow: var(--mantine-shadow-lg);
+      box-shadow: var(--mantine-shadow-sm);
       transform: scale(1.05);
     }
 }

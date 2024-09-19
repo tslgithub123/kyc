@@ -53,7 +53,7 @@ CREATE TABLE users (
     enabled TINYINT(1),
     designation VARCHAR(45),
     company_profile_id BIGINT,
-    failed_login_count INT NOT NULL,
+    failed_login_count INT,
     last_login_date DATETIME,
     locked BIT,
     CONSTRAINT FK_users_company_profile FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE SET NULL
@@ -82,7 +82,7 @@ CREATE TABLE emp_data (
     cont_per_no VARCHAR(500),
     email VARCHAR(500),
     company_id BIGINT,
-    status VARCHAR(20) DEFAULT 'active' NOT NULL,
+    status VARCHAR(20) DEFAULT 'active',
     email_status VARCHAR(20),
     profile_status VARCHAR(100),
     profile_pic VARCHAR(30),

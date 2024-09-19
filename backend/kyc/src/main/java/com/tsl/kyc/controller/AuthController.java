@@ -2,14 +2,15 @@ package com.tsl.kyc.controller;
 
 import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.CompanyProfile;
+import com.tsl.kyc.entity.Employee;
 import com.tsl.kyc.entity.Role;
-import com.tsl.kyc.entity.Role.ERole;
 import com.tsl.kyc.entity.User;
-import com.tsl.kyc.service.CompanyProfileService;
-import com.tsl.kyc.service.RoleService;
-import com.tsl.kyc.service.UserService;
+import com.tsl.kyc.repository.UserRepository;
+import com.tsl.kyc.service.*;
 import com.tsl.kyc.security.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.tsl.kyc.utils.PasswordGenerator;
+import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,20 +37,27 @@ public class AuthController {
     
     private final CompanyProfileService companyProfileService;
 
+    private final EmployeeService employeeService;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
 
-    private final JwtUtils jwtUtils;
 
-    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService) {
+    private final JwtUtils jwtUtils;
+    private final EmailService emailService;
+
+    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService) {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
         this.companyProfileService = companyProfileService;
+        this.employeeService = employeeService;
+        this.emailService = emailService;
     }
+
 
     @PostMapping({"/register"})
     public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
@@ -58,7 +66,7 @@ public class AuthController {
         for (UserRegistrationDto dto : registrationDTOs) {
             try {
                 registerUser(dto);
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | MessagingException e) {
                 errors.add(e.getMessage());
             }
         }
@@ -71,42 +79,46 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", message));
     }
 
-    private void registerUser(UserRegistrationDto dto) {
+    private void registerUser(UserRegistrationDto dto) throws MessagingException {
         if (userService.findByUsername(dto.getUsername()).isPresent()) {
             throw new RuntimeException("Username is already taken!");
         }
 
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
-        newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
-        newUser.setEnabled(dto.isEnabled());
+        String password = PasswordGenerator.generatePassword(8);
+        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
+
+        System.out.println("Password: " + password);
+        newUser.setPassword(passwordEncoder.encode(password));
+        newUser.setEnabled(true);
 
         // for the time being, set the designation to the role
-        newUser.setDesignation(switch (dto.getRole()) {
-            case "ROLE_ADMIN" -> "Administrator";
-            case "ROLE_ENVIRONMENT_OFFICER" -> "Environment Officer";
-            case "ROLE_MANAGEMENT" -> "Management";
-            case "ROLE_THIRD_PARTY" -> "Third Party";
+        newUser.setDesignation(switch (dto.getRoleId().toString()) {
+            case "1" -> "Super Admin";
+            case "2" -> "Admin";
+            case "3" -> "Environment Officer";
+            case "4" -> "Management";
+            case "5" -> "Third Party";
+            case "6" -> "MPCB Officer";
             default -> "Unknown";
         });
 
         CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
         newUser.setCompanyProfile(companyProfile);
 
-        newUser.setFailedLoginCount(dto.getFailedLoginCount());
+        newUser.setLastLoginDate(LocalDateTime.now());
 
-        if (dto.getLastLoginDate() != null) {
-            newUser.setLastLoginDate(LocalDateTime.parse(dto.getLastLoginDate()));
-        }
+        newUser.setLocked(false);
 
-        newUser.setLocked(dto.isLocked());
+        Role role = roleService.findById(dto.getRoleId());
+        userService.assignRole(newUser, role.getName());
 
-        userService.saveUser(newUser);
-
-        ERole roleEnum = ERole.valueOf(dto.getRole().toUpperCase());
-        Role role = roleService.findByName(roleEnum)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        userService.assignRole(newUser, roleEnum);
+        Employee employee = new Employee();
+        employee.setEmployeeName(dto.getEmployeeName());
+        employee.setUser(newUser);
+        employee.setCompanyProfile(companyProfile);
+        employeeService.save(employee);
     }
 
 

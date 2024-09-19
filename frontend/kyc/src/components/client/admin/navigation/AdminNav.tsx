@@ -8,15 +8,7 @@ import AdminServices from "../services/AdminServices";
 
 const adminNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/admin' },
-  {
-    label: "Users",
-    icon: IconUser,
-    initiallyOpened: true,
-    links: [
-      { label: "Create", link: "user/create" },
-      { label: "Manage", link: "user/manage" },
-    ],
-  },
+  { label: "Users", icon: IconUser, links: 'users' },
   {
     label: "Companies",
     icon: IconBuilding,

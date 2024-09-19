@@ -1,5 +1,5 @@
 import { Space } from "@mantine/core";
-import AddUser from "./AddUser";
+import AddUser from "./AddUsersLayout";
 import MyUsers from "./MyUsers";
 
 export default function UserPage() {

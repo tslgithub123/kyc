@@ -21,4 +21,8 @@ public class EmployeeService {
     public Employee getEmployeeByUserId(Long id) {
         return employeeRepository.findByUserId(id);
     }
+
+    public Employee save(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 }

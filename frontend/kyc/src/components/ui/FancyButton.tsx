@@ -34,7 +34,7 @@ export default function FancyButton({ icon, color, title, onClick }: FancyButton
     return (
         <UnstyledButton bg={bgColor} onClick={handleClick} className={classes.item} mt="md">
             {React.cloneElement(icon as React.ReactElement, { color: theme.colors[color][6], size: "2rem" })}
-            <Text size="xs" mt={7}>
+            <Text size="sm" mt={7}>
                 {title}
             </Text>
         </UnstyledButton>

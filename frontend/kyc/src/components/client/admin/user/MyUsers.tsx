@@ -19,7 +19,7 @@ import {
   Menu,
   rem,
 } from '@mantine/core';
-import { IconArrowUp, IconArrowDown, IconSearch, IconTrash, IconClearAll, IconSend2, IconCircleOff, IconDownload, IconArrowsLeftRight, IconMessageCircle, IconPhoto, IconSettings, IconFingerprint, IconFileExcel, IconPdf, IconRestore } from '@tabler/icons-react';
+import { IconArrowUp, IconArrowDown, IconSearch, IconClearAll, IconSend2, IconCircleOff, IconDownload, IconFileExcel, IconPdf, IconRestore, IconUser } from '@tabler/icons-react';
 import api from '../../../../utils/api';
 import PromptModal from '../../../ui/PromptModal';
 import global from "./../../../ui/Global.module.css";
@@ -124,7 +124,7 @@ export default function MyUsers() {
     console.log("Sending emails to profiles with IDs:", selectedIds);
   }
 
-  const deleteProfiles = async (ids: number[]) => {
+  const deactivateProfiles = async (ids: number[]) => {
     try {
       //await api.deleteUserProfiles(ids);
       setUserProfiles((prevProfiles) => prevProfiles.filter((profile) => !ids.includes(profile.id)));
@@ -201,8 +201,12 @@ export default function MyUsers() {
                             </Title>
                         </Tooltip>
                     </Grid.Col>
-                    <Grid.Col span={6} style={{ textAlign: 'right' }}>
-                        <Text size="sm" c="dimmed">Total Profiles: </Text>
+                    <Grid.Col  span={6} style={{ textAlign: 'right' }}>
+                        <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
+                          Total Users: <Text component="span" c={userProfiles.length > 0 ? 'blue' : 'red'}>
+                            {userProfiles.length}
+                          </Text>
+                        </Text>
                     </Grid.Col>
                 </Grid>
       <Divider />
@@ -220,7 +224,7 @@ export default function MyUsers() {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Button
+              {/* <Button
                 color="blue"
                 ml={'sm'}
                 disabled={selectedIds.length === 0}
@@ -232,7 +236,21 @@ export default function MyUsers() {
                 mr={'sm'}
               >
                 Clear
+              </Button> */}
+              <Button
+                color="blue"
+                ml={'sm'}
+                disabled={!(selectedIds.length === 1)}
+                onClick={() => {
+                  setSelectedIds([]);
+                }}
+                leftSection={<IconUser/>}
+                style={{ minWidth: '110px' }}
+                mr={'sm'}
+              >
+                View
               </Button>
+              
               <PromptModal
                 disabled={selectedIds.length === 0}
                 color="red"
