@@ -1,4 +1,4 @@
-import { IconBuilding, IconGauge, IconUser } from "@tabler/icons-react";
+import { IconFileText, IconGauge, IconPencilCheck, IconSeeding } from "@tabler/icons-react";
 
 import Navigation from "../../../navigation/Navigation";
 import { EnvRoutes } from "../../../../routes/Routes";
@@ -8,23 +8,28 @@ import EnvMenu from "./EnvMenu";
 
 const adminNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/env' },
+  { label: "Environment Clearance", icon: IconSeeding, links: [
+    { label: "Add", link: "ec/create" },
+    { label: "View", link: "ec/view" },
+  ], },
   {
     label: "Consent",
-    icon: IconUser,
+    icon: IconFileText,
     initiallyOpened: true,
     links: [
-      { label: "Create", link: "consent/create" },
+      { label: "Add", link: "consent/create" },
       { label: "View", link: "consent/view" },
     ],
   },
   {
     label: "Daily Data",
-    icon: IconBuilding,
+    icon: IconPencilCheck,
     links: [
-      { label: "Add", link: "/data/daily/add" },
-      { label: "View", link: "/data/daily/view" },
+      { label: "Add", link: "data/daily/add" },
+      { label: "View", link: "data/daily/view" },
     ],
-  }
+  },
+  
 ];
 
 export default function EnvNav() {

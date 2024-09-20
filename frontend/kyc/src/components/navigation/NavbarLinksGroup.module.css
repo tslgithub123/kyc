@@ -5,11 +5,13 @@
   color: var(--mantine-color-text);
   font-size: var(--mantine-font-size-sm);
   cursor: pointer;
+  border-radius: 4px;
+  border-bottom-right-radius: 4px;
 
   /* Hover effect */
   &:hover {
     background-color: light-dark(
-      var(--mantine-color-gray-0),
+      var(--mantine-color-gray-1),
       var(--mantine-color-dark-7)
     );
     color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
@@ -19,7 +21,7 @@
 .activeLink {
   font-weight: 500;
   background-color: light-dark(
-    var(--mantine-color-blue-0),
+    var(--mantine-color-blue-1),
     var(--mantine-color-dark-7)
   );
   border-left: 1px solid light-dark(
@@ -27,12 +29,10 @@
     var(--mantine-color-dark-4)
   );
   
-  color: var(--mantine-color-blue); /* Make active link color prominent */
-
-  /* Hover effect for active links */
+  color: var(--mantine-color-blue);
   &:hover {
     background-color: light-dark(
-      var(--mantine-color-blue-0),
+      var(--mantine-color-blue-1),
       var(--mantine-color-dark-7)
     );
     color: var(--mantine-color-blue);
@@ -45,17 +45,20 @@
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
   padding-left: var(--mantine-spacing-md);
   margin-left: var(--mantine-spacing-xl);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-right: var(--mantine-spacing-md);
   font-size: var(--mantine-font-size-sm);
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
   border-left: 1px solid light-dark(
-    var(--mantine-color-gray-3),
+    var(--mantine-color-gray-4),
     var(--mantine-color-dark-4)
   );
 
   /* Hover effect for normal links */
   &:hover {
     background-color: light-dark(
-      var(--mantine-color-gray-0),
+      var(--mantine-color-gray-1),
       var(--mantine-color-dark-7)
     );
     color: var(--mantine-color-blue);

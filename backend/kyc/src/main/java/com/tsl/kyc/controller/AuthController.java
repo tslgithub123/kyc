@@ -87,7 +87,7 @@ public class AuthController {
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
         String password = PasswordGenerator.generatePassword(8);
-        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
+//        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
 
         System.out.println("Password: " + password);
         newUser.setPassword(passwordEncoder.encode(password));

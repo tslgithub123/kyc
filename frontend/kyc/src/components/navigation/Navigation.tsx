@@ -3,7 +3,8 @@ import {
   AppShell,
   Burger,
   Group,
-  AppShellFooter
+  AppShellFooter,
+  Button
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBrandMantine } from "@tabler/icons-react";
@@ -11,6 +12,7 @@ import NavbarLinksGroup from "./NavbarLinksGroup";
 import ThemeButton from "../ui/ThemeButton";
 import Notifications from "../notifications/Notifications";
 import classes from './Navigation.module.css';
+import { useState } from "react";
 
 interface NavigationProps {
   navdata: Array<any>;
@@ -26,6 +28,7 @@ export default function Navigation({
   menu,
 }: NavigationProps) {
   const [opened, { toggle, close }] = useDisclosure();
+  const [navbarVisible, setNavbarVisible] = useState(true);
 
   const handleLinkClick = () => {
     if (opened) {
@@ -33,12 +36,16 @@ export default function Navigation({
     }
   };
 
+  const toggleNavbar = () => {
+    setNavbarVisible(!navbarVisible);
+  };
+
   const links = navdata.map((item) => (
     <NavbarLinksGroup {...item} key={item.label} onLinkClick={handleLinkClick} />
   ));
 
   return (
-    
+    <>
     <AppShell
     layout="default"
       header={{ height: { base: 60, md: 70, lg: 60 } }}
@@ -60,6 +67,9 @@ export default function Navigation({
                 hiddenFrom="sm"
                 size="sm"
               />
+              <Button onClick={toggleNavbar}>
+            {navbarVisible ? 'Hide Navbar' : 'Show Navbar'}
+          </Button>
               <IconBrandMantine size={30} />
             </Group>
             
@@ -72,7 +82,7 @@ export default function Navigation({
           </Group>
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar  p="md">
+      {navbarVisible && <AppShell.Navbar  p="md">
         {links}
         <AppShellFooter className={classes.footer}>
             <div className={classes.footerContent}>
@@ -80,8 +90,14 @@ export default function Navigation({
             <p>Techknowgreen Solutions Ltd.</p>
             </div>
         </AppShellFooter>
-      </AppShell.Navbar>
-      <AppShell.Main >{routes}</AppShell.Main>
+      </AppShell.Navbar>}
+
+      {navbarVisible ? (
+        <AppShell.Main>{routes}</AppShell.Main>
+      ) : (
+        <div style={{paddingTop: '76px', paddingLeft: '16px', paddingRight: '16px'}}>{routes}</div>
+      )}
     </AppShell>
+    </>
   );
 }

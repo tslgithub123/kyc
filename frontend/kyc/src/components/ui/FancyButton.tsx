@@ -23,6 +23,9 @@ export default function FancyButton({ icon, color, title, onClick }: FancyButton
         case "Third Party":
             bgColor = 'grape.1';
             break;
+            case "Company":
+                bgColor = 'blue.1';
+                break;
         default:
             bgColor = 'lime.1';
     }
