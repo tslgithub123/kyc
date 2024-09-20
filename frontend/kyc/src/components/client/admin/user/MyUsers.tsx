@@ -41,6 +41,7 @@ interface SortConfig {
 
 export default function MyUsers() {
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
+  const [currentProfile, setCurrentProfile] = useState<UserProfile>();
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -48,6 +49,8 @@ export default function MyUsers() {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [refresh, setRefresh] = useState<boolean>(false);
   const theme = useMantineTheme();
+
+  const uid = useAuthStore().user?.id;
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
@@ -81,7 +84,19 @@ export default function MyUsers() {
   };
 
   useEffect(() => {
-    fetchUserProfiles();
+    const fetchAndFilterUserProfiles = async () => {
+      await fetchUserProfiles();
+      setUserProfiles((prevUserProfiles) => {
+        const currentUserProfile = prevUserProfiles.find(profile => profile.id === uid);
+        console.log("Current User Profile:", currentUserProfile);
+        if (currentUserProfile) {
+          setCurrentProfile(currentUserProfile);
+          return prevUserProfiles.filter(profile => profile.id !== uid);
+        }
+        return prevUserProfiles;
+      });
+    };
+    fetchAndFilterUserProfiles();
   }, [refresh]);
 
   const handleLockChange = async (id: number, currentLockedStatus: boolean) => {
@@ -173,12 +188,12 @@ export default function MyUsers() {
       'Environment Officer': '1px solid green',
       'Manager': '1px solid purple',
       'Third Party': '1px solid gray',
-     
+
     };
-  
+
     return designationColors[designation] || '1px solid black';
   };
-  
+
 
   const getTextColor = (designation: string): string => {
     const textColors: { [key: string]: string } = {
@@ -186,29 +201,29 @@ export default function MyUsers() {
       'Environment Officer': 'darkgreen',
       'Manager': 'purple',
       'Third Party': 'gray.9',
-     };
-  
+    };
+
     return textColors[designation] || 'black';
   };
 
   return (
     <Paper withBorder mt={'md'} radius="sm">
-       <Grid p="sm" pl='lg' bg={'gray.1'} justify="space-between" align="center">
-                    <Grid.Col span={6}>
-                        <Tooltip withArrow arrowPosition="side" arrowSize={8} position="right" offset={-370} label="Select the title and fill in the details to add a user.">
-                            <Title className={global.title}  order={3} c="gray.7">
-                                My Users
-                            </Title>
-                        </Tooltip>
-                    </Grid.Col>
-                    <Grid.Col  span={6} style={{ textAlign: 'right' }}>
-                        <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
-                          Total Users: <Text component="span" c={userProfiles.length > 0 ? 'blue' : 'red'}>
-                            {userProfiles.length}
-                          </Text>
-                        </Text>
-                    </Grid.Col>
-                </Grid>
+      <Grid p="sm" pl='lg' bg={'gray.1'} justify="space-between" align="center">
+        <Grid.Col span={6}>
+          <Tooltip withArrow arrowPosition="side" arrowSize={8} position="right" offset={-370} label="Select the title and fill in the details to add a user.">
+            <Title className={global.title} order={3} c="gray.7">
+              My Users
+            </Title>
+          </Tooltip>
+        </Grid.Col>
+        <Grid.Col span={6} style={{ textAlign: 'right' }}>
+          <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
+            Total Users: <Text component="span" c={userProfiles.length > 0 ? 'blue' : 'red'}>
+              {userProfiles.length + 1}
+            </Text>
+          </Text>
+        </Grid.Col>
+      </Grid>
       <Divider />
       <Paper p="lg" radius="lg">
         <Grid mb="md">
@@ -244,13 +259,13 @@ export default function MyUsers() {
                 onClick={() => {
                   setSelectedIds([]);
                 }}
-                leftSection={<IconUser/>}
+                leftSection={<IconUser />}
                 style={{ minWidth: '110px' }}
                 mr={'sm'}
               >
                 View
               </Button>
-              
+
               <PromptModal
                 disabled={selectedIds.length === 0}
                 color="red"
@@ -275,7 +290,7 @@ export default function MyUsers() {
                 disabled={!(selectedIds.length === 1)}
                 color="dark"
                 exportButtonText={'Reset Password'}
-                icon={<IconRestore/>}
+                icon={<IconRestore />}
                 title={'Reset Password?'}
                 description="Are you sure you want to reset password of the selected profile? This will send an email to the user with reset credentials."
                 trueButtonText="Send"
@@ -284,24 +299,24 @@ export default function MyUsers() {
             </div>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 3 }} style={{ textAlign: 'right' }}>
-          <Menu shadow="md" width={200}>
-      <Menu.Target>
-      <ActionIcon size="lg" color="green">
-        <IconDownload size={20} />
-      </ActionIcon>
-      </Menu.Target>
+            <Menu shadow="md" width={200}>
+              <Menu.Target>
+                <ActionIcon size="lg" color="green">
+                  <IconDownload size={20} />
+                </ActionIcon>
+              </Menu.Target>
 
-      <Menu.Dropdown>
-        
-        <Menu.Item leftSection={<IconFileExcel style={{ width: rem(14), height: rem(14) }} />}>
-          Download Excel
-        </Menu.Item>
-        <Menu.Item leftSection={<IconPdf style={{ width: rem(14), height: rem(14) }} />}>
-          Download PDF
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
-            
+              <Menu.Dropdown>
+
+                <Menu.Item leftSection={<IconFileExcel style={{ width: rem(14), height: rem(14) }} />}>
+                  Download Excel
+                </Menu.Item>
+                <Menu.Item leftSection={<IconPdf style={{ width: rem(14), height: rem(14) }} />}>
+                  Download PDF
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+
           </Grid.Col>
         </Grid>
         <Table withColumnBorders striped highlightOnHover withTableBorder>
@@ -340,6 +355,47 @@ export default function MyUsers() {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody style={{ textAlign: 'center' }}>
+          {currentProfile && (<Table.Tr bg={'blue.1'} key={currentProfile.id}>
+            <Table.Td >
+            <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" >
+                    Current User
+                    </ActionIcon>
+                </Table.Td>
+                <Table.Td>{currentProfile.username}</Table.Td>
+                <Table.Td>
+                  <Pill c={getTextColor(currentProfile.designation)} style={{
+                    width: '130px',
+                    justifyContent: 'center',
+                    outline: getOutlineColor(currentProfile.designation),
+                  }}>{currentProfile.designation}</Pill></Table.Td>
+                <Table.Td>
+                  {currentProfile.lastLoginDate ? (
+                    <Text size="sm" c="dimmed">
+                      {new Date(currentProfile.lastLoginDate).toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </Text>
+                  ) : (
+                    <Text size="sm" c="dimmed">
+                      N/A
+                    </Text>
+                  )}
+                </Table.Td>
+                <Table.Td>
+                  <Center>
+                    <Switch
+                      checked={currentProfile.locked}
+                      onChange={() => handleLockChange(currentProfile.id, currentProfile.locked)}
+                      color={currentProfile.locked ? "red" : "teal"}
+                      size="md"
+                      disabled
+                    /></Center>
+                </Table.Td>
+              </Table.Tr>)}
             {paginatedProfiles.map((profile, index) => (
               <Table.Tr key={profile.id}>
                 <Table.Td>
@@ -351,12 +407,12 @@ export default function MyUsers() {
                   </ActionIcon>
                 </Table.Td>
                 <Table.Td>{profile.username}</Table.Td>
-                {/* <Table.Td>{profile.companyName}</Table.Td> */}
-                <Table.Td><Pill  c={getTextColor(profile.designation)} style={{width: '130px',  
-                justifyContent: 'center', 
-      outline: getOutlineColor(profile.designation),
-      
-    }}>{profile.designation}</Pill></Table.Td>
+                <Table.Td>
+                  <Pill c={getTextColor(profile.designation)} style={{
+                    width: '130px',
+                    justifyContent: 'center',
+                    outline: getOutlineColor(profile.designation),
+                  }}>{profile.designation}</Pill></Table.Td>
                 <Table.Td>
                   {profile.lastLoginDate ? (
                     <Text size="sm" c="dimmed">
@@ -376,7 +432,7 @@ export default function MyUsers() {
                 </Table.Td>
                 <Table.Td>
                   <Center>
-                    <Switch 
+                    <Switch
                       checked={profile.locked}
                       onChange={() => handleLockChange(profile.id, profile.locked)}
                       color={profile.locked ? "red" : "teal"}

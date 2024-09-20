@@ -1,8 +1,7 @@
-import { memo, useCallback, useEffect } from 'react';
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
 
 interface Link {
@@ -26,9 +25,8 @@ const NavbarLinksGroup = ({
   onLinkClick,
 }: NavbarLinksGroupProps) => {
   const hasLinks = Array.isArray(links);
-  const isSingleLink = (typeof links === 'string');
+  const isSingleLink = typeof links === 'string';
   const [opened, setOpened] = useState(initiallyOpened);
-  const location = useLocation();
 
   const handleLinkClick = useCallback(() => {
     if (onLinkClick) {
@@ -43,6 +41,7 @@ const NavbarLinksGroup = ({
       className={({ isActive }) =>
         `${classes.link} ${isActive ? classes.activeLink : ''}`
       }
+      end
       onClick={handleLinkClick}
     >
       {link.label}
@@ -77,15 +76,18 @@ const NavbarLinksGroup = ({
         <NavLink
           to={links as string}
           style={{ textDecoration: 'none' }}
-          className={`${classes.control} ${location.pathname === links ? classes.activeLink : ''}`}
+          className={({ isActive }) =>
+            `${classes.control} ${isActive ? classes.activeLink : ''}`
+          }
+          end
           onClick={handleLinkClick}
         >
           {content}
         </NavLink>
       ) : (
-        <UnstyledButton 
-          onClick={() => setOpened((o) => !o)} 
-          className={`${classes.control} ${isSingleLink ? classes.activeLink : ''}`}
+        <UnstyledButton
+          onClick={() => setOpened((o) => !o)}
+          className={classes.control}
         >
           {content}
         </UnstyledButton>
@@ -93,6 +95,6 @@ const NavbarLinksGroup = ({
       {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
     </>
   );
-}
+};
 
 export default memo(NavbarLinksGroup);

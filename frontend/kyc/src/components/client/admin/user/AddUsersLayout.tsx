@@ -101,6 +101,7 @@ export default function AddUser() {
                                 </div>
                             </Center>
                         </Grid.Col>
+                        
                         <Grid.Col pt={0} span={4}>
                             <Center>
                             <div className={classes.item}>
@@ -121,6 +122,7 @@ export default function AddUser() {
                                 </div>
                             </Center>
                         </Grid.Col>
+                        
                         <Grid.Col pt={0} span={4}>
                             <Center>
                             <div className={classes.item}>

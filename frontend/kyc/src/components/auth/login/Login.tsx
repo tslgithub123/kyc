@@ -62,7 +62,7 @@ export default function Login() {
           navigate('/thp');
           break;
         default:
-          navigate('/dashboard');
+          navigate('/unauthorized');
           break;
       }
     } catch (error: any) {

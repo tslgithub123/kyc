@@ -113,8 +113,8 @@ VALUES
 -- Insert Users with all fields filled
 INSERT INTO users (username, password, enabled, designation, company_profile_id, failed_login_count, last_login_date, locked)
 VALUES
-('superadmin', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 1, 'Super Admin', 1, 0, NOW(), 0),
-('mpcb', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 1, 'MPCB', 1, 0, NOW(), 0),
+('superadmin', '$2a$12$WZfY6W.y0iEHSs/xgVztxud3ry/Hto9OhVDx8rlv7WhLJdYVfLw0i', 1, 'Super Admin', 1, 0, NOW(), 0),
+('mpcb', '$2a$12$ve87lQVb5uTYFnkQCkt5wej3UfjUWT4rJcrVKj6KKF/jm9zz.ETU2', 1, 'MPCB', 1, 0, NOW(), 0),
 ('admin', '$2a$10$EpSzg7LgnWJnhmwTz7LpS.ag/QoKCMklUoFYactrDAY7XH3floeFy', 1, 'Administrator', 1, 0, NOW(), 0),
 ('env', '$2a$10$tZdWNzgjivHVMSYE08xcRenbu2TS/AGj57JOV1l.ZowrK3wOheLxa', 1, 'Environment Officer', 1, 0, NOW(), 0),
 ('man', '$2a$10$9mlMDltOWKW.avowJvbzXOr3100kYk90xbBrUfPoXG65UQoD29y6q', 1, 'Manager', 1, 0, NOW(), 0),

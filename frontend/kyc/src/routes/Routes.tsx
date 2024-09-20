@@ -6,6 +6,7 @@ import EnvDashboard from '../components/client/env/EnvDashboard';
 import SuperAdminDashboard from '../components/superadmin/SuperAdminDashboard';
 import MpcbDashboard from '../components/mpcb/MpcbDashboard';
 import UserPage from '../components/client/admin/user/UserPage';
+import CompanyPage from '../components/client/admin/company/CompanyPage';
 
 export function SuperAdminRoutes() {
   return (
@@ -29,8 +30,7 @@ export function AdminRoutes() {
   return (
     <Routes>
       <Route path="/" element={<AdminDashboard />} />
-      <Route path="/company/create" element={<CompanyProfileAccordian />} />
-      <Route path="/company/manage" element={<CompanyProfileAccordian />} />
+      <Route path="/company" element={<CompanyPage/>} />
       <Route path="/users" element={<UserPage/>} />
       <Route path="/profile" element={<AdminProfile />} />
     </Routes>
