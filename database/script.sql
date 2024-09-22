@@ -1,17 +1,19 @@
--- Drop and Create Database
-DROP DATABASE IF EXISTS new_kyc;
-CREATE DATABASE new_kyc;
-USE new_kyc;
+-- Drop and Create Database (PostgreSQL does not allow database creation within a session)
+-- Instead, you must create the database outside this script (or via psql):
+-- CREATE DATABASE new_kyc;
+
+-- Connect to the database
+\c new_kyc;
 
 -- Create Roles Table
 CREATE TABLE roles (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
 -- Create Company Profile Table
 CREATE TABLE company_profile (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     mpcbid BIGINT,
     branch VARCHAR(255),
     category VARCHAR(255),
@@ -47,15 +49,15 @@ CREATE TABLE company_profile (
 
 -- Create Users Table with New Fields
 CREATE TABLE users (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    enabled TINYINT(1),
+    enabled BOOLEAN,
     designation VARCHAR(45),
     company_profile_id BIGINT,
     failed_login_count INT,
-    last_login_date DATETIME,
-    locked BIT,
+    last_login_date TIMESTAMP,
+    locked BOOLEAN,
     CONSTRAINT FK_users_company_profile FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE SET NULL
 );
 
@@ -70,7 +72,7 @@ CREATE TABLE user_roles (
 
 -- Create Employee Data Table
 CREATE TABLE emp_data (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     employee_name VARCHAR(500),
     gender VARCHAR(20),
@@ -89,9 +91,9 @@ CREATE TABLE emp_data (
     marital_status VARCHAR(255),
     CONSTRAINT FK_emp_data_company FOREIGN KEY (company_id) REFERENCES company_profile(id),
     CONSTRAINT FK_emp_data_user FOREIGN KEY (user_id) REFERENCES users(id)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
 
--- Create Indexes for emp_data Table
+-- Indexes (PostgreSQL auto-creates indexes for primary and foreign keys)
 CREATE INDEX idx_emp_data_company ON emp_data (company_id);
 CREATE INDEX idx_emp_data_user ON emp_data (user_id);
 
@@ -113,12 +115,12 @@ VALUES
 -- Insert Users with all fields filled
 INSERT INTO users (username, password, enabled, designation, company_profile_id, failed_login_count, last_login_date, locked)
 VALUES
-('superadmin', '$2a$12$WZfY6W.y0iEHSs/xgVztxud3ry/Hto9OhVDx8rlv7WhLJdYVfLw0i', 1, 'Super Admin', 1, 0, NOW(), 0),
-('mpcb', '$2a$12$ve87lQVb5uTYFnkQCkt5wej3UfjUWT4rJcrVKj6KKF/jm9zz.ETU2', 1, 'MPCB', 1, 0, NOW(), 0),
-('admin', '$2a$10$EpSzg7LgnWJnhmwTz7LpS.ag/QoKCMklUoFYactrDAY7XH3floeFy', 1, 'Administrator', 1, 0, NOW(), 0),
-('env', '$2a$10$tZdWNzgjivHVMSYE08xcRenbu2TS/AGj57JOV1l.ZowrK3wOheLxa', 1, 'Environment Officer', 1, 0, NOW(), 0),
-('man', '$2a$10$9mlMDltOWKW.avowJvbzXOr3100kYk90xbBrUfPoXG65UQoD29y6q', 1, 'Manager', 1, 0, NOW(), 0),
-('thp', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 1, 'Third Party', 1, 0, NOW(), 0);
+('superadmin', '$2a$12$WZfY6W.y0iEHSs/xgVztxud3ry/Hto9OhVDx8rlv7WhLJdYVfLw0i', TRUE, 'Super Admin', 1, 0, NOW(), FALSE),
+('mpcb', '$2a$12$ve87lQVb5uTYFnkQCkt5wej3UfjUWT4rJcrVKj6KKF/jm9zz.ETU2', TRUE, 'MPCB', 1, 0, NOW(), FALSE),
+('admin', '$2a$10$EpSzg7LgnWJnhmwTz7LpS.ag/QoKCMklUoFYactrDAY7XH3floeFy', TRUE, 'Administrator', 1, 0, NOW(), FALSE),
+('env', '$2a$10$tZdWNzgjivHVMSYE08xcRenbu2TS/AGj57JOV1l.ZowrK3wOheLxa', TRUE, 'Environment Officer', 1, 0, NOW(), FALSE),
+('man', '$2a$10$9mlMDltOWKW.avowJvbzXOr3100kYk90xbBrUfPoXG65UQoD29y6q', TRUE, 'Manager', 1, 0, NOW(), FALSE),
+('thp', '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', TRUE, 'Third Party', 1, 0, NOW(), FALSE);
 
 -- Map Users to Roles
 INSERT INTO user_roles (user_id, role_id) VALUES
