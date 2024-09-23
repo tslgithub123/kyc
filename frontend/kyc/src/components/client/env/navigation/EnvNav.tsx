@@ -15,7 +15,6 @@ const adminNavData = [
   {
     label: "Consent",
     icon: IconFileText,
-    initiallyOpened: true,
     links: [
       { label: "Add", link: "consent/create" },
       { label: "View", link: "consent/view" },

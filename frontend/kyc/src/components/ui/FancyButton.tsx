@@ -15,16 +15,16 @@ export default function FancyButton({ icon, color, title, onClick }: FancyButton
     let bgColor = ''
     switch (title) {
         case "Environment Officer":
-            bgColor = 'lime.1';
+            bgColor = 'lime.2';
             break;
         case "Management":
-            bgColor = 'yellow.1';
+            bgColor = 'yellow.2';
             break;
         case "Third Party":
-            bgColor = 'grape.1';
+            bgColor = 'grape.2';
             break;
             case "Company":
-                bgColor = 'blue.1';
+                bgColor = 'cyan.2';
                 break;
         default:
             bgColor = 'lime.1';

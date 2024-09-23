@@ -1,4 +1,4 @@
-import { IconGauge, IconUser } from "@tabler/icons-react";
+import { IconBuilding, IconGauge, IconUser } from "@tabler/icons-react";
 
 import { AdminRoutes} from "../../../../routes/Routes";
 import Navigation from "../../../navigation/Navigation";
@@ -8,8 +8,8 @@ import AdminServices from "../services/AdminServices";
 
 const adminNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/admin' },
+  { label: "Company", icon: IconBuilding, links: 'company' },
   { label: "Users", icon: IconUser, links: 'users' },
-  { label: "Company", icon: IconUser, links: 'company' },
   // {
   //   label: "Companies",
   //   icon: IconBuilding,
