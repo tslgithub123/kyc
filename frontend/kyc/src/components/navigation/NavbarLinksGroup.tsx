@@ -1,7 +1,8 @@
 import { memo, useCallback, useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
-import { NavLink} from 'react-router-dom';
+import global from '../ui/Global.module.css'
+import { NavLink } from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
 
 interface Link {
@@ -49,7 +50,7 @@ const NavbarLinksGroup = ({
   ));
 
   const content = (
-    <Group justify="space-between" gap={0}>
+    <Group className={global.navlinks} justify="space-between" gap={0}>
       <Box style={{ display: 'flex', alignItems: 'center' }}>
         <ThemeIcon variant="light" size={30}>
           <Icon style={{ width: rem(18), height: rem(18) }} />

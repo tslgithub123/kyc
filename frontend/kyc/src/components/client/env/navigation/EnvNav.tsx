@@ -6,10 +6,10 @@ import EnvServices from "../services/EnvServices";
 import EnvMenu from "./EnvMenu";
 
 
-const adminNavData = [
+const envNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/env' },
   { label: "Environment Clearance", icon: IconSeeding, links: [
-    { label: "Add", link: "ec/create" },
+    { label: "Add", link: "ec/add" },
     { label: "View", link: "ec/view" },
   ], },
   {
@@ -34,7 +34,7 @@ const adminNavData = [
 export default function EnvNav() {
   return (
     <Navigation 
-      navdata={adminNavData} 
+      navdata={envNavData} 
       routes={<EnvRoutes/>} 
       actions={<EnvServices/>} 
       menu={<EnvMenu/>}

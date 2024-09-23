@@ -29,6 +29,9 @@ export default function Navigation({
   const [opened, { close }] = useDisclosure();
   const [navbarVisible, setNavbarVisible] = useState(true);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const memoizedRoutes = useMemo(() => routes, [routes]);
+
+  console.log('navbarVisible', navbarVisible);
 
   const handleLinkClick = useCallback(() => {
     if (opened) {
@@ -65,6 +68,8 @@ export default function Navigation({
               opened={navbarVisible}
               onClick={toggleNavbar}
               size="sm"
+              
+
             />
             <IconBrandMantine size={30} />
           </Group>
@@ -90,19 +95,25 @@ export default function Navigation({
               <div className={classes.footerContent}>
                 <p>© {new Date().getFullYear()}</p>
                 <p>Techknowgreen Solutions Ltd.</p>
+
               </div>
             </AppShellFooter>
           </AppShell.Navbar>
         )}
       </Transition>
 
-      <div style={{ display: navbarVisible ? 'block' : 'none', transition: 'all 300ms ease' }}>
-        <AppShell.Main>{routes}</AppShell.Main>
-      </div>
-
-      <div style={{ display: !navbarVisible ? 'block' : 'none', paddingTop: '76px', paddingLeft: '16px', paddingRight: '16px', transition: 'all 300ms ease' }}>
-        {routes}
-      </div>
+      <AppShell.Main
+        style={{
+          paddingTop: '76px',
+          display: 'block',
+          transition: 'all 300ms ease',
+          paddingLeft: navbarVisible ? undefined : '16px',
+          paddingRight: navbarVisible ? undefined : '16px'
+        }}
+        pt={navbarVisible ? undefined : '76px'}
+      >
+        {memoizedRoutes}
+      </AppShell.Main>
     </AppShell>
   );
 }

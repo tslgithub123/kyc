@@ -210,11 +210,9 @@ export default function MyUsers() {
     <Paper withBorder mt={'md'} radius="sm">
       <Grid p="sm" pl='lg' bg={'gray.1'} justify="space-between" align="center">
         <Grid.Col span={6}>
-          <Tooltip withArrow arrowPosition="side" arrowSize={8} position="right" offset={-370} label="Select the title and fill in the details to add a user.">
             <Title className={global.title} order={3} c="gray.7">
               My Users
             </Title>
-          </Tooltip>
         </Grid.Col>
         <Grid.Col span={6} style={{ textAlign: 'right' }}>
           <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
