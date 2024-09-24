@@ -1,11 +1,18 @@
-.title {
-  font-family:
-    Greycliff CF,
-    var(--mantine-font-family);
-  
-  line-height: 1.1;
+.navlinks {
+  font-family: 'open sans';
+}
+
+.fancytitle{
+  font-family: 'open sans';
   margin: 0;
   padding: 0;
   color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+}
 
+
+.title {
+  font-family: 'open sans';
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 }

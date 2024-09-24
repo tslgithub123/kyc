@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useCurrentUser } from '../hooks/useCurrentUser';
-import { useAuthStore } from '../../store/store';
-import LogoutButton from '../ui/LogoutButton';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import LogoutButton from '../../ui/LogoutButton';
+import { useAuthStore } from '../../../store/store';
 
 
 function ManagementDashboard() {
