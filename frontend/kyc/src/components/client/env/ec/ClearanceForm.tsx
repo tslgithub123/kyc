@@ -6,13 +6,15 @@ import { IconPaperclip } from "@tabler/icons-react";
 
 export default function ClearanceForm() {
     const [isApplicable, setIsApplicable] = useState(false);
-    const [ecGrantedFrom, setEcGrantedFrom] = useState("");
+    const [selectedUnit, setSelectedUnit] = useState('');
+    const [customUnit, setCustomUnit] = useState('');
 
     const unitOptions = [
         { value: 'hector', label: 'Hector' },
         { value: 'sqMeters', label: 'Sq. Meters' },
         { value: 'nos', label: 'Nos' },
-        { value: 'unit', label: 'Unit' }
+        { value: 'unit', label: 'Unit' },
+        { value: 'other', label: 'Other' }
     ];
 
     const form = useForm({
@@ -39,6 +41,8 @@ export default function ClearanceForm() {
     const unitSelect = (
         <NativeSelect
             data={unitOptions}
+            value={selectedUnit}
+            onChange={(event) => setSelectedUnit(event.currentTarget.value)}
             rightSectionWidth={28}
             styles={{ input: { borderTopLeftRadius: 0, borderBottomLeftRadius: 0, width: rem(88) } }}
             mr={'xl'}
@@ -62,6 +66,16 @@ export default function ClearanceForm() {
                 rightSection={unitSelect}
                 {...form.getInputProps(quantityKey)}
             />
+            {selectedUnit === 'other' && (
+                <TextInput
+                    m='md'
+                    withAsterisk
+                    label="Custom Unit"
+                    placeholder="Enter unit"
+                    value={customUnit}
+                    onChange={(event) => setCustomUnit(event.currentTarget.value)}
+                />
+            )}
         </SimpleGrid>
     );
 
@@ -98,7 +112,7 @@ export default function ClearanceForm() {
                                 <TextInput
                                     m='md'
                                     withAsterisk
-                                    label="Existing Environmental Clearance Number"
+                                    label="Existing Env. Clearance Number"
                                     placeholder="XYZ123"
                                     {...form.getInputProps('existingEcNumber')}
                                 />
