@@ -7,10 +7,11 @@ import com.tsl.kyc.entity.Role;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class UserDto implements Serializable {
 
-    private Long id;
+    private UUID id;
     private String username;
 
     @JsonIgnore
@@ -32,8 +33,8 @@ public class UserDto implements Serializable {
 
     // Getters and Setters
 
-    public UserDto(Long id, String username, String password, Boolean enabled, String designation,
-			CompanyProfile companyProfile, Integer failedLoginCount, String lastLoginDate, Boolean locked, String companyName,Set<Role> role) {
+    public UserDto(UUID id, String username, String password, Boolean enabled, String designation,
+                   CompanyProfile companyProfile, Integer failedLoginCount, String lastLoginDate, Boolean locked, String companyName, Set<Role> role) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -49,11 +50,11 @@ public class UserDto implements Serializable {
 
 
 
-	public Long getId() {
+	public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

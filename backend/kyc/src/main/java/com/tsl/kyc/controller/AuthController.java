@@ -1,16 +1,12 @@
 package com.tsl.kyc.controller;
 
 import com.tsl.kyc.dto.UserRegistrationDto;
-import com.tsl.kyc.entity.CompanyProfile;
-import com.tsl.kyc.entity.Employee;
-import com.tsl.kyc.entity.Role;
-import com.tsl.kyc.entity.User;
+import com.tsl.kyc.entity.*;
 import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.service.*;
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.utils.PasswordGenerator;
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,7 +42,6 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
-
     public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService) {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
@@ -115,7 +110,8 @@ public class AuthController {
         userService.assignRole(newUser, role.getName());
 
         Employee employee = new Employee();
-        employee.setEmployeeName(dto.getEmployeeName());
+
+        employee.setName(dto.getEmployeeName());
         employee.setUser(newUser);
         employee.setCompanyProfile(companyProfile);
         employeeService.save(employee);
@@ -132,17 +128,18 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = userService.findByUsername(username).orElseThrow();
-        if(user.getLocked()){
 
+        System.out.println("User: " + user);
+        if(user.getLocked()){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User is locked"));
         }
-        Role role = user.getRoles().stream().findFirst().orElseThrow();
         String jwt = jwtUtils.generateToken((UserDetails) authentication.getPrincipal());
 
         userService.saveLastLoginDate(username);
 
-        return ResponseEntity.ok(Map.of("token", jwt, "user",UserService.convertToDto(user)));
+        return ResponseEntity.ok(Map.of("token", jwt, "user", user));
     }
+
 
     @GetMapping("/success")
     public ResponseEntity<?> loginSuccess() {

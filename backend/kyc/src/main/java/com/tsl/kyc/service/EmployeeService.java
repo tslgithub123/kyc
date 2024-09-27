@@ -5,6 +5,7 @@ import com.tsl.kyc.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EmployeeService {
@@ -18,7 +19,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee getEmployeeByUserId(Long id) {
+    public Employee getEmployeeByUserId(UUID id) {
         return employeeRepository.findByUserId(id);
     }
 

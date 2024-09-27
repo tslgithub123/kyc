@@ -1,19 +1,21 @@
 package com.tsl.kyc.dto;
 
 
+import java.util.UUID;
+
 public class UserRegistrationDto {
     private String employeeName;
     private String username;
     private String email;
-    private Long roleId;
-    private Long companyProfileId;
+    private UUID roleId;
+    private UUID companyProfileId;
     private String phoneNumber;
 
     public UserRegistrationDto() {
 		super();
 	}
 
-    public UserRegistrationDto(String employeeName, String username, String email, Long roleId, Long companyProfileId, String phoneNumber) {
+    public UserRegistrationDto(String employeeName, String username, String email, UUID roleId, UUID companyProfileId, String phoneNumber) {
         this.employeeName = employeeName;
         this.username = username;
         this.email = email;
@@ -46,11 +48,11 @@ public class UserRegistrationDto {
         this.email = email;
     }
 
-    public Long getRoleId() {
+    public UUID getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(UUID roleId) {
         this.roleId = roleId;
     }
 
@@ -62,11 +64,11 @@ public class UserRegistrationDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getCompanyProfileId() {
+    public UUID getCompanyProfileId() {
         return companyProfileId;
     }
 
-    public void setCompanyProfileId(Long companyProfileId) {
+    public void setCompanyProfileId(UUID companyProfileId) {
         this.companyProfileId = companyProfileId;
     }
 

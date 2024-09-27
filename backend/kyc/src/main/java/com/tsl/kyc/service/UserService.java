@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +44,7 @@ public class UserService {
         userDto.setFailedLoginCount(user.getFailedLoginCount());
         userDto.setLastLoginDate(user.getLastLoginDate() != null ? user.getLastLoginDate().toString() : null);
         userDto.setLocked(user.getLocked());
-        userDto.setCompanyName(user.getCompanyProfile() != null ? user.getCompanyProfile().getCompName() : null);
+        userDto.setCompanyName(user.getCompanyProfile() != null ? user.getCompanyProfile().getName() : null);
         userDto.setRoles(user.getRoles());
         return userDto;
     }
@@ -65,20 +66,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
-    public void assignRole(User user, Role.ERole roleName) {
-        System.out.println("In User Service: " + user.toString() + " rolename: " + roleName);
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
-
-        if (user.getRoles() == null) {
-            user.setRoles(new HashSet<>());
+    public void assignRole(User user, String roleName) {
+        Optional<Role> roleOpt = roleRepository.findByName(roleName);
+        if (roleOpt.isPresent()) {
+            user.getRoles().add(roleOpt.get());
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Role not found: " + roleName);
         }
-        user.getRoles().add(role);
-        userRepository.save(user);
     }
 
-    public List<UserDto> getUserByCompanyProfileId(Integer id) {
+    public List<UserDto> getUserByCompanyProfileId(UUID id) {
         List<User> users = userRepository.findByCompanyProfileId(id);
         return users.stream()
                 .map(UserService::convertToDto)
@@ -86,7 +84,7 @@ public class UserService {
     }
 
     @Transactional
-    public User changeLockStatus(Long userId, Boolean locked) {
+    public User changeLockStatus(UUID userId, Boolean locked) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
