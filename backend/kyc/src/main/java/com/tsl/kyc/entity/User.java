@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +20,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
-    
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -29,9 +30,9 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "user_role",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
 
@@ -39,10 +40,10 @@ public class User implements UserDetails {
     private Boolean enabled;
 
     private String designation;
-    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
+    @JsonBackReference // Prevents serialization of companyProfile inside User
     private CompanyProfile companyProfile;
 
     @Column
@@ -170,6 +171,6 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + "]";
+        return "User [id=" + id + ", username=" + username + ", password=PROTECTED, roles=" + roles + "]";
     }
 }

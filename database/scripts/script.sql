@@ -8,6 +8,7 @@ BEGIN;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- types
+CREATE TYPE role_name AS ENUM ('ROLE_TSL','ROLE_AUTHORITY', 'ROLE_ADMIN', 'ROLE_ENVIRONMENT_OFFICER', 'ROLE_MANAGEMENT', 'ROLE_THIRD_PARTY');
 CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
@@ -15,7 +16,25 @@ CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
 -- Create Role Table
 CREATE TABLE role (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(50) NOT NULL UNIQUE
+    name role_name UNIQUE
+);
+
+-- Create Address Table
+CREATE TABLE address (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    street VARCHAR(255),
+    line2 VARCHAR(255),
+    line3 VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(255),
+    district VARCHAR(255),
+    country VARCHAR(255),
+    pincode VARCHAR(20),
+    village VARCHAR(255),
+    taluka VARCHAR(255),
+    plot_number VARCHAR(255),
+    ro VARCHAR(255),
+    sro VARCHAR(255),
 );
 
 CREATE TABLE contact_person (
@@ -71,30 +90,18 @@ CREATE TABLE company_profile (
     website VARCHAR(255),
     working_hour INT,
     year_established INT,
+    address_id UUID,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
     FOREIGN KEY (industry_link_id) REFERENCES industry_link(id) ON DELETE SET NULL,
     FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
--- CREATE TABLE company_unit (
--- )
-
--- Create Address Table
-CREATE TABLE address (
+CREATE TABLE company_unit (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    company_profile_id UUID NOT NULL,
-    street VARCHAR(255),
-    line2 VARCHAR(255),
-    line3 VARCHAR(255),
-    city VARCHAR(255),
-    state VARCHAR(255),
-    district VARCHAR(255),
-    country VARCHAR(255),
-    pincode VARCHAR(20),
-    village VARCHAR(255),
-    taluka VARCHAR(255),
-    plot_number VARCHAR(255),
-    ro VARCHAR(255),
-    sro VARCHAR(255),
+    company_profile_id UUID,
+    address_id UUID,
+    name VARCHAR(50),
+    FOREIGN_KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
     FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE CASCADE
 );
 
@@ -130,7 +137,6 @@ CREATE TABLE employee (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     company_id UUID,
     user_id UUID NOT NULL,
-    address_id UUID,
     contact_person_id UUID,
     name VARCHAR(500),
     gender VARCHAR(20),
@@ -143,7 +149,6 @@ CREATE TABLE employee (
     marital_status VARCHAR(255),
     FOREIGN KEY (company_id) REFERENCES company_profile(id),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
     FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
@@ -222,6 +227,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TABLE notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    message TEXT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    email_sent BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    trigger_date DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE TRIGGER create_resource_transaction_partition_trigger
 AFTER INSERT ON company_profile
 FOR EACH ROW
@@ -255,12 +272,12 @@ VALUES
 
 -- Insert predefined roles
 INSERT INTO role (name) VALUES
-    ('ROLE_SUPERADMIN'),
+    ('ROLE_TSL'),
+    ('ROLE_AUTHORITY'),
     ('ROLE_ADMIN'),
     ('ROLE_ENVIRONMENT_OFFICER'),
     ('ROLE_MANAGEMENT'),
-    ('ROLE_THIRD_PARTY'),
-    ('ROLE_MPCB');
+    ('ROLE_THIRD_PARTY');
 
 -------------------------------------------------------------------------------
 -- 3. Insert Industry Categories
@@ -518,7 +535,6 @@ INSERT INTO employee (
     id, 
     company_id, 
     user_id, 
-    address_id, 
     contact_person_id, 
     name, 
     gender, 
@@ -534,11 +550,6 @@ VALUES (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
     (SELECT id FROM users WHERE username = 'superadmin'), 
-    (SELECT id FROM address 
-     WHERE company_profile_id = (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.') 
-     AND street = '123 Main St' 
-     AND line2 = 'Apt 4B'
-     LIMIT 1), 
     (SELECT id FROM contact_person WHERE name = 'Dhananjay Yelwande'), 
     'John Doe', 
     'Male', 

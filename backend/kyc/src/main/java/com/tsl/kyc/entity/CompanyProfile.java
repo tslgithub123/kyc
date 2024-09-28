@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -57,6 +58,20 @@ public class CompanyProfile {
 
 	@Column(name = "year_established")
 	private Integer yearEstablished;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Address> addresses;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Employee> employees;
+
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference // Manages the forward part of the reference
+	private Set<User> users;
+
+	// Getters and setters
 
 	public UUID getId() {
 		return id;
@@ -201,16 +216,4 @@ public class CompanyProfile {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "companyProfile")
-	private Set<Address> addresses;
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "companyProfile")
-	private Set<Employee> employees;
-
-	
-	@OneToMany(mappedBy = "companyProfile")
-	private Set<User> users;
 }
