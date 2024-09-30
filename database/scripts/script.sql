@@ -8,11 +8,12 @@ BEGIN;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- types
-CREATE TYPE role_name AS ENUM ('ROLE_TSL','ROLE_AUTHORITY', 'ROLE_ADMIN', 'ROLE_ENVIRONMENT_OFFICER', 'ROLE_MANAGEMENT', 'ROLE_THIRD_PARTY');
+CREATE TYPE role_name AS ENUM ('ROLE_TSL','ROLE_DIRECTOR', 'ROLE_ADMIN', 'ROLE_ENVIRONMENT_OFFICER', 'ROLE_MANAGEMENT', 'ROLE_THIRD_PARTY');
 CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
 CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
+
 -- Create Role Table
 CREATE TABLE role (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -34,7 +35,7 @@ CREATE TABLE address (
     taluka VARCHAR(255),
     plot_number VARCHAR(255),
     ro VARCHAR(255),
-    sro VARCHAR(255),
+    sro VARCHAR(255)
 );
 
 CREATE TABLE contact_person (
@@ -101,7 +102,7 @@ CREATE TABLE company_unit (
     company_profile_id UUID,
     address_id UUID,
     name VARCHAR(50),
-    FOREIGN_KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
     FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE CASCADE
 );
 
@@ -228,8 +229,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
     message TEXT NOT NULL,
     type VARCHAR(50) NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
@@ -244,18 +245,6 @@ AFTER INSERT ON company_profile
 FOR EACH ROW
 EXECUTE FUNCTION create_resource_transaction_partition();
 
--- Indexes
-CREATE INDEX idx_employee_company ON employee (company_id);
-CREATE INDEX idx_employee_user ON employee (user_id);
-CREATE INDEX idx_company_profile_name ON company_profile (name);
-CREATE INDEX idx_employee_email ON employee (email);
-CREATE INDEX idx_address_company ON address (company_profile_id);
-CREATE INDEX idx_resource_transaction_company ON resource_transaction (company_profile_id);
-CREATE INDEX idx_resource_transaction_resource ON resource_transaction (resource_id);
-CREATE INDEX idx_resource_transaction_timestamp ON resource_transaction (timestamp);
-CREATE INDEX idx_resource_transaction_type ON resource_transaction (transaction_type);
-
-
 
 -------------------------------------------------------------------------------
 -- 1. Insert Contact Person
@@ -264,7 +253,9 @@ CREATE INDEX idx_resource_transaction_type ON resource_transaction (transaction_
 -- Insert a single contact person
 INSERT INTO contact_person (id, name, designation, phone, email)
 VALUES 
-    (uuid_generate_v4(), 'Dhananjay Yelwande', 'SWE', '9657212458', 'yelwandedhananjay@gmail.com');
+    (uuid_generate_v4(), 'Ajay Ojha', 'MD', '9876543212', 'example@example.com'),
+    (uuid_generate_v4(), 'Prasad Pawar', 'CEO', '9876543212', 'example@example.com'),
+    (uuid_generate_v4(), 'Ritesh Gujar', 'IT', '9876543212', 'example@example.com');
 
 -------------------------------------------------------------------------------
 -- 2. Insert Roles
@@ -273,7 +264,7 @@ VALUES
 -- Insert predefined roles
 INSERT INTO role (name) VALUES
     ('ROLE_TSL'),
-    ('ROLE_AUTHORITY'),
+    ('ROLE_DIRECTOR'),
     ('ROLE_ADMIN'),
     ('ROLE_ENVIRONMENT_OFFICER'),
     ('ROLE_MANAGEMENT'),
@@ -341,13 +332,13 @@ INSERT INTO company_profile (
     name, 
     branch, 
     category, 
-    email, 
+    email,
     phone_number
 )
 VALUES 
     (
         uuid_generate_v4(), 
-        (SELECT id FROM contact_person WHERE name = 'Dhananjay Yelwande'), 
+        (SELECT id FROM contact_person WHERE name = 'Ajay Ojha'), 
         'Techknowgreen Ltd.', 
         'Main Branch', 
         'IT', 
@@ -356,7 +347,7 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        (SELECT id FROM contact_person WHERE name = 'Dhananjay Yelwande'), 
+        (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
         'Techknowblue Ltd.', 
         'Main Branch', 
         'IT', 
@@ -364,13 +355,15 @@ VALUES
         '1234567890'
     );
 
+
+
 -------------------------------------------------------------------------------
 -- 8. Insert Addresses
 -------------------------------------------------------------------------------
 
 -- Insert addresses linked to company profiles
 INSERT INTO address (
-    company_profile_id, 
+    id,
     street, 
     line2, 
     line3, 
@@ -387,38 +380,124 @@ INSERT INTO address (
 )
 VALUES
     (
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-        '123 Main St', 
-        'Apt 4B', 
-        'City Center', 
-        'Pune', 
+        uuid_generate_v4(),
+        '101, 102', 
+        'Ekta Society', 
+        'Hem Opal', 
+        'Wakdewadi', 
         'Maharashtra', 
         'Pune', 
         'India', 
-        '411001', 
+        '411005', 
         'Village A', 
         'Taluka A', 
-        'Plot 1', 
+        'Plot No. 26', 
         'RO1', 
         'SRO1'
     ),
     (
-        (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
-        '456 Elm St', 
-        NULL, 
-        'Downtown', 
-        'Pune', 
+        uuid_generate_v4(),
+        'New Lane', 
+        'Orchid Society', 
+        'Gandhi Road', 
+        'New Mumbai', 
         'Maharashtra', 
-        'Pune', 
+        'Mumbai', 
         'India', 
-        '411002', 
+        '400001', 
+        'Village A', 
+        'Taluka A', 
+        'Plot No. 26', 
+        'RO1', 
+        'SRO1'
+    ),
+    (
+        uuid_generate_v4(),
+        '456 Elm St', 
+        'Block B', 
+        'Karol Bagh', 
+        'New Delhi', 
+        'Delhi', 
+        'New Delhi', 
+        'India', 
+        '110005', 
         'Village B', 
         'Taluka B', 
         'Plot 2', 
         'RO2', 
         'SRO2'
+    ),
+    (
+        uuid_generate_v4(),
+        '789 Oak St', 
+        'Suite 100', 
+        'Connaught Place', 
+        'New Delhi', 
+        'Delhi', 
+        'New Delhi', 
+        'India', 
+        '110002', 
+        'Village C', 
+        'Taluka C', 
+        'Plot 3', 
+        'RO3', 
+        'SRO3'
+    ),
+    (
+        uuid_generate_v4(),
+        '123 Maple St', 
+        'Apt 200', 
+        'Saket', 
+        'Chennai', 
+        'Tamil Nadu', 
+        'Chennai', 
+        'India', 
+        '600001', 
+        'Village D', 
+        'Taluka D', 
+        'Plot 4', 
+        'RO4', 
+        'SRO4'
     );
 
+
+INSERT INTO company_unit (
+    id, 
+    company_profile_id, 
+    address_id, 
+    name
+)
+VALUES 
+    (
+        uuid_generate_v4(), 
+        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM address WHERE district = 'Pune'), 
+        'Main Unit'
+    ),
+    (
+        uuid_generate_v4(), 
+        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM address WHERE district = 'Mumbai'), 
+        'Sub Unit 1'
+    ),
+    (
+        uuid_generate_v4(), 
+        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM address WHERE street = '456 Elm St'), 
+        'Sub Unit 2'
+    ),
+    (
+        uuid_generate_v4(), 
+        (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
+        (SELECT id FROM address WHERE street = '789 Oak St'), 
+        'Main Unit'
+    ),
+    (
+        uuid_generate_v4(), 
+        (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
+        (SELECT id FROM address WHERE street = '123 Maple St'), 
+        'Sub Unit 1'
+    );
 -------------------------------------------------------------------------------
 -- 9. Insert Users
 -------------------------------------------------------------------------------
@@ -439,10 +518,10 @@ INSERT INTO users (
 VALUES
     (
         uuid_generate_v4(), 
-        'superadmin', 
-        '$2a$12$WZfY6W.y0iEHSs/xgVztxud3ry/Hto9OhVDx8rlv7WhLJdYVfLw0i', 
+        'tsl', 
+        '$2a$12$9AskmTUZBUf5wkDzuwI08euYs9GkVHLRbkL1Yb0PjceA.H.WN9m86', 
         TRUE, 
-        'Super Admin', 
+        'TSL', 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         0, 
         NOW(), 
@@ -451,10 +530,10 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'mpcb', 
-        '$2a$12$ve87lQVb5uTYFnkQCkt5wej3UfjUWT4rJcrVKj6KKF/jm9zz.ETU2', 
+        'director', 
+        '$2a$12$91s3EN/u8hSWOeJQ5MOVR.achEV2Xrou/2Y30eiG0XUiZNVGSn6oy', 
         TRUE, 
-        'MPCB', 
+        'Director', 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         0, 
         NOW(), 
@@ -476,7 +555,7 @@ VALUES
     (
         uuid_generate_v4(), 
         'env', 
-        '$2a$10$tZdWNzgjivHVMSYE08xcRenbu2TS/AGj57JOV1l.ZowrK3wOheLxa', 
+        '$2a$12$pTeoXyu6hrtTFh4J8fFbfOxWISLUtADvu.4p82j1T8Vw9gRUuWMZu', 
         TRUE, 
         'Environment Officer', 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
@@ -514,23 +593,22 @@ VALUES
 -- 10. Insert User Role Mappings
 -------------------------------------------------------------------------------
 
--- Map each user to their respective role
 INSERT INTO user_role (id, user_id, role_id)
-SELECT uuid_generate_v4(), u.id, r.id
-FROM users u
-JOIN role r ON 
-    (u.username = 'superadmin' AND r.name = 'ROLE_SUPERADMIN') OR
-    (u.username = 'mpcb' AND r.name = 'ROLE_MPCB') OR
-    (u.username = 'admin' AND r.name = 'ROLE_ADMIN') OR
-    (u.username = 'env' AND r.name = 'ROLE_ENVIRONMENT_OFFICER') OR
-    (u.username = 'man' AND r.name = 'ROLE_MANAGEMENT') OR
-    (u.username = 'thp' AND r.name = 'ROLE_THIRD_PARTY');
+VALUES
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'tsl'), (SELECT id FROM role WHERE name = 'ROLE_TSL')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY'));
+
+-- Map each user to their respective role
 
 -------------------------------------------------------------------------------
 -- 11. Insert Dummy Employee Data
 -------------------------------------------------------------------------------
 
--- Insert a single employee linked to a user and address
+-- Insert emplyees linked to company profiles, users, and contact persons
 INSERT INTO employee (
     id, 
     company_id, 
@@ -549,9 +627,84 @@ INSERT INTO employee (
 VALUES (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'superadmin'), 
-    (SELECT id FROM contact_person WHERE name = 'Dhananjay Yelwande'), 
-    'John Doe', 
+    (SELECT id FROM users WHERE username = 'tsl'), 
+    (SELECT id FROM contact_person WHERE name = 'Ajay Ojha'), 
+    'Dhananjay Yelwande', 
+    'Male', 
+    '1990-01-01', 
+    'john.doe@example.com', 
+    'active', 
+    'verified', 
+    'complete', 
+    'john_doe.jpg', 
+    'Single'
+),
+(
+    uuid_generate_v4(),
+    (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+    (SELECT id FROM users WHERE username = 'director'), 
+    (SELECT id FROM contact_person WHERE name = 'Ajay Ojha'), 
+    'Omkar Patil', 
+    'Male', 
+    '1990-01-01', 
+    'john.doe@example.com', 
+    'active', 
+    'verified', 
+    'complete', 
+    'john_doe.jpg', 
+    'Single'
+),
+(
+    uuid_generate_v4(),
+    (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+    (SELECT id FROM users WHERE username = 'admin'), 
+    (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
+    'Omkar Patil', 
+    'Male', 
+    '1990-01-01', 
+    'john.doe@example.com', 
+    'active', 
+    'verified', 
+    'complete', 
+    'john_doe.jpg', 
+    'Single'
+),
+(
+    uuid_generate_v4(),
+    (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+    (SELECT id FROM users WHERE username = 'env'), 
+    (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
+    'Kajal Dudhe', 
+    'Female', 
+    '1990-01-01', 
+    'john.doe@example.com', 
+    'active', 
+    'verified', 
+    'complete', 
+    'john_doe.jpg', 
+    'Single'
+),
+(
+    uuid_generate_v4(),
+    (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+    (SELECT id FROM users WHERE username = 'man'), 
+    (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
+    'Rishikesh Kharade', 
+    'Male', 
+    '1990-01-01', 
+    'john.doe@example.com', 
+    'active', 
+    'verified', 
+    'complete', 
+    'john_doe.jpg', 
+    'Single'
+),
+(
+    uuid_generate_v4(),
+    (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+    (SELECT id FROM users WHERE username = 'thp'), 
+    (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
+    'Harish Buddy', 
     'Male', 
     '1990-01-01', 
     'john.doe@example.com', 
@@ -561,6 +714,8 @@ VALUES (
     'john_doe.jpg', 
     'Single'
 );
+
+
 
 -------------------------------------------------------------------------------
 -- 12. Insert Unit Data

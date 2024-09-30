@@ -10,9 +10,10 @@ import '@mantine/dates/styles.css';
 import AdminNav from './components/client/admin/navigation/AdminNav';
 import EnvNav from './components/client/env/navigation/EnvNav';
 import ManNav from './components/client/management/navigation/ManNav';
-import SuperAdminNav from './components/superadmin/navigation/SuperAdminNav';
-import MpcbNav from './components/mpcb/navigation/MpcbNav';
 import Unauthorized from './components/auth/Unauthorized';
+import TslNav from './components/tsl/navigation/TslNav';
+import DirectorNav from './components/director/navigation/DirectorNav';
+import ThpNav from './components/client/thirdparty/navigation/ThpNav';
 
 function App() {
   return (
@@ -21,14 +22,14 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         
-        <Route path="/superadmin/*" element={
-          <ProtectedRoute allowedRoles={['ROLE_SUPERADMIN']}>
-            <SuperAdminNav/>
+        <Route path="/tsl/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_TSL']}>
+            <TslNav/>
           </ProtectedRoute>
         }/>
-        <Route path="/mpcb/*" element={
-          <ProtectedRoute allowedRoles={['ROLE_MPCB']}>
-            <MpcbNav/>
+        <Route path="/director/*" element={
+          <ProtectedRoute allowedRoles={['ROLE_DIRECTOR']}>
+            <DirectorNav/>
           </ProtectedRoute>
         }/>
         <Route path="/admin/*" element={
@@ -46,11 +47,11 @@ function App() {
             <ManNav/>
           </ProtectedRoute>
         }/>
-        {/* <Route path="/thp/*" element={
+        <Route path="/thp/*" element={
           <ProtectedRoute allowedRoles={['ROLE_THIRD_PARTY']}>
             <ThpNav/>
           </ProtectedRoute>
-        }/> */}
+        }/>
         <Route path="/unauthorized" element={<Unauthorized />} />
       </Routes>
     </>

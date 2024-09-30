@@ -16,6 +16,7 @@ public interface RoleRepository extends JpaRepository<Role, UUID> {
     Optional<Role> findByName(String name);
     @Query("SELECT r.name FROM Role r WHERE r.id IN :ids")
     List<String> findRoleNamesByIds(List<UUID> ids);
+
     @NonNull
     List<Role> findAll();
 }

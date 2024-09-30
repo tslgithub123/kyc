@@ -43,11 +43,11 @@ export default function Login() {
       const roles: string[] = data.user.roles.map((role: any) => role.authority);
       console.log('roles: '+JSON.stringify(roles[0]));
       switch (roles[0]) {
-        case 'ROLE_SUPERADMIN':
-          navigate('/superadmin');
+        case 'ROLE_TSL':
+          navigate('/tsl');
           break;
-        case 'ROLE_MPCB':
-          navigate('/mpcb');
+        case 'ROLE_DIRECTOR':
+          navigate('/director');
           break;
         case 'ROLE_ADMIN':
           navigate('/admin');
@@ -56,6 +56,7 @@ export default function Login() {
           navigate('/env');
           break;
         case 'ROLE_MANAGEMENT':
+          console.log('ROLE_MANAGEMENT is here');
           navigate('/man');
           break;
         case 'ROLE_THIRD_PARTY':

@@ -13,7 +13,7 @@ export interface User {
     designation: string;
     companyProfile: CompanyProfile;
     failedLoginCount: number;
-    lastLoginDate: string; // ISO date format
+    lastLoginDate: string;
     locked: boolean;
     accountNonLocked: boolean;
     accountNonExpired: boolean;
@@ -36,56 +36,51 @@ export interface CurrentUser {
 }
 
 export interface CompanyProfile {
-    id: number;
-    mpcbid: string | null;
+    id: string;
+    contactPerson: ContactPerson | null;
+    mpcbId: number | null;
+    industryLink: IndustryLink | null;
     branch: string;
     category: string;
-    city: string;
-    compName: string;
-    contPerDesig: string | null;
-    contPerName: string | null;
-    contPerNo: string | null;
-    country: string;
-    district: string | null;
+    name: string;
     email: string;
     fax: string | null;
-    indPrimary: string | null;
-    indSecondary: string | null;
-    industryType: string | null;
-    lastEnv: string | null;
-    noWorkDays: string | null;
-    phoneNo: string;
-    pincode: string | null;
-    plotNo: string | null;
-    ro: string | null;
-    sro: string | null;
-    state: string;
-    street: string | null;
-    taluka: string | null;
-    uan: string | null;
-    village: string | null;
+    lastEnvironment: string | null;
+    workDay: number | null;
+    phoneNumber: string;
     website: string | null;
-    workingHour: string | null;
-    yearEstb: string | null;
-    compEmail: string | null;
+    workingHour: number | null;
+    yearEstablished: number | null;
+    addresses: Address[];
+    employees: Employee[];
+    users: User[];
 }
 
-export interface Employee {
-    id: number;
-    user: User;
+export interface ContactPerson {
+
+}
+
+export interface IndustryLink {
+    // Define the properties of IndustryLink based on your requirements
+}
+
+export interface Address {
+    // Define the properties of Address based on your requirements
+}
+
+interface Employee {
+    id: string;
     companyProfile: CompanyProfile;
-    employeeName: string;
+    user: User;
+    address: Address;
+    contactPerson: ContactPerson;
+    name: string;
     gender: string;
-    birthday: string;
-    address: string;
-    address2: string;
-    address3: string;
-    contactPersonDesignation: string;
-    contactPersonNumber: string;
+    birthday: Date;
     email: string;
     status: string;
     emailStatus: string;
     profileStatus: string;
-    profilePic: string;
+    profilePicture: string;
     maritalStatus: string;
 }

@@ -1,60 +1,76 @@
 package com.tsl.kyc.entity;
 
-import jakarta.persistence.Entity;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "address")
 public class Address {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @ColumnDefault("uuid_generate_v4()")
+    @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "company_profile_id", nullable = false)
-    private CompanyProfile companyProfile;
-
+    @Size(max = 255)
     @Column(name = "street")
     private String street;
 
+    @Size(max = 255)
     @Column(name = "line2")
     private String line2;
 
+    @Size(max = 255)
     @Column(name = "line3")
     private String line3;
 
+    @Size(max = 255)
     @Column(name = "city")
     private String city;
 
+    @Size(max = 255)
     @Column(name = "state")
     private String state;
 
+    @Size(max = 255)
     @Column(name = "district")
     private String district;
 
+    @Size(max = 255)
     @Column(name = "country")
     private String country;
 
+    @Size(max = 20)
     @Column(name = "pincode", length = 20)
     private String pincode;
 
+    @Size(max = 255)
     @Column(name = "village")
     private String village;
 
+    @Size(max = 255)
     @Column(name = "taluka")
     private String taluka;
 
+    @Size(max = 255)
     @Column(name = "plot_number")
     private String plotNumber;
 
+    @Size(max = 255)
     @Column(name = "ro")
     private String ro;
 
+    @Size(max = 255)
     @Column(name = "sro")
     private String sro;
+
+
+    @OneToMany(mappedBy = "address")
+    private Set<CompanyUnit> companyUnits = new LinkedHashSet<>();
 
     public UUID getId() {
         return id;
@@ -62,14 +78,6 @@ public class Address {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public CompanyProfile getCompanyProfile() {
-        return companyProfile;
-    }
-
-    public void setCompanyProfile(CompanyProfile companyProfile) {
-        this.companyProfile = companyProfile;
     }
 
     public String getStreet() {
@@ -175,4 +183,13 @@ public class Address {
     public void setSro(String sro) {
         this.sro = sro;
     }
+
+    public Set<CompanyUnit> getCompanyUnits() {
+        return companyUnits;
+    }
+
+    public void setCompanyUnits(Set<CompanyUnit> companyUnits) {
+        this.companyUnits = companyUnits;
+    }
+
 }

@@ -1,4 +1,5 @@
 package com.tsl.kyc.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tsl.kyc.utils.UserStatus;
 import jakarta.persistence.*;
 import java.util.Date;
@@ -14,14 +15,16 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonIgnore
     private CompanyProfile companyProfile;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "id")
     private Address address;
 
     @OneToOne

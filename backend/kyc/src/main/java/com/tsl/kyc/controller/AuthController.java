@@ -1,6 +1,6 @@
 package com.tsl.kyc.controller;
 
-import com.tsl.kyc.dto.UserRegistrationDto;
+
 import com.tsl.kyc.entity.*;
 import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.service.*;
@@ -39,7 +39,6 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
     public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService) {
@@ -54,68 +53,68 @@ public class AuthController {
     }
 
 
-    @PostMapping({"/register"})
-    public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
-        List<String> errors = new ArrayList<>();
-
-        for (UserRegistrationDto dto : registrationDTOs) {
-            try {
-                registerUser(dto);
-            } catch (RuntimeException | MessagingException e) {
-                errors.add(e.getMessage());
-            }
-        }
-
-        if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("errors", errors));
-        }
-
-        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
-        return ResponseEntity.ok(Map.of("message", message));
-    }
-
-    private void registerUser(UserRegistrationDto dto) throws MessagingException {
-        if (userService.findByUsername(dto.getUsername()).isPresent()) {
-            throw new RuntimeException("Username is already taken!");
-        }
-
-        User newUser = new User();
-        newUser.setUsername(dto.getUsername());
-        String password = PasswordGenerator.generatePassword(8);
-//        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
-
-        System.out.println("Password: " + password);
-        newUser.setPassword(passwordEncoder.encode(password));
-        newUser.setEnabled(true);
-
-        // for the time being, set the designation to the role
-        newUser.setDesignation(switch (dto.getRoleId().toString()) {
-            case "1" -> "Super Admin";
-            case "2" -> "Admin";
-            case "3" -> "Environment Officer";
-            case "4" -> "Management";
-            case "5" -> "Third Party";
-            case "6" -> "MPCB Officer";
-            default -> "Unknown";
-        });
-
-        CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
-        newUser.setCompanyProfile(companyProfile);
-
-        newUser.setLastLoginDate(LocalDateTime.now());
-
-        newUser.setLocked(false);
-
-        Role role = roleService.findById(dto.getRoleId());
-        userService.assignRole(newUser, role.getName());
-
-        Employee employee = new Employee();
-
-        employee.setName(dto.getEmployeeName());
-        employee.setUser(newUser);
-        employee.setCompanyProfile(companyProfile);
-        employeeService.save(employee);
-    }
+//    @PostMapping({"/register"})
+//    public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistration> registrationDTOs) {
+//        List<String> errors = new ArrayList<>();
+//
+//        for (UserRegistration dto : registrationDTOs) {
+//            try {
+//                registerUser(dto);
+//            } catch (RuntimeException | MessagingException e) {
+//                errors.add(e.getMessage());
+//            }
+//        }
+//
+//        if (!errors.isEmpty()) {
+//            return ResponseEntity.badRequest().body(Map.of("errors", errors));
+//        }
+//
+//        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
+//        return ResponseEntity.ok(Map.of("message", message));
+//    }
+//
+//    private void registerUser(UserRegistrationDto dto) throws MessagingException {
+//        if (userService.findByUsername(dto.getUsername()).isPresent()) {
+//            throw new RuntimeException("Username is already taken!");
+//        }
+//
+//        User newUser = new User();
+//        newUser.setUsername(dto.getUsername());
+//        String password = PasswordGenerator.generatePassword(8);
+////        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
+//
+//        System.out.println("Password: " + password);
+//        newUser.setPassword(passwordEncoder.encode(password));
+//        newUser.setEnabled(true);
+//
+//        // for the time being, set the designation to the role
+//        newUser.setDesignation(switch (dto.getRoleId().toString()) {
+//            case "1" -> "Super Admin";
+//            case "2" -> "Admin";
+//            case "3" -> "Environment Officer";
+//            case "4" -> "Management";
+//            case "5" -> "Third Party";
+//            case "6" -> "MPCB Officer";
+//            default -> "Unknown";
+//        });
+//
+//        CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
+//        newUser.setCompanyProfile(companyProfile);
+//
+//        newUser.setLastLoginDate(LocalDateTime.now());
+//
+//        newUser.setLocked(false);
+//
+//        Role role = roleService.findById(dto.getRoleId());
+//        userService.assignRole(newUser, role.getName());
+//
+//        Employee employee = new Employee();
+//
+//        employee.setName(dto.getEmployeeName());
+//        employee.setUser(newUser);
+//        employee.setCompanyProfile(companyProfile);
+//        employeeService.save(employee);
+//    }
 
 
     @PostMapping("/login")

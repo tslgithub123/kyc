@@ -1,9 +1,7 @@
 package com.tsl.kyc.controller;
 
-import com.tsl.kyc.dto.UserDto;
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.UserService;
-import org.apache.tomcat.util.net.TLSClientHelloExtractor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +19,14 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public List<UserDto> getAllUsers() {
+    public List<User> getAllUsers() {
         return userService.getAll();
     }
 
     @PutMapping("/{id}/lock")
-    public ResponseEntity<UserDto> changeLockStatus(@PathVariable UUID id, @RequestParam Boolean locked) {
-        UserDto userDto = UserService.convertToDto(userService.changeLockStatus(id, locked));
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<User> changeLockStatus(@PathVariable UUID id, @RequestParam Boolean locked) {
+        User user = userService.changeLockStatus(id, locked);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/username-exists/{username}")

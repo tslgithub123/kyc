@@ -1,11 +1,12 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, ReactNode, useCallback, useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
-import { IconChevronRight } from '@tabler/icons-react';
-import global from '../ui/Global.module.css'
+import { Icon123, IconChevronRight } from '@tabler/icons-react';
+import global from '../ui/Global.module.css';
 import { NavLink } from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
 
 interface Link {
+  icon: React.ComponentType<{ style: React.CSSProperties }>;
   link: string;
   label: string;
 }
@@ -35,19 +36,29 @@ const NavbarLinksGroup = ({
     }
   }, [onLinkClick]);
 
-  const items = (hasLinks ? links : []).map((link: Link) => (
-    <NavLink
-      to={link.link}
-      key={link.label}
-      className={({ isActive }) =>
-        `${classes.link} ${isActive ? classes.activeLink : ''}`
-      }
-      end
-      onClick={handleLinkClick}
-    >
-      {link.label}
-    </NavLink>
-  ));
+  const items = (hasLinks ? links : []).map((link: Link) => {
+    const IconComponent = link.icon as React.ComponentType<{ style: React.CSSProperties }>;
+    return (
+      <>
+      <div className={classes.division}></div>
+      <NavLink
+        to={link.link}
+        key={link.label}
+        className={({ isActive }) =>
+          `${classes.link} ${isActive ? classes.activeLink : ''}`
+        }
+        end
+        onClick={handleLinkClick}
+        style={{ display: 'flex', alignItems: 'center' }} // Added style for vertical centering
+      >
+        <ThemeIcon radius="xl" variant="light" size={30}>
+          <IconComponent style={{ width: rem(18), height: rem(18) }} />
+        </ThemeIcon>
+        <Box ml="sm">{link.label}</Box>
+      </NavLink>
+      </>
+    );
+  });
 
   const content = (
     <Group className={global.navlinks} justify="space-between" gap={0}>
