@@ -1,75 +1,49 @@
 package com.tsl.kyc.entity;
-
+import com.tsl.kyc.utils.UserStatus;
 import jakarta.persistence.*;
+import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "emp_data")
+@Table(name = "employee")
 public class Employee {
 
-    public Employee() {
-    }
-
-    public Employee(Long id, User user, CompanyProfile companyProfile, String employeeName, String gender, String birthday, String address, String address2, String address3, String contactPersonDesignation, String contactPersonNumber, String email, String status, String emailStatus, String profileStatus, String profilePic, String maritalStatus) {
-        this.id = id;
-        this.user = user;
-        this.companyProfile = companyProfile;
-        this.employeeName = employeeName;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.address = address;
-        this.address2 = address2;
-        this.address3 = address3;
-        this.contactPersonDesignation = contactPersonDesignation;
-        this.contactPersonNumber = contactPersonNumber;
-        this.email = email;
-        this.status = status;
-        this.emailStatus = emailStatus;
-        this.profileStatus = profileStatus;
-        this.profilePic = profilePic;
-        this.maritalStatus = maritalStatus;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private CompanyProfile companyProfile;
 
-    @Column(name = "employee_name", length = 500)
-    private String employeeName;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
+
+    @OneToOne
+    @JoinColumn(name = "contact_person_id")
+    private ContactPerson contactPerson;
+
+    @Column(name = "name", length = 500)
+    private String name;
 
     @Column(name = "gender", length = 20)
     private String gender;
 
-    @Column(name = "birthday", length = 40)
-    private String birthday;
-
-    @Column(name = "address", length = 500)
-    private String address;
-
-    @Column(name = "address2", length = 500)
-    private String address2;
-
-    @Column(name = "address3", length = 500)
-    private String address3;
-
-    @Column(name = "cont_per_desig", length = 500)
-    private String contactPersonDesignation;
-
-    @Column(name = "cont_per_no", length = 500)
-    private String contactPersonNumber;
+    @Column(name = "birthday")
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
 
     @Column(name = "email", length = 500)
     private String email;
 
-    @Column(name = "status", length = 20)
-    private String status = "active";
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private UserStatus status = UserStatus.active;
 
     @Column(name = "email_status", length = 20)
     private String emailStatus;
@@ -77,28 +51,18 @@ public class Employee {
     @Column(name = "profile_status", length = 100)
     private String profileStatus;
 
-    @Column(name = "profile_pic", length = 30)
-    private String profilePic;
+    @Column(name = "profile_picture", length = 30)
+    private String profilePicture;
 
-    @Column(name = "marital_status", length = 255)
+    @Column(name = "marital_status")
     private String maritalStatus;
 
-    // Getters and Setters
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public CompanyProfile getCompanyProfile() {
@@ -109,12 +73,36 @@ public class Employee {
         this.companyProfile = companyProfile;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
+    public User getUser() {
+        return user;
     }
 
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public ContactPerson getContactPerson() {
+        return contactPerson;
+    }
+
+    public void setContactPerson(ContactPerson contactPerson) {
+        this.contactPerson = contactPerson;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getGender() {
@@ -125,52 +113,12 @@ public class Employee {
         this.gender = gender;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    public String getAddress3() {
-        return address3;
-    }
-
-    public void setAddress3(String address3) {
-        this.address3 = address3;
-    }
-
-    public String getContactPersonDesignation() {
-        return contactPersonDesignation;
-    }
-
-    public void setContactPersonDesignation(String contactPersonDesignation) {
-        this.contactPersonDesignation = contactPersonDesignation;
-    }
-
-    public String getContactPersonNumber() {
-        return contactPersonNumber;
-    }
-
-    public void setContactPersonNumber(String contactPersonNumber) {
-        this.contactPersonNumber = contactPersonNumber;
     }
 
     public String getEmail() {
@@ -181,11 +129,11 @@ public class Employee {
         this.email = email;
     }
 
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 
@@ -205,12 +153,12 @@ public class Employee {
         this.profileStatus = profileStatus;
     }
 
-    public String getProfilePic() {
-        return profilePic;
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getMaritalStatus() {
@@ -219,5 +167,25 @@ public class Employee {
 
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", companyProfile=" + companyProfile +
+                ", user=" + user +
+                ", address=" + address +
+                ", contactPerson=" + contactPerson +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthday=" + birthday +
+                ", email='" + email + '\'' +
+                ", status=" + status +
+                ", emailStatus='" + emailStatus + '\'' +
+                ", profileStatus='" + profileStatus + '\'' +
+                ", profilePicture='" + profilePicture + '\'' +
+                ", maritalStatus='" + maritalStatus + '\'' +
+                '}';
     }
 }

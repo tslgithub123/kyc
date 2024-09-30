@@ -1,0 +1,217 @@
+Local Body
+G95 CBG plants based on crop residue (paddy straw /wheat straw /corn sweet sorghum /napier grass, etc.)
+G96 CBG plants based on animal waste (dairy farms, poultry farms, and other animal waste)
+O93 Without any surface treatment activity such as washing, metal surface finishing operations, pickling, plating, electroplating, phosphating & without heat treatment
+G64 Railway Stations (Waste Water Generation < 10 KLD)
+G65 Gaushalas
+G24 Heat treatment with any of the new technology like ultrasound probe, induction hardening, ionization beam, gas carburizing, etc.
+G40 Rolling mill (gas fired) and cold rolling mill
+G01 Aluminium utensils from aluminium circles.
+G2 Ayurvedic and homeopathic medicines (without boiler)
+G3 Bakery/confectionery/sweets products (with production capacity <1tpd (with gas or electrical oven)
+G4 Bi-axially oriented PP film along with metalizing operations
+G5 Biomass briquettes (sun drying) without using toxic hazardous wastes
+G6 Blending of melamine resins & different powder, additives by physical mixing
+G7 Brass and bell metal utensils manufacturing from circles (dry mechanical operation without re-rolling facility)
+G8 Candy
+G9 Cardboard or corrugated box and paper products (excluding paper or pulp manufacturing and without using boilers)
+G10 Carpentry & wooden furniture manufacturing (excluding saw mill) with the help of electrical (motorized) machines such as electrical wood planner, steel saw cutting circular blade, etc.
+G11 Cement products (without using asbestos / boiler / steam curing) like pipe, pillar, jafri, well ring, block/tiles etc. (should be done in closed covered shed to control fugitive emissions)
+G12 Ceramic colour manufacturing by mixing & blending only (not using boiler and wastewater recycling process)
+G13 Chilling plant, cold storage and ice making
+G14 Coke briquetting (sun drying)
+G15 Cotton spinning and weaving (small scale)
+G16 Dal Mills
+G17 Decoration of ceramic cups and plates by electric furnace
+G18 Digital printing on PVC clothes
+G19 Facility of handling, storage and transportation of food grains in bulk
+G20 Flour mills (dry process)
+G21 Glass, ceramic, earthen potteries, tile and tile manufacturing using electrical kiln or not involving fossil fuel kiln
+G22 Glue from starch (physical mixing) with gas / electrically operated oven/boiler
+G23 Gold and silver smithy (purification with acid smelting operation and sulphuric acid polishing operation) (using less or equal to 1 litre of sulphuric acid/nitric acid per month)
+G25 Insulation and other coated papers (excluding paper or pipe manufacturing)
+G26 Leather foot wear and leather products (excluding tanning and hide processing except cottage scale)
+G27 Lubricating oil, greases or petroleum based products (only blending at normal temperature)
+G28 Manufacturing of pasted veneers using gas fired boiler or thermic fluid heater and by sun drying
+G29 Oil mill Ghani and extraction (no hydrogenation / refining)
+G30 Packing materials manufacturing from non asbestos fibre, vegetable fibre yarn
+G31 Phenyl/toilet cleaner formulation and bottling
+G32 Polythene and plastic processed products manufacturing (virgin plastic)
+G33 Poultry, Hatchery and Piggery
+G34 Power looms (without dye and bleaching)
+G35 Puffed rice (muri) (using gas or electrical heating system)
+G36 Pulverization of bamboo and scrap wood
+G37 Ready mix cement concrete
+G38 Reprocessing of waste cotton
+G39 Rice mill (Rice hullers only)
+G41 Rubber goods industry (with gas operated baby boiler)
+G42 Saw mills
+G43 Soap manufacturing (hand made without steam boiling/boiler)
+G44 Spice grinding (upto-20 HP motor)
+G45 Spice grinding (>20 hp motor)
+G46 Steel furniture without spray painting
+G47 Steeping and processing of grains
+G48 Tyres and tube retreating (without boilers)
+G49 Chilling plant and ice making without using ammonia
+G50 CO2 recovery
+G51 Distilled water (without boiler) with electricity as source of heat
+G52 Hotels (up to 20 rooms and without boilers)
+G53 Manufacturing of optical lenses (using electrical furnace)
+G54 Mineralized water
+G55 Tamarind powder manufacturing
+G56 Cutting, sizing and polishing of marble stone
+G57 Emery powder (fine dust of sand) manufacturing
+G58 Flyash export, transport & disposal facilities
+G59 Mineral stack yard / Railway sidings
+G60 Oil and gas transportation pipeline
+G61 Seasoning of wood in steam heated chamber
+G62 Synthetic detergent formulation
+G63 Tea processing (with boiler)
+O1 Dismantling of rolling stocks (wagons/coaches)
+O2 Bakery and confectionery units with production capacity > 1 TPD. (With ovens/furnaces)
+O3 Chanachur and ladoo from puffed and beaten rice (muri and shira) using husk fired oven
+O4 Coated electrode manufacturing
+O5 Compact disc computer floppy and cassette manufacturing / Reel manufacturing
+O6 Flakes from rejected PET bottle
+O7 Food and food processing including fruits and vegetable processing
+O8 Jute processing without dyeing
+O9 Manufacturing of silica gel
+O10 Manufacturing of tooth powder, toothpaste, talcum powder and other cosmetic items
+O11 Printing or etching of glass sheet using hydrofluoric acid
+O12 Silk screen printing, sari printing by wooden blocks
+O13 Synthetic detergents and soaps (excluding formulation)
+O15 Cotton spinning and weaving (medium and large scale)
+O16 Almirah, Grill Manufacturing (Dry Mechanical Process)
+O17 Aluminium & copper extraction from scrap using oil fired furnace (dry process only)
+O18 Automobile servicing, repairing and painting (excluding only fuel dispensing)
+O19 Ayurvedic and homeopathic medicine
+O20 Brickfields (excluding fly ash brick manufacturing using lime process)
+O21 Building and construction project more than 20,000 sq. m built up area
+O22 Ceramics and Refractories
+O23 Coal washeries
+O24 Dairy and dairy products (small scale)
+O25 DG set of capacity >1MVA but < 5MVA
+O26 Dry coal processing, mineral processing, industries involving ore sintering, pelletisating, grinding & pulverization
+O27 Fermentation industry including manufacture of yeast, beer, distillation of alcohol (Extra Neutral Alcohol)
+O28 Ferrous and Non- ferrous metal extraction involving different furnaces through melting, refining, re-processing, casting and alloy-making
+O29 Fertilizer (granulation / formulation / blending only)
+O30 Fish feed, poultry feed and cattle feed
+O31 Fish processing and packing (excluding chilling of fishes)
+O32 Forging of ferrous and non- ferrous metals (using oil and gas fired furnaces)
+O33 Formulation/pelletization of camphor tablets, naphthalene balls from camphor/naphthalene powders.
+O34 Glass ceramics, earthen potteries and tile manufacturing using oil and gas fired kilns, coating on glasses using cerium fluorides and magnesium fluoride etc.
+O35 Gravure printing, digital printing on flex, vinyl
+O37 Hot mix plants
+O38 Hotels (< 3 star) or hotels having > 20 rooms and less than 100 rooms.
+O39 Ice cream
+O42 Industry or processes involving foundry operations
+O43 Lime manufacturing (using lime kiln)
+O44 Liquid floor cleaner, black phenyl, liquid soap, glycerol mono-stearate manufacturing
+O45 Manufacturing of glass
+O46 Manufacturing of iodized salt from crude/raw salt
+O47 Manufacturing of mirror from sheet glass
+O48 Manufacturing of mosquito repellent coil
+O49 Manufacturing of Starch/Sago
+O50 Mechanized laundry using oil fired boiler
+O51 Modular wooden furniture from particle board, MDF, swan timber, etc., ceiling tiles/partition board from saw dust, wood chips, etc., and other agricultural waste using synthetic adhesive resin, wooden box making (With boiler)
+O52 New highway construction project
+O53 Non-alcoholic beverages (soft drink) & bottling of alcohol/non-alcoholic products
+O54 Paint blending and mixing (Ball mill)
+O55 Paints and varnishes (mixing and blending)
+O56 Ply-board manufacturing (including Veneer and laminate) with oil fired boiler/thermic fluid heater (without resin plant)
+O57 Potable alcohol (IMFL) by blending, bottling of alcohol products
+O58 Printing ink manufacturing
+O59 Printing press
+O60 Reprocessing of waste plastic including PVC
+O62 Spray painting, paint baking, paint shipping
+O63 Steel and steel products using various furnaces like blast furnace/open hearth furnace/induction furnace/arc furnace/submerged arc furnace/basic oxygen furnace/hot rolling reheated furnace
+O64 Stone crushers
+O65 Surgical and medical products including prophylactics and latex
+O66 Teflon based products
+O68 Tobacco products including cigarettes and tobacco/opium processes
+O69 Transformer repairing/manufacturing (dry process only)
+O70 Tyres and tubes vulcanization/hot retreating
+O71 Vegetable oil manufacturing including solvent extraction and refinery/hydrogenated oils
+O72 Wire drawing and wire netting
+O73 Dry cell battery (excluding manufacturing of electrodes) and assembling & charging of acid lead battery on micro scale
+O74 Pharmaceutical formulation and for R&D purpose (For sustained release/extended release of drugs only and not for commercial purpose)
+O75 Synthetic resins
+O76 Synthetic rubber excluding molding
+O77 Cashew nut processing
+O78 Coffee seed processing
+O79 Parboiled Rice Mills
+O80 Foam manufacturing
+O83 Producer gas plant using conventional up drift coal gasification (linked to rolling mills glass and ceramic industry refectories for dedicated fuel supply)
+O14 Thermometer manufacturing
+O36 Heat treatment using oil fired furnace (without cyaniding)
+O40 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - B148 Paint and ink sludge/residues
+O41 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Brass Dross, Copper Dross, Copper Oxide Mill Scale, Copper Reverts, Cake & Residues, Waste Copper and copper alloys in dispersible form, Slags from copper processing for further processing or refining, Insulated Copper Wire, Scrap/copper with PVC sheathing including ISRI-code material namely “Druid”, Jelly filled Copper cables, Zinc Dross-Hot dip Galvanizers SLAB, Zinc Dross-Bottom Dross, Zinc ash/Skimming arising from galvanizing and die casting operations, Zinc ash/Skimming/other zinc bearing wastes arising from smelting and refining, Zinc ash and residues including zinc alloy residues in dispersible form
+O61 Rolling mill (oil or coal fired) and cold rolling mill
+O67 Thermocol manufacturing (with boiler)
+O81 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Used Oil – As per specifications prescribed from time to time
+O82 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Waste Oil ---As per specifications prescribed from time to time
+Restaurant activity having overall waste water generated up to 10 KLD
+O84 Railway Stations (Waste Water Generation >= 10 KLD, but < 100 KLD)
+O85 Scrapping Centers (for End of Life of Vehicles and other scraps such as plant and machineries, structural material, railway coaches and wagons etc.)
+O86 Compressed/Refined Bio-Gas Production from Bio-degradables Wastes
+O87 Dairy farms
+O89 CBG plants based on Municipal Solid Waste (MSW)
+O90 CBG plants based on process waste (industrial/process liquid effluent & solid waste like press mud, organic sludge, molasses, etc.)
+Assaying & hallmarking centers
+R61 Dead Animal incineration plant (Carcass disposal plant)
+R89 (i.e. Sterilization process by using Gamma Rays using COBALT-60)
+R61 Railway Stations (Waste Water Generation >= 100 KLD)
+Pyrolysis oil from plastic waste
+Municipal corporation STP
+Restaurant activity having overall waste water generated more than 10 KLD
+R3 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Spent cleared metal catalyst containing copper, Spent cleared metal catalyst containing zinc
+R10 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Spent catalyst containing nickel, cadmium, Zinc, copper, arsenic, vanadium and cobalt
+R15 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Dismantlers Recycling Plants -- Components of waste electrical and electronic assembles comprising accumulators and other batteries included on list A, mercury-switches, activated glass cullets from cathode-ray tubes and other activated glass and PCB-capacitors, or any other component contaminated with Schedule 2 constituents (e.g. cadmium, mercury, lead, polychlorinated biphenyl) to an extent that they exhibit hazard characteristics indicated in part C of this Schedule
+R18 Pulp & Paper (waste paper based without bleaching process to manufacture Kraft paper)
+R32 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008
+R33 Industries engaged in recycling/reprocessing/recovery/reuse of Hazardous Waste under schedule iv of HW(M, H & TBM) rules, 2008 - Items namely - Integrated Recycling Plants -- Components of waste electrical and electronic assembles comprising accumulators and other batteries included on list A, mercury-switches, activated glass cullets from cathode-ray tubes and other activated glass and PCB-capacitors, or any other component contaminated with Schedule 2 constituents (e.g. cadmium, mercury, lead, polychlorinated biphenyl) to an extent that they exhibit hazard characteristics indicated in part C of this Schedule
+R54 Pulp & Paper (waste paper based units with bleaching process to manufacture writing & printing paper)
+R59 Pulp & Paper (Large-Agro + wood), Small Pulp & Paper (agro based-wheat straw/rice husk)
+R1 Isolated storage of hazardous chemicals (as per schedule of manufacturing, storage of hazardous chemicals rules, 1989 as amended)
+R2 Automobile Manufacturing (integrated facilities)
+R4 Manufacturing of lubricating oils, grease and petroleum based products
+R5 DG Set of capacity > 5 MVA
+R6 Industrial carbon including electrodes and graphite blocks, activated carbon, carbon black
+R7 Lead acid battery manufacturing (excluding assembling and charging of lead-acid battery in micro scale)
+R8 Phosphate rock processing plant
+R9 Power generation plant [except Wind and Solar renewable power plants of all capacities and Mini Hydel power plant of capacity <25MW]
+R11 Processes involving chlorinated hydrocarbons
+R12 Sugar (excluding Khandsari)
+R13 Fibre glass production and processing (excluding moulding)
+R14 Fire crackers manufacturing and bulk storage facilities
+R16 Milk processes and dairy products (integrated project)
+R17 Phosphorous and its compounds
+R19 Coke making, liquefaction, coal tar distillation or fuel gas making
+R20 Manufacturing of explosives, detonators, fuses including management and handling activities
+R21 Manufacturing of paints varnishes, pigments and intermediate (excluding blending/mixing)
+R22 Organic Chemicals manufacturing
+R23 Airports and Commercial Air Strips
+R24 Asbestos and asbestos based industries
+R25 Basic chemicals and electro chemicals and its derivatives including manufacturing of acid
+R26 Cement
+R27 Chlorates, per-chlorates & peroxides
+R28 Chlorine, fluorine, bromine, iodine and their compounds
+R29 Dyes and Dye-Intermediates
+R31 Hotels having overall waste-water generation @ 100 KLD and more
+R34 Manufacturing of glue and gelatin
+R35 Mining and ore beneficiation
+R36 Nuclear power plant
+R37 Pesticides (technical) (excluding formulation)
+R38 Photographic film and its chemicals
+R39 Railway locomotive workshop/Integrated road transport workshop/Authorized service centers
+R40 Yarn/Textile processing involving any effluent/emission generating processes including bleaching, dyeing, printing and colouring
+R41 Chlor Alkali
+R42 Ship Breaking Industries
+R43 Oil and gas extraction including CBM (offshore & on-shore extraction through drilling wells)
+R44 Industry or process involving metal surface treatment or process such as pickling/electroplating/paint stripping/heat treatment using cyanide bath/phosphating or finishing and anodizing/enamelling/galvanizing
+R45 Tanneries
+R46 Ports and harbour, jetties and dredging operations
+R47 Synthetic fibers including rayon, tyre cord, polyester filament yarn
+R48 Thermal Power Plants
+R49 Slaughter house (as per notification S.O.270(E) dated 26.03.2001) and meat processing industries, bone mill, processing of animal horn, hoofs and other body parts
+R50 Aluminium Smelter

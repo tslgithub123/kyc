@@ -1,118 +1,108 @@
 package com.tsl.kyc.entity;
 
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+import java.util.Set;
+import java.util.UUID;
+
 @Entity
 @Table(name = "company_profile")
 public class CompanyProfile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
-    private Long mpcbid;
-    private String branch;
-    private String category;
-    private String city;
-    private String compName;
-    private String contPerDesig;
-    private String contPerName;
-    private String contPerNo;
-    private String country;
-    private String district;
-    private String email;
-    private String fax;
-    private String indPrimary;
-    private String indSecondary;
-    private String industryType;
-    private String lastEnv;
-    private Integer noWorkDays;
-    private String phoneNo;
-    private String pincode;
-    private String plotNo;
-    private String ro;
-    private String sro;
-    private String state;
-    private String street;
-    private String taluka;
-    private String uan;
-    private String village;
-    private String website;
-    private Integer workingHour;
-    private Integer yearEstb;
-    private String compEmail;
+	@OneToOne
+	@JoinColumn(name = "contact_person_id")
+	private ContactPerson contactPerson;
 
-    public CompanyProfile() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-    
-	public CompanyProfile(Long id, Long mpcbid, String branch, String category, String city, String compName,
-			String contPerDesig, String contPerName, String contPerNo, String country, String district, String email,
-			String fax, String indPrimary, String indSecondary, String industryType, String lastEnv, Integer noWorkDays,
-			String phoneNo, String pincode, String plotNo, String ro, String sro, String state, String street,
-			String taluka, String uan, String village, String website, Integer workingHour, Integer yearEstb, String compEmail, Set<User> users) {
-		super();
-		this.id = id;
-		this.mpcbid = mpcbid;
-		this.branch = branch;
-		this.category = category;
-		this.city = city;
-		this.compName = compName;
-		this.contPerDesig = contPerDesig;
-		this.contPerName = contPerName;
-		this.contPerNo = contPerNo;
-		this.country = country;
-		this.district = district;
-		this.email = email;
-		this.fax = fax;
-		this.indPrimary = indPrimary;
-		this.indSecondary = indSecondary;
-		this.industryType = industryType;
-		this.lastEnv = lastEnv;
-		this.noWorkDays = noWorkDays;
-		this.phoneNo = phoneNo;
-		this.pincode = pincode;
-		this.plotNo = plotNo;
-		this.ro = ro;
-		this.sro = sro;
-		this.state = state;
-		this.street = street;
-		this.taluka = taluka;
-		this.uan = uan;
-		this.village = village;
-		this.website = website;
-		this.workingHour = workingHour;
-		this.yearEstb = yearEstb;
+	@Column(name = "mpcbid", unique = true)
+	private Long mpcbId;
 
-		this.compEmail = compEmail;
-//		this.users = users;
-	}
+	@ManyToOne
+	@JoinColumn(name = "industry_link_id")
+	private IndustryLink industryLink;
 
-	public Long getId() {
+	@Column(name = "branch")
+	private String branch;
+
+	@Column(name = "category")
+	private String category;
+
+	@Column(name = "name")
+	private String name;
+
+	@Column(name = "email")
+	private String email;
+
+	@Column(name = "fax")
+	private String fax;
+
+	@Column(name = "last_environment", length = 20)
+	private String lastEnvironment;
+
+	@Column(name = "work_day")
+	private Integer workDay;
+
+	@Column(name = "phone_number")
+	private String phoneNumber;
+
+	@Column(name = "website")
+	private String website;
+
+	@Column(name = "working_hour")
+	private Integer workingHour;
+
+	@Column(name = "year_established")
+	private Integer yearEstablished;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Address> addresses;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Employee> employees;
+
+	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference // Manages the forward part of the reference
+	private Set<User> users;
+
+	// Getters and setters
+
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
-	public Long getMpcbid() {
-		return mpcbid;
+	public ContactPerson getContactPerson() {
+		return contactPerson;
 	}
 
-	public void setMpcbid(Long mpcbid) {
-		this.mpcbid = mpcbid;
+	public void setContactPerson(ContactPerson contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+	public Long getMpcbId() {
+		return mpcbId;
+	}
+
+	public void setMpcbId(Long mpcbId) {
+		this.mpcbId = mpcbId;
+	}
+
+	public IndustryLink getIndustryLink() {
+		return industryLink;
+	}
+
+	public void setIndustryLink(IndustryLink industryLink) {
+		this.industryLink = industryLink;
 	}
 
 	public String getBranch() {
@@ -131,60 +121,12 @@ public class CompanyProfile {
 		this.category = category;
 	}
 
-	public String getCity() {
-		return city;
+	public String getName() {
+		return name;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getCompName() {
-		return compName;
-	}
-
-	public void setCompName(String compName) {
-		this.compName = compName;
-	}
-
-	public String getContPerDesig() {
-		return contPerDesig;
-	}
-
-	public void setContPerDesig(String contPerDesig) {
-		this.contPerDesig = contPerDesig;
-	}
-
-	public String getContPerName() {
-		return contPerName;
-	}
-
-	public void setContPerName(String contPerName) {
-		this.contPerName = contPerName;
-	}
-
-	public String getContPerNo() {
-		return contPerNo;
-	}
-
-	public void setContPerNo(String contPerNo) {
-		this.contPerNo = contPerNo;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -203,124 +145,28 @@ public class CompanyProfile {
 		this.fax = fax;
 	}
 
-	public String getIndPrimary() {
-		return indPrimary;
+	public String getLastEnvironment() {
+		return lastEnvironment;
 	}
 
-	public void setIndPrimary(String indPrimary) {
-		this.indPrimary = indPrimary;
+	public void setLastEnvironment(String lastEnvironment) {
+		this.lastEnvironment = lastEnvironment;
 	}
 
-	public String getIndSecondary() {
-		return indSecondary;
+	public Integer getWorkDay() {
+		return workDay;
 	}
 
-	public void setIndSecondary(String indSecondary) {
-		this.indSecondary = indSecondary;
+	public void setWorkDay(Integer workDay) {
+		this.workDay = workDay;
 	}
 
-	public String getIndustryType() {
-		return industryType;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setIndustryType(String industryType) {
-		this.industryType = industryType;
-	}
-
-	public String getLastEnv() {
-		return lastEnv;
-	}
-
-	public void setLastEnv(String lastEnv) {
-		this.lastEnv = lastEnv;
-	}
-
-	public Integer getNoWorkDays() {
-		return noWorkDays;
-	}
-
-	public void setNoWorkDays(Integer noWorkDays) {
-		this.noWorkDays = noWorkDays;
-	}
-
-	public String getPhoneNo() {
-		return phoneNo;
-	}
-
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
-	}
-
-	public String getPincode() {
-		return pincode;
-	}
-
-	public void setPincode(String pincode) {
-		this.pincode = pincode;
-	}
-
-	public String getPlotNo() {
-		return plotNo;
-	}
-
-	public void setPlotNo(String plotNo) {
-		this.plotNo = plotNo;
-	}
-
-	public String getRo() {
-		return ro;
-	}
-
-	public void setRo(String ro) {
-		this.ro = ro;
-	}
-
-	public String getSro() {
-		return sro;
-	}
-
-	public void setSro(String sro) {
-		this.sro = sro;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getTaluka() {
-		return taluka;
-	}
-
-	public void setTaluka(String taluka) {
-		this.taluka = taluka;
-	}
-
-	public String getUan() {
-		return uan;
-	}
-
-	public void setUan(String uan) {
-		this.uan = uan;
-	}
-
-	public String getVillage() {
-		return village;
-	}
-
-	public void setVillage(String village) {
-		this.village = village;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getWebsite() {
@@ -339,32 +185,35 @@ public class CompanyProfile {
 		this.workingHour = workingHour;
 	}
 
-	public Integer getYearEstb() {
-		return yearEstb;
+	public Integer getYearEstablished() {
+		return yearEstablished;
 	}
 
-	public void setYearEstb(Integer yearEstb) {
-		this.yearEstb = yearEstb;
+	public void setYearEstablished(Integer yearEstablished) {
+		this.yearEstablished = yearEstablished;
 	}
 
-
-	public String getCompEmail() {
-		return compEmail;
+	public Set<Address> getAddresses() {
+		return addresses;
 	}
 
-	public void setCompEmail(String compEmail) {
-		this.compEmail = compEmail;
+	public void setAddresses(Set<Address> addresses) {
+		this.addresses = addresses;
 	}
 
-//	public Set<User> getUsers() {
-//		return users;
-//	}
-//
-//	public void setUsers(Set<User> users) {
-//		this.users = users;
-//	}
+	public Set<Employee> getEmployees() {
+		return employees;
+	}
 
-//    @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Set<User> users;
+	public void setEmployees(Set<Employee> employees) {
+		this.employees = employees;
+	}
 
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
 }

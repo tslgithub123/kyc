@@ -2,10 +2,11 @@ package com.tsl.kyc.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 public class CompanyProfileDto implements Serializable {
 
-    private Long id;
+    private UUID id;
     private String mpcbid;
     private String branch;
     private String category;
@@ -93,11 +94,11 @@ public class CompanyProfileDto implements Serializable {
 
 	// Getters and Setters
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/lock")
-    public ResponseEntity<UserDto> changeLockStatus(@PathVariable Long id, @RequestParam Boolean locked) {
+    public ResponseEntity<UserDto> changeLockStatus(@PathVariable UUID id, @RequestParam Boolean locked) {
         UserDto userDto = UserService.convertToDto(userService.changeLockStatus(id, locked));
         return ResponseEntity.ok(userDto);
     }

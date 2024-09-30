@@ -8,6 +8,7 @@ import com.tsl.kyc.service.CompanyProfileService;
 import com.tsl.kyc.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class CompanyProfileController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyProfileDto> getCompanyProfileById(@PathVariable("id") Long id) {
+    public ResponseEntity<CompanyProfileDto> getCompanyProfileById(@PathVariable("id") UUID id) {
         CompanyProfileDto companyProfileDTO = companyProfileService.getCompanyProfileById(id);
         return ResponseEntity.ok(companyProfileDTO);
     }
@@ -45,13 +46,13 @@ public class CompanyProfileController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyProfileDto> updateCompanyProfile(@PathVariable Long id, @RequestBody CompanyProfileDto companyProfileDto) {
+    public ResponseEntity<CompanyProfileDto> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileDto companyProfileDto) {
         CompanyProfileDto updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileDto);
         return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
     }
     
     @GetMapping("/users/{id}")
-    public List<UserDto> getUsersByCompanyProfileId(@PathVariable Integer id){
+    public List<UserDto> getUsersByCompanyProfileId(@PathVariable UUID id){
     	System.out.println("cf id: "+id);
     	return userService.getUserByCompanyProfileId(id);
     }

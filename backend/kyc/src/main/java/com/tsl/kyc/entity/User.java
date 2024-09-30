@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
@@ -17,8 +19,8 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
+    private UUID id;
+
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -28,9 +30,9 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-        name = "user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
 
@@ -38,10 +40,10 @@ public class User implements UserDetails {
     private Boolean enabled;
 
     private String designation;
-    
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
+    @JsonBackReference // Prevents serialization of companyProfile inside User
     private CompanyProfile companyProfile;
 
     @Column
@@ -58,7 +60,7 @@ public class User implements UserDetails {
     }
 
     // Parameterized constructor
-    public User(Long id, String username, String password, Set<Role> roles) {
+    public User(UUID id, String username, String password, Set<Role> roles) {
         super();
         this.id = id;
         this.username = username;
@@ -67,11 +69,11 @@ public class User implements UserDetails {
     }
 
     // Getters and setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -169,6 +171,6 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", username=" + username + ", password=" + password + ", roles=" + roles + "]";
+        return "User [id=" + id + ", username=" + username + ", password=PROTECTED, roles=" + roles + "]";
     }
 }

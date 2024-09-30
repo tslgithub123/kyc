@@ -4,58 +4,49 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role implements GrantedAuthority {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@JsonIgnore
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
 
 	@JsonIgnore
-    @Enumerated(EnumType.STRING)
-    private ERole name;
+	@Column(name = "name", unique = true, nullable = false, length = 50)
+	private String name;
 
-    @Override
-    public String getAuthority() {
-        return name.name();
-    }
-
-    public enum ERole {
-		ROLE_SUPERADMIN,
-		ROLE_MPCB,
-        ROLE_ADMIN,
-        ROLE_ENVIRONMENT_OFFICER,
-        ROLE_MANAGEMENT,
-        ROLE_THIRD_PARTY
-    }
-    
-    public Role() {
-		super();
-	}
-    
-	public Role(Long id, ERole name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public ERole getName() {
+	@Override
+	public String getAuthority() {
 		return name;
 	}
 
-	public void setName(ERole name) {
+	public Role() {
+		super();
+	}
+
+	public Role(UUID id, String name) {
+		super();
+		this.id = id;
 		this.name = name;
 	}
 
-    
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

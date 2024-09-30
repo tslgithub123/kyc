@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -26,7 +27,7 @@ public class EmployeeController {
 
     // Add a new endpoint to get an employee by user id
     @GetMapping("/user/{id}")
-    public Employee getEmployeeByUserId(@PathVariable Long id) {
+    public Employee getEmployeeByUserId(@PathVariable UUID id) {
         return employeeService.getEmployeeByUserId(id);
     }
 }
