@@ -1,8 +1,11 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Set;
 import java.util.UUID;
@@ -59,17 +62,19 @@ public class CompanyProfile {
 	@Column(name = "year_established")
 	private Integer yearEstablished;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Address> addresses;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Employee> employees;
 
 	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference // Manages the forward part of the reference
+	@JsonManagedReference
+	@JsonIgnore
+
 	private Set<User> users;
+
+
+
 
 	// Getters and setters
 
@@ -193,13 +198,7 @@ public class CompanyProfile {
 		this.yearEstablished = yearEstablished;
 	}
 
-	public Set<Address> getAddresses() {
-		return addresses;
-	}
 
-	public void setAddresses(Set<Address> addresses) {
-		this.addresses = addresses;
-	}
 
 	public Set<Employee> getEmployees() {
 		return employees;

@@ -1,37 +1,25 @@
-import { IconBuilding, IconGauge, IconUser } from "@tabler/icons-react";
-
+import { IconBuildingFactory, IconBuildings, IconGauge, IconUser } from "@tabler/icons-react";
 import Navigation from "../../../navigation/Navigation";
 import { ManRoutes } from "../../../../routes/Routes";
-import ManMenu from "./ManMenu";
+import TslServices from "../../../tsl/services/TslServices";
 import ManServices from "../services/ManServices";
+import ManMenu from "./ManMenu";
+
 
 
 const manNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/man' },
-  {
-    label: "Example",
-    icon: IconUser,
-    initiallyOpened: true,
-    links: [
-      { label: "Create", link: "consent/create" },
-      { label: "View", link: "consent/view" },
-    ],
-  },
-  {
-    label: "Daily Data",
-    icon: IconBuilding,
-    links: [
-      { label: "Add", link: "/data/daily/add" },
-      { label: "View", link: "/data/daily/view" },
-    ],
-  }
+  { label: "MPCB", icon: IconBuildingFactory, links: 'mpcb' },
+  { label: "Companies", icon: IconBuildings, links: 'companies' },
+  { label: "Users", icon: IconUser, links: 'users' },
+  
 ];
 
 export default function ManNav() {
   return (
     <Navigation 
       navdata={manNavData} 
-      routes={<ManRoutes/>} 
+      routes={<ManRoutes />} 
       actions={<ManServices/>} 
       menu={<ManMenu/>}
     />

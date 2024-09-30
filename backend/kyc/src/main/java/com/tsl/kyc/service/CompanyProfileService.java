@@ -1,18 +1,13 @@
 package com.tsl.kyc.service;
 
-import com.tsl.kyc.dto.CompanyProfileDto;
-import com.tsl.kyc.dto.UserDto;
 import com.tsl.kyc.entity.CompanyProfile;
-import com.tsl.kyc.entity.User;
 import com.tsl.kyc.exception.ResourceNotFoundException;
 import com.tsl.kyc.repository.CompanyProfileRepository;
 import com.tsl.kyc.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class CompanyProfileService {
@@ -36,7 +31,7 @@ public class CompanyProfileService {
     }
     
 
-    public CompanyProfileDto createCompanyProfile(CompanyProfileDto companyProfileDto) {
+    public CompanyProfile createCompanyProfile(CompanyProfile companyProfileDto) {
         CompanyProfile companyProfile = new CompanyProfile();
         companyProfile.setBranch(companyProfileDto.getBranch());
         companyProfile.setCategory(companyProfileDto.getCategory());
@@ -72,10 +67,10 @@ public class CompanyProfileService {
         // Save CompanyProfile
         CompanyProfile savedCompanyProfile = companyProfileRepository.save(companyProfile);
 
-        return convertToDto(savedCompanyProfile);
+        return savedCompanyProfile;
     }
 
-    public CompanyProfileDto updateCompanyProfile(UUID id, CompanyProfileDto companyProfileDto) {
+    public CompanyProfile updateCompanyProfile(UUID id, CompanyProfile companyProfileDto) {
         CompanyProfile companyProfile = companyProfileRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found"));
 
@@ -113,18 +108,16 @@ public class CompanyProfileService {
 
         CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
 
-        return convertToDto(updatedCompanyProfile);
+        return updatedCompanyProfile;
     }
     
-    public CompanyProfileDto getCompanyProfileById(UUID id) {
-        CompanyProfile companyProfile = companyProfileRepository.findById(id)
+    public CompanyProfile getCompanyProfileById(UUID id) {
+        return companyProfileRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found with id: " + id));
-
-        return convertToDto(companyProfile);
     }
 
-    private CompanyProfileDto convertToDto(CompanyProfile companyProfile) {
-        CompanyProfileDto dto = new CompanyProfileDto();
+    private CompanyProfile convertToDto(CompanyProfile companyProfile) {
+        CompanyProfile dto = new CompanyProfile();
         dto.setId(companyProfile.getId());
         dto.setBranch(companyProfile.getBranch());
         dto.setCategory(companyProfile.getCategory());

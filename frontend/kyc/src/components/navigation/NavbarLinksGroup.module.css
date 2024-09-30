@@ -11,7 +11,7 @@ fontlink {
   cursor: pointer;
   border-radius: 4px;
   border-bottom-right-radius: 4px;
-
+  margin-top: var(--mantine-spacing-xs);
   &:hover {
     background-color: light-dark(
       var(--mantine-color-gray-1),
@@ -64,4 +64,14 @@ fontlink {
 
 .chevron {
   transition: transform 200ms ease;
+}
+
+.division{
+  padding-left: var(--mantine-spacing-md);
+  margin-left: var(--mantine-spacing-xl);
+  border-left: 1px solid light-dark(
+    var(--mantine-color-gray-4),
+    var(--mantine-color-dark-4)
+  );
+  height: var(--mantine-spacing-xs);
 }

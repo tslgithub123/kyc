@@ -1,11 +1,11 @@
 import { IconGauge } from "@tabler/icons-react";
 import Navigation from "../../navigation/Navigation";
-import { MpcbRoutes, SuperAdminRoutes } from "../../../routes/Routes";
+import { DirectorRoutes } from "../../../routes/Routes";
 import MpcbServices from "../services/MpcbServices";
-import MpcbMenu from "./MpcbMenu";
+import MpcbMenu from "./DirectorMenu";
 
 
-const mpcbNavData = [
+const directorNavData = [
   { label: "Dashboard", icon: IconGauge, links: '/mpcb' },
   { label: "Statistics", icon: IconGauge, links: 'statistics' },
 //   {
@@ -27,11 +27,11 @@ const mpcbNavData = [
 //   }
 ];
 
-export default function MpcbNav() {
+export default function DirectorNav() {
   return (
     <Navigation 
-      navdata={mpcbNavData} 
-      routes={<MpcbRoutes />} 
+      navdata={directorNavData} 
+      routes={<DirectorRoutes />} 
       actions={<MpcbServices/>} 
       menu={<MpcbMenu/>}
     />

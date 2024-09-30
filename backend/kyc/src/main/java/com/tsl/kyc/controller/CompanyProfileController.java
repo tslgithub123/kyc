@@ -1,7 +1,5 @@
 package com.tsl.kyc.controller;
 
-import com.tsl.kyc.dto.CompanyProfileDto;
-import com.tsl.kyc.dto.UserDto;
 import com.tsl.kyc.entity.CompanyProfile;
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.CompanyProfileService;
@@ -10,7 +8,6 @@ import com.tsl.kyc.service.UserService;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,26 +31,25 @@ public class CompanyProfileController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<CompanyProfileDto> getCompanyProfileById(@PathVariable("id") UUID id) {
-        CompanyProfileDto companyProfileDTO = companyProfileService.getCompanyProfileById(id);
-        return ResponseEntity.ok(companyProfileDTO);
+    public ResponseEntity<CompanyProfile> getCompanyProfileById(@PathVariable("id") UUID id) {
+        CompanyProfile companyProfile = companyProfileService.getCompanyProfileById(id);
+        return ResponseEntity.ok(companyProfile);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CompanyProfileDto> createCompanyProfile(@RequestBody CompanyProfileDto companyProfileDto) {
-        CompanyProfileDto createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfileDto);
+    public ResponseEntity<CompanyProfile> createCompanyProfile(@RequestBody CompanyProfile companyProfile) {
+        CompanyProfile createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfile);
         return new ResponseEntity<>(createdCompanyProfile, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyProfileDto> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileDto companyProfileDto) {
-        CompanyProfileDto updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileDto);
+    public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfile companyProfile) {
+        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfile);
         return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
     }
     
     @GetMapping("/users/{id}")
-    public List<UserDto> getUsersByCompanyProfileId(@PathVariable UUID id){
-    	System.out.println("cf id: "+id);
+    public List<User> getUsersByCompanyProfileId(@PathVariable UUID id){
     	return userService.getUserByCompanyProfileId(id);
     }
 }

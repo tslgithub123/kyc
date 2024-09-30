@@ -1,13 +1,13 @@
 import { IconBuildingFactory, IconBuildings, IconGauge, IconUser } from "@tabler/icons-react";
 import Navigation from "../../navigation/Navigation";
-import { SuperAdminRoutes } from "../../../routes/Routes";
-import SuperAdminMenu from "./SuperAdminMenu";
-import SuperAdminServices from "../services/SuperAdminServices";
+import { TslRoutes } from "../../../routes/Routes";
+import SuperAdminMenu from "./TslMenu";
+import SuperAdminServices from "../services/TslServices";
 
 
 
 const superAdminNavData = [
-  { label: "Dashboard", icon: IconGauge, links: '/superadmin' },
+  { label: "Dashboard", icon: IconGauge, links: '/tsl' },
   { label: "MPCB", icon: IconBuildingFactory, links: 'mpcb' },
   { label: "Companies", icon: IconBuildings, links: 'companies' },
   { label: "Users", icon: IconUser, links: 'users' },
@@ -31,11 +31,11 @@ const superAdminNavData = [
 //   }
 ];
 
-export default function SuperAdminNav() {
+export default function TslNav() {
   return (
     <Navigation 
       navdata={superAdminNavData} 
-      routes={<SuperAdminRoutes />} 
+      routes={<TslRoutes />} 
       actions={<SuperAdminServices/>} 
       menu={<SuperAdminMenu/>}
     />
