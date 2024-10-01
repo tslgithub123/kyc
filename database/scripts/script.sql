@@ -9,6 +9,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- types
 CREATE TYPE role_name AS ENUM ('ROLE_TSL','ROLE_DIRECTOR', 'ROLE_ADMIN', 'ROLE_ENVIRONMENT_OFFICER', 'ROLE_MANAGEMENT', 'ROLE_THIRD_PARTY');
+CREATE TYPE company_unit_type AS ENUM ('main', 'sub');
 CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
@@ -79,21 +80,13 @@ CREATE TABLE company_profile (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     contact_person_id UUID,
     mpcbid BIGINT UNIQUE,
-    industry_link_id UUID,
-    branch VARCHAR(255),
-    category VARCHAR(255),
     name VARCHAR(255),
     email VARCHAR(255),
     fax VARCHAR(255),
     last_environment VARCHAR(20),
-    work_day INT,
     phone_number VARCHAR(255),
     website VARCHAR(255),
-    working_hour INT,
     year_established INT,
-    address_id UUID,
-    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
-    FOREIGN KEY (industry_link_id) REFERENCES industry_link(id) ON DELETE SET NULL,
     FOREIGN KEY (contact_person_id) REFERENCES contact_person(id)
 );
 
@@ -101,9 +94,17 @@ CREATE TABLE company_unit (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     company_profile_id UUID,
     address_id UUID,
+    industry_link_id UUID,
     name VARCHAR(50),
+    type company_unit_type,
+    unit_email VARCHAR(255),
+    unit_fax VARCHAR(255),
+    unit_phone_number VARCHAR(255),
+    work_day INT,
+    working_hour INT,
     FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
-    FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE CASCADE
+    FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE CASCADE,
+    FOREIGN KEY (industry_link_id) REFERENCES industry_link(id) ON DELETE SET NULL
 );
 
 -- Create User Table
@@ -113,14 +114,14 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL,
     enabled BOOLEAN,
     designation VARCHAR(45),
-    company_profile_id UUID,
+    company_unit_id UUID,
     failed_login_count INT CHECK (failed_login_count >= 0),
     last_login_date TIMESTAMPTZ,
     locked BOOLEAN,
     status user_status DEFAULT 'active',
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE SET NULL
+    FOREIGN KEY (company_unit_id) REFERENCES company_unit(id) ON DELETE SET NULL
 );
 
 -- Create User Role Mapping Table
@@ -329,30 +330,39 @@ VALUES
 INSERT INTO company_profile (
     id, 
     contact_person_id, 
+    mpcbid, 
     name, 
-    branch, 
-    category, 
-    email,
-    phone_number
+    email, 
+    fax, 
+    last_environment, 
+    phone_number, 
+    website, 
+    year_established
 )
 VALUES 
     (
         uuid_generate_v4(), 
         (SELECT id FROM contact_person WHERE name = 'Ajay Ojha'), 
+        123456789, 
         'Techknowgreen Ltd.', 
-        'Main Branch', 
-        'IT', 
         'it@techknowgreen.com', 
-        '1234567890'
+        '123-456-7890', 
+        '2023', 
+        '1234567890', 
+        'www.techknowgreen.com', 
+        2000
     ),
     (
         uuid_generate_v4(), 
         (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
+        987654321, 
         'Techknowblue Ltd.', 
-        'Main Branch', 
-        'IT', 
         'it@techknowblue.com', 
-        '1234567890'
+        '098-765-4321', 
+        '2023', 
+        '0987654321', 
+        'www.techknowblue.com', 
+        2005
     );
 
 
@@ -465,38 +475,80 @@ INSERT INTO company_unit (
     id, 
     company_profile_id, 
     address_id, 
-    name
+    industry_link_id,
+    name,
+    type,
+    unit_email,
+    unit_fax,
+    unit_phone_number,
+    work_day,
+    working_hour
 )
 VALUES 
     (
         uuid_generate_v4(), 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         (SELECT id FROM address WHERE district = 'Pune'), 
-        'Main Unit'
+        (SELECT id FROM industry_link WHERE industry_category_id = (SELECT id FROM industry_category WHERE name = 'GREEN') AND industry_scale_id = (SELECT id FROM industry_scale WHERE name = 'LSI') AND industry_type_id = (SELECT id FROM industry_type WHERE name = 'Aatta-chakkies')),
+        'TSL Main Unit',
+        'main',
+        'mainunit@techknowgreen.com',
+        '123-456-7890',
+        '123-456-7890',
+        5,
+        8
     ),
     (
         uuid_generate_v4(), 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         (SELECT id FROM address WHERE district = 'Mumbai'), 
-        'Sub Unit 1'
+        (SELECT id FROM industry_link WHERE industry_category_id = (SELECT id FROM industry_category WHERE name = 'ORANGE') AND industry_scale_id = (SELECT id FROM industry_scale WHERE name = 'MSI') AND industry_type_id = (SELECT id FROM industry_type WHERE name = 'Candles')),
+        'TSL Sub Unit 1',
+        'sub',
+        'subunit1@techknowgreen.com',
+        '098-765-4321',
+        '098-765-4321',
+        6,
+        7
     ),
     (
         uuid_generate_v4(), 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         (SELECT id FROM address WHERE street = '456 Elm St'), 
-        'Sub Unit 2'
+        (SELECT id FROM industry_link WHERE industry_category_id = (SELECT id FROM industry_category WHERE name = 'GREEN') AND industry_scale_id = (SELECT id FROM industry_scale WHERE name = 'LSI') AND industry_type_id = (SELECT id FROM industry_type WHERE name = 'Aatta-chakkies')),
+        'TSL Sub Unit 2',
+        'sub',
+        'subunit2@techknowgreen.com',
+        '111-222-3333',
+        '111-222-3333',
+        5,
+        8
     ),
     (
         uuid_generate_v4(), 
         (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
         (SELECT id FROM address WHERE street = '789 Oak St'), 
-        'Main Unit'
+        (SELECT id FROM industry_link WHERE industry_category_id = (SELECT id FROM industry_category WHERE name = 'ORANGE') AND industry_scale_id = (SELECT id FROM industry_scale WHERE name = 'MSI') AND industry_type_id = (SELECT id FROM industry_type WHERE name = 'Candles')),
+        'TBL Main Unit',
+        'main',
+        'mainunit@techknowblue.com',
+        '444-555-6666',
+        '444-555-6666',
+        6,
+        7
     ),
     (
         uuid_generate_v4(), 
         (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
         (SELECT id FROM address WHERE street = '123 Maple St'), 
-        'Sub Unit 1'
+        (SELECT id FROM industry_link WHERE industry_category_id = (SELECT id FROM industry_category WHERE name = 'GREEN') AND industry_scale_id = (SELECT id FROM industry_scale WHERE name = 'LSI') AND industry_type_id = (SELECT id FROM industry_type WHERE name = 'Aatta-chakkies')),
+        'TBL Sub Unit 1',
+        'sub',
+        'subunit1@techknowblue.com',
+        '777-888-9999',
+        '777-888-9999',
+        5,
+        8
     );
 -------------------------------------------------------------------------------
 -- 9. Insert Users
@@ -509,7 +561,7 @@ INSERT INTO users (
     password, 
     enabled, 
     designation, 
-    company_profile_id, 
+    company_unit_id, 
     failed_login_count, 
     last_login_date, 
     locked, 
@@ -519,10 +571,10 @@ VALUES
     (
         uuid_generate_v4(), 
         'tsl', 
-        '$2a$12$9AskmTUZBUf5wkDzuwI08euYs9GkVHLRbkL1Yb0PjceA.H.WN9m86', 
+        '$2a$12$vYPpThZEkVYeGZl8TpVTmORZLzIDnJwYYhgeF6oz/cbo3WoQbxgBa', 
         TRUE, 
         'TSL', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -534,7 +586,7 @@ VALUES
         '$2a$12$91s3EN/u8hSWOeJQ5MOVR.achEV2Xrou/2Y30eiG0XUiZNVGSn6oy', 
         TRUE, 
         'Director', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -542,11 +594,11 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'admin', 
-        '$2a$10$EpSzg7LgnWJnhmwTz7LpS.ag/QoKCMklUoFYactrDAY7XH3floeFy', 
+        'admin1', 
+        '$2a$12$k/ubhOxFf8v5JwJAd63TieQOxmrlK0..437AhLOk.TV05PKb59i8G', 
         TRUE, 
         'Administrator', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -554,11 +606,11 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'env', 
-        '$2a$12$pTeoXyu6hrtTFh4J8fFbfOxWISLUtADvu.4p82j1T8Vw9gRUuWMZu', 
+        'env1', 
+        '$2a$12$13acWj93fOjTAZNBGULDYuyuXmJt04vEgeBJ5Z.cUcv2LH/vbyOO.', 
         TRUE, 
         'Environment Officer', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -566,11 +618,11 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'man', 
-        '$2a$10$9mlMDltOWKW.avowJvbzXOr3100kYk90xbBrUfPoXG65UQoD29y6q', 
+        'man1', 
+        '$2a$12$EBavzyNzTir96MEz5fM0peZeD62TRuVCiyd.vfIkiQrzeHKbraLIm', 
         TRUE, 
         'Manager', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -578,11 +630,215 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'thp', 
-        '$2a$10$Kx1SuyCHptaOh1qJ96Vqb.Z83EsDMNskCghg5RTPZDDq6a372MoNC', 
+        'thp1', 
+        '$2a$12$aK62VQba49JNZKy7gIDKk.vCEJa6v/CIIpOvUvmiZrzJnro5t/qXK', 
         TRUE, 
         'Third Party', 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'admin2', 
+        '$2a$12$pMwMNvsjxyPWLScAczSDbeqS.k5NMpFzwmUxgF3eB26xaSaG4CT7W', 
+        TRUE, 
+        'Administrator', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'env2', 
+        '$2a$12$38dr6N1fIATx4lf5L/yO4ujWyhflPfZpNnPVNuXeqMKF0/HVvNTm2', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'man2', 
+        '$2a$12$k8V1Q/W1U7AyvY9psKYkJOqeOVKM11C2k1PeO.aDr9ocAHm08WDn.', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'thp2', 
+        '$2a$12$Ztjv1/BPRfqo/KBkIS8ABemlDLMpPHLSp2QolWFYxRFceYDz.N4X6', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'admin3', 
+        '$2a$12$ckr3MmIDiRlP8Y93Cj7mY.41uYoGUwOhKhiCqqt507Ddi3QURbcpq', 
+        TRUE, 
+        'Administrator', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'env3', 
+        '$2a$12$VS0EGPyK6gXDgCWTJ1WMsuYnGPyzG2HW8vMoAxtMhbGPaJwSFHhoG', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'man3', 
+        '$2a$12$9fCGFIss9Sc38sDvLMT1DeLWz/Y8YD5RZiHoNVexI9wNAfQqlm40u', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'thp3', 
+        '$2a$12$lNR6IC3OAl0VUqd754SOB.AP8ivukQIv6e4kMPHkCPrwtZ4QFgU.O', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'director1', 
+        '$2a$12$v99.2NKRklCiKSlDwNbfe.BVJILdsqOi3McGil6vtF8rSzXAk4BnG', 
+        TRUE, 
+        'director',
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1admin1', 
+        '$2a$12$FoJ8yK4liByi4xECEE0wEuzClL50lNk8prGDti9FIz9/SSJpceNly', 
+        TRUE, 
+        'Administrator', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1env1', 
+        '$2a$12$NwD1KwvkhsA6qnz00SFs3OZEVgNlbUF0nBCFCv/p4.pAIU87l6cTC', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1man1', 
+        '$2a$12$K9Lohn203HE.MOsQ7Ei33OcQNpM2IJ5Maeou0fWYsO7XFaNyKzP6y', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1thp1', 
+        '$2a$12$IF7OdFclCSVWmBYzOtTHRu8vHgVVFhmxYzi.Dh9eYqbxc/f.xF29K', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1admin2', 
+        '$2a$12$f3dQt3N/JYdUxIwTPFZHV.6IysStVs7iGZMhFe7OEUQ1Y88XHl0yC', 
+        TRUE, 
+        'Administrator', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1env2', 
+        '$2a$12$spRAYgKXASLgBjTauM9pM.FuDiL637taIGdbCC0G9ys35JcJQOd3W', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1man2', 
+        '$2a$12$rmXEpxSHKxERlX80/2ywF.msnsMXsbaWNLx0stUYlirPMrzkNAVnO', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1thp2', 
+        '$2a$12$NCFh.y3PqCZ3R12mGW9/bOUuKgiDqF8bcfIatFcBwoLdJ5dPgPt7G', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
         0, 
         NOW(), 
         FALSE, 
@@ -597,10 +853,27 @@ INSERT INTO user_role (id, user_id, role_id)
 VALUES
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'tsl'), (SELECT id FROM role WHERE name = 'ROLE_TSL')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY'));
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin1'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin2'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env2'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man2'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin3'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env3'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man3'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp3'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director1'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1admin1'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1admin2'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1env2'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1man2'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY'));
 
 -- Map each user to their respective role
 
@@ -657,7 +930,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'admin'), 
+    (SELECT id FROM users WHERE username = 'admin1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Omkar Patil', 
     'Male', 
@@ -672,7 +945,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'env'), 
+    (SELECT id FROM users WHERE username = 'env1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Kajal Dudhe', 
     'Female', 
@@ -687,7 +960,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'man'), 
+    (SELECT id FROM users WHERE username = 'man1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Rishikesh Kharade', 
     'Male', 
@@ -702,7 +975,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'thp'), 
+    (SELECT id FROM users WHERE username = 'thp1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Harish Buddy', 
     'Male', 

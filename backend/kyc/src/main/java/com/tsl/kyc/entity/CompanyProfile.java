@@ -1,218 +1,149 @@
 package com.tsl.kyc.entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "company_profile")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CompanyProfile {
+    @Id
+    @ColumnDefault("uuid_generate_v4()")
+    @Column(name = "id", nullable = false)
+    private UUID id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_person_id")
+    private ContactPerson contactPerson;
 
-	@OneToOne
-	@JoinColumn(name = "contact_person_id")
-	private ContactPerson contactPerson;
+    @Column(name = "mpcbid")
+    private Long mpcbid;
 
-	@Column(name = "mpcbid", unique = true)
-	private Long mpcbId;
+    @Size(max = 255)
+    @Column(name = "name")
+    private String name;
 
-	@ManyToOne
-	@JoinColumn(name = "industry_link_id")
-	private IndustryLink industryLink;
+    @Size(max = 255)
+    @Column(name = "email")
+    private String email;
 
-	@Column(name = "branch")
-	private String branch;
+    @Size(max = 255)
+    @Column(name = "fax")
+    private String fax;
 
-	@Column(name = "category")
-	private String category;
+    @Size(max = 20)
+    @Column(name = "last_environment", length = 20)
+    private String lastEnvironment;
 
-	@Column(name = "name")
-	private String name;
+    @Size(max = 255)
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-	@Column(name = "email")
-	private String email;
+    @Size(max = 255)
+    @Column(name = "website")
+    private String website;
 
-	@Column(name = "fax")
-	private String fax;
+    @Column(name = "year_established")
+    private Integer yearEstablished;
 
-	@Column(name = "last_environment", length = 20)
-	private String lastEnvironment;
+    @OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("companyProfile")
+    @JsonBackReference
+    private List<CompanyUnit> companyUnits;
 
-	@Column(name = "work_day")
-	private Integer workDay;
+    public UUID getId() {
+        return id;
+    }
 
-	@Column(name = "phone_number")
-	private String phoneNumber;
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
-	@Column(name = "website")
-	private String website;
+    public ContactPerson getContactPerson() {
+        return contactPerson;
+    }
 
-	@Column(name = "working_hour")
-	private Integer workingHour;
+    public void setContactPerson(ContactPerson contactPerson) {
+        this.contactPerson = contactPerson;
+    }
 
-	@Column(name = "year_established")
-	private Integer yearEstablished;
+    public Long getMpcbid() {
+        return mpcbid;
+    }
 
+    public void setMpcbid(Long mpcbid) {
+        this.mpcbid = mpcbid;
+    }
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Employee> employees;
+    public String getName() {
+        return name;
+    }
 
-	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	@JsonIgnore
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	private Set<User> users;
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
+    public String getFax() {
+        return fax;
+    }
 
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
 
-	// Getters and setters
+    public String getLastEnvironment() {
+        return lastEnvironment;
+    }
 
-	public UUID getId() {
-		return id;
-	}
+    public void setLastEnvironment(String lastEnvironment) {
+        this.lastEnvironment = lastEnvironment;
+    }
 
-	public void setId(UUID id) {
-		this.id = id;
-	}
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-	public ContactPerson getContactPerson() {
-		return contactPerson;
-	}
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-	public void setContactPerson(ContactPerson contactPerson) {
-		this.contactPerson = contactPerson;
-	}
+    public String getWebsite() {
+        return website;
+    }
 
-	public Long getMpcbId() {
-		return mpcbId;
-	}
+    public void setWebsite(String website) {
+        this.website = website;
+    }
 
-	public void setMpcbId(Long mpcbId) {
-		this.mpcbId = mpcbId;
-	}
+    public Integer getYearEstablished() {
+        return yearEstablished;
+    }
 
-	public IndustryLink getIndustryLink() {
-		return industryLink;
-	}
+    public void setYearEstablished(Integer yearEstablished) {
+        this.yearEstablished = yearEstablished;
+    }
 
-	public void setIndustryLink(IndustryLink industryLink) {
-		this.industryLink = industryLink;
-	}
+    public List<CompanyUnit> getCompanyUnits() {
+        return companyUnits;
+    }
 
-	public String getBranch() {
-		return branch;
-	}
-
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getFax() {
-		return fax;
-	}
-
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
-
-	public String getLastEnvironment() {
-		return lastEnvironment;
-	}
-
-	public void setLastEnvironment(String lastEnvironment) {
-		this.lastEnvironment = lastEnvironment;
-	}
-
-	public Integer getWorkDay() {
-		return workDay;
-	}
-
-	public void setWorkDay(Integer workDay) {
-		this.workDay = workDay;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getWebsite() {
-		return website;
-	}
-
-	public void setWebsite(String website) {
-		this.website = website;
-	}
-
-	public Integer getWorkingHour() {
-		return workingHour;
-	}
-
-	public void setWorkingHour(Integer workingHour) {
-		this.workingHour = workingHour;
-	}
-
-	public Integer getYearEstablished() {
-		return yearEstablished;
-	}
-
-	public void setYearEstablished(Integer yearEstablished) {
-		this.yearEstablished = yearEstablished;
-	}
-
-
-
-	public Set<Employee> getEmployees() {
-		return employees;
-	}
-
-	public void setEmployees(Set<Employee> employees) {
-		this.employees = employees;
-	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
+    public void setCompanyUnits(List<CompanyUnit> companyUnits) {
+        this.companyUnits = companyUnits;
+    }
 }
