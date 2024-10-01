@@ -5,7 +5,7 @@ import { useState } from "react";
 import classes from '../user/ModalStyles.module.css';
 import global from "./../../../ui/Global.module.css";
 import AddUserForm from "../user/AddUserForm";
-import CompanyProfileForm from "./form/CompanyProfileForm";
+import CompanyProfileForm from "./forms/CompanyProfileForm";
 
 const CompanyModalContent = (
     <CompanyProfileForm/>
@@ -31,7 +31,7 @@ export default function CreateCompanyProfile() {
 
     return (
         <>
-            <Paper withBorder radius="sm">
+            <Paper withBorder mt='md' radius="sm">
                 <Grid p="sm" pl='lg' bg={'gray.1'} justify="space-between" align="center">
                     <Grid.Col span={6}>
 

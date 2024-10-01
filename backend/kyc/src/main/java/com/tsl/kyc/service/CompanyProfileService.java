@@ -33,8 +33,7 @@ public class CompanyProfileService {
 
     public CompanyProfile createCompanyProfile(CompanyProfile companyProfileDto) {
         CompanyProfile companyProfile = new CompanyProfile();
-        companyProfile.setBranch(companyProfileDto.getBranch());
-        companyProfile.setCategory(companyProfileDto.getCategory());
+
 //        companyProfile.getAddresses().setCity(companyProfileDto.getCity());
 //        companyProfile.setCompName(companyProfileDto.getCompName());
 //        companyProfile.setContPerDesig(companyProfileDto.getContPerDesig());
@@ -74,8 +73,7 @@ public class CompanyProfileService {
         CompanyProfile companyProfile = companyProfileRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found"));
 
-        companyProfile.setBranch(companyProfileDto.getBranch());
-        companyProfile.setCategory(companyProfileDto.getCategory());
+
 
 //        companyProfile.setCity(companyProfileDto.getCity());
 //        companyProfile.setCompName(companyProfileDto.getCompName());
@@ -119,8 +117,7 @@ public class CompanyProfileService {
     private CompanyProfile convertToDto(CompanyProfile companyProfile) {
         CompanyProfile dto = new CompanyProfile();
         dto.setId(companyProfile.getId());
-        dto.setBranch(companyProfile.getBranch());
-        dto.setCategory(companyProfile.getCategory());
+
 //        dto.setCity(companyProfile.getCity());
 //        dto.setCompName(companyProfile.getCompName());
 //        dto.setContPerDesig(companyProfile.getContPerDesig());

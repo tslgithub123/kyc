@@ -43,7 +43,8 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
-    @JsonBackReference // Prevents serialization of companyProfile inside User
+    @JsonBackReference
+    @JsonIgnore
     private CompanyProfile companyProfile;
 
     @Column

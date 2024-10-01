@@ -1,5 +1,6 @@
 package com.tsl.kyc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "address")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Address {
     @Id
     @ColumnDefault("uuid_generate_v4()")
@@ -67,10 +69,6 @@ public class Address {
     @Size(max = 255)
     @Column(name = "sro")
     private String sro;
-
-
-    @OneToMany(mappedBy = "address")
-    private Set<CompanyUnit> companyUnits = new LinkedHashSet<>();
 
     public UUID getId() {
         return id;
@@ -182,14 +180,6 @@ public class Address {
 
     public void setSro(String sro) {
         this.sro = sro;
-    }
-
-    public Set<CompanyUnit> getCompanyUnits() {
-        return companyUnits;
-    }
-
-    public void setCompanyUnits(Set<CompanyUnit> companyUnits) {
-        this.companyUnits = companyUnits;
     }
 
 }
