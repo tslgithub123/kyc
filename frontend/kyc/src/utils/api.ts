@@ -111,14 +111,14 @@ const fetchAllRoles = async (): Promise<Role[]> => {
   }
 };
 
-const deleteUserProfiles = async (ids: string[]): Promise<void> => {
-  try {
-    await base_api.delete(endpoints.user.deleteProfiles, { data: { ids } });
-  } catch (error) {
-    console.error('Error deleting profiles:', error);
-    throw error;
-  }
-};
+// const deleteUserProfiles = async (ids: string[]): Promise<void> => {
+//   try {
+//     await base_api.delete(endpoints.user.deleteProfiles, { data: { ids } });
+//   } catch (error) {
+//     console.error('Error deleting profiles:', error);
+//     throw error;
+//   }
+// };
 
 const fetchUser = async (id: string): Promise<User> => {
   try {

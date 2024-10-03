@@ -64,15 +64,15 @@ const CompanyProfileAccordian: React.FC = () => {
             <Accordion.Control>
               <Group justify="space-between" style={{ width: '100%' }}>
                 <Pill size='lg'>
-                  {(currentPage - 1) * itemsPerPage + index + 1}. {profile.compName}
+                  {(currentPage - 1) * itemsPerPage + index + 1}. {}
                 </Pill>
               </Group>
             </Accordion.Control>
             <Accordion.Panel>
               <Box mt="sm" mb="sm">
-                <Text size="sm">City: {profile.city}</Text>
-                <Text size="sm">Category: {profile.category}</Text>
-                <Text size="sm">Country: {profile.country}</Text>
+                <Text size="sm">City: {}</Text>
+                <Text size="sm">Category: {}</Text>
+                <Text size="sm">Country: {}</Text>
                 <Text size="sm" mt="md" fw={500}>Users</Text>
                 {loading[profile.id] ? (
                   <Loader size="xs" variant="dots" />

@@ -7,7 +7,6 @@ export default function CompanyPage() {
     return (
         <div>
             <CompanyMain/>
-            <CreateCompanyProfile/>
             <AddCompanyUnit/>
             <MyCompany/>
         </div>

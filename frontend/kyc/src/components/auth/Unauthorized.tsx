@@ -1,4 +1,4 @@
-import { Container, Title, Text, Center, Image, Button, Space, Divider } from '@mantine/core';
+import { Container, Title, Text, Center, Image, Button, Space } from '@mantine/core';
 import hal9000 from '../../assets/icons/hal9000.png';
 import { useEffect } from 'react';
 import { useAuthStore } from '../../store/store';

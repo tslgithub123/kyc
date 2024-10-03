@@ -2,11 +2,7 @@ import React from 'react';
 import { Menu, Group, Text, Avatar, useMantineTheme, ActionIcon, rem, Box, MantineTheme } from '@mantine/core';
 import {
     IconLogout,
-    IconHeart,
-    IconStar,
-    IconMessage,
     IconSettings,
-    IconSwitchHorizontal,
     IconChevronRight,
     IconDots,
     IconHistory,

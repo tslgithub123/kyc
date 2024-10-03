@@ -1,8 +1,8 @@
-import { UnstyledButton, Checkbox, Text, Image, SimpleGrid, Radio, CheckIcon } from '@mantine/core';
+import { UnstyledButton, Text, SimpleGrid, Radio, CheckIcon } from '@mantine/core';
 import { useUncontrolled } from '@mantine/hooks';
 import classes from './ImageCheckboxes.module.css';
 import { ReactNode } from 'react';
-import { Icon24Hours, IconBrandAppleFilled, IconSignRight, IconXboxXFilled } from '@tabler/icons-react';
+import { IconSignRight, IconXboxXFilled } from '@tabler/icons-react';
 
 interface ImageCheckboxProps {
   checked?: boolean;

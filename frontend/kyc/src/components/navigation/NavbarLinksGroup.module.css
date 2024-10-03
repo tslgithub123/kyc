@@ -5,8 +5,10 @@ fontlink {
 .control {
   display: block;
   width: 100%;
+  
   padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
   color: var(--mantine-color-text);
+ 
   font-size: var(--mantine-font-size-sm);
   cursor: pointer;
   border-radius: 4px;
@@ -27,8 +29,7 @@ fontlink {
     var(--mantine-color-blue-1),
     var(--mantine-color-dark-7)
   );
-  color: var(--mantine-color-blue);
-
+  background: linear-gradient(45deg, #d2e0ff 10%, #90b6fc 90%);
   &:hover {
     background-color: light-dark(
       var(--mantine-color-blue-1),
@@ -52,7 +53,7 @@ fontlink {
     var(--mantine-color-gray-4),
     var(--mantine-color-dark-4)
   );
-  
+  height: fit-content;
   &:not(.activeLink):hover {
     background-color: light-dark(
       var(--mantine-color-gray-1),

@@ -14,12 +14,11 @@ import {
   Button,
   Text,
   Center,
-  Tooltip,
   Pill,
   Menu,
   rem,
 } from '@mantine/core';
-import { IconArrowUp, IconArrowDown, IconSearch, IconClearAll, IconSend2, IconCircleOff, IconDownload, IconFileExcel, IconPdf, IconRestore, IconUser } from '@tabler/icons-react';
+import { IconArrowUp, IconArrowDown, IconSearch, IconSend2, IconCircleOff, IconDownload, IconFileExcel, IconPdf, IconRestore, IconUser } from '@tabler/icons-react';
 import api from '../../../../utils/api';
 import PromptModal from '../../../ui/PromptModal';
 import global from "./../../../ui/Global.module.css";
@@ -139,14 +138,14 @@ export default function MyUsers() {
     console.log("Sending emails to profiles with IDs:", selectedIds);
   }
 
-  const deactivateProfiles = async (ids: number[]) => {
-    try {
-      //await api.deleteUserProfiles(ids);
-      setUserProfiles((prevProfiles) => prevProfiles.filter((profile) => !ids.includes(profile.id)));
-    } catch (error) {
-      console.error("Error deleting profiles:", error);
-    }
-  }
+  // const deactivateProfiles = async (ids: number[]) => {
+  //   try {
+  //     //await api.deleteUserProfiles(ids);
+  //     setUserProfiles((prevProfiles) => prevProfiles.filter((profile) => !ids.includes(profile.id)));
+  //   } catch (error) {
+  //     console.error("Error deleting profiles:", error);
+  //   }
+  // }
 
   const sortedProfiles = useMemo(() => {
     let sortedProfiles = [...userProfiles];

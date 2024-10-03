@@ -52,6 +52,7 @@ export default function Navigation({
 
   return (
     <AppShell
+    
       layout="default"
       header={{ height: { base: 60, md: 70, lg: 60 } }}
       navbar={{
@@ -60,8 +61,9 @@ export default function Navigation({
         collapsed: { mobile: !opened },
       }}
       padding="md"
+      
     >
-      <AppShell.Header>
+      <AppShell.Header >
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Burger
@@ -89,7 +91,7 @@ export default function Navigation({
         timingFunction="ease"
       >
         {(styles) => (
-          <AppShell.Navbar p="md" style={styles}>
+          <AppShell.Navbar  p="md" style={styles}>
             {links}
             <AppShellFooter className={classes.footer}>
               <div className={classes.footerContent}>
@@ -104,13 +106,13 @@ export default function Navigation({
 
       <AppShell.Main
         style={{
-          paddingTop: '76px',
           display: 'block',
           transition: 'all 300ms ease',
           paddingLeft: navbarVisible ? undefined : '16px',
-          paddingRight: navbarVisible ? undefined : '16px'
+          paddingRight: navbarVisible ? undefined : '16px',
         }}
         pt={navbarVisible ? undefined : '76px'}
+       
       >
         {memoizedRoutes}
       </AppShell.Main>
