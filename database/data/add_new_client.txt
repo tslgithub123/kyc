@@ -1,0 +1,44 @@
+Task: Need to create Director and Admin (main unit)
+Login: TSL (SuperAdmin)
+
+Steps:
+1. TSL Logins
+2. Create Company Profile:
+	1. Company Name
+	2. Company Email
+	3. Company Contact Number
+
+3. Create Unit (Main)
+	1. Main Unit Data:
+		1. Unit name
+		2. Unit email
+		3. Unit phone
+		4. Unit address
+		5. Unit work day
+		6. Unit working hour
+
+4. Create Admin (main)
+	1. User:
+		1. Username (generate)
+		2. Password (generate)
+		3. Designation (Admin)
+		4. User status (active)
+	2. Employee:
+		1. Admin Name
+		2. Gender
+		3. Email
+
+4. Create Director
+	1. User:
+		1. Username (generate)
+		2. Password (generate)
+		3. Designation (Director)
+		4. User status (active)
+	2. Employee
+		1. Director Name
+		2. Gender
+		3. Email
+
+
+What will happen:
+1. TSL Login -> Director and Admin Created -> Both receive emails with credentials -> Admin can add new unit or add employees to existing main unit

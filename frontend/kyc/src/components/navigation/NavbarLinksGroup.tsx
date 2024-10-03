@@ -1,6 +1,6 @@
-import { memo, ReactNode, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
-import { Icon123, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight } from '@tabler/icons-react';
 import global from '../ui/Global.module.css';
 import { NavLink } from 'react-router-dom';
 import classes from './NavbarLinksGroup.module.css';
@@ -8,12 +8,14 @@ import classes from './NavbarLinksGroup.module.css';
 interface Link {
   icon: React.ComponentType<{ style: React.CSSProperties }>;
   link: string;
+  iconColor?: string;
   label: string;
 }
 
 interface NavbarLinksGroupProps {
   icon: React.ComponentType<{ style: React.CSSProperties }>;
   label: string;
+  iconColor?: string;
   initiallyOpened?: boolean;
   links?: Link[] | string;
   onLinkClick?: () => void;
@@ -22,6 +24,7 @@ interface NavbarLinksGroupProps {
 const NavbarLinksGroup = ({
   icon: Icon,
   label,
+  iconColor,
   initiallyOpened = false,
   links,
   onLinkClick,
@@ -47,11 +50,12 @@ const NavbarLinksGroup = ({
         className={({ isActive }) =>
           `${classes.link} ${isActive ? classes.activeLink : ''}`
         }
+        
         end
         onClick={handleLinkClick}
-        style={{ display: 'flex', alignItems: 'center' }} // Added style for vertical centering
+        style={{ display: 'flex', alignItems: 'center' }}
       >
-        <ThemeIcon radius="xl" variant="light" size={30}>
+        <ThemeIcon c={link.iconColor} bg={`${link.iconColor}.0`} radius="xl" variant="light" size={30}>
           <IconComponent style={{ width: rem(18), height: rem(18) }} />
         </ThemeIcon>
         <Box ml="sm">{link.label}</Box>
@@ -61,9 +65,9 @@ const NavbarLinksGroup = ({
   });
 
   const content = (
-    <Group className={global.navlinks} justify="space-between" gap={0}>
+    <Group className={global.navlinks} justify="space-between"  gap={0}>
       <Box style={{ display: 'flex', alignItems: 'center' }}>
-        <ThemeIcon variant="light" size={30}>
+        <ThemeIcon c={iconColor} bg={`${iconColor}.0`} variant="light" size={30}>
           <Icon style={{ width: rem(18), height: rem(18) }} />
         </ThemeIcon>
         <Box ml="md">{label}</Box>

@@ -1,10 +1,9 @@
-import { Card, Center, Divider, Grid, Group, Modal, Overlay, Paper, rem, Text, ThemeIcon, Title, Tooltip } from "@mantine/core";
+import { Card, Center, Divider, Grid, Group, Modal, Paper, Text, Title } from "@mantine/core";
 import FancyButton from "../../../ui/FancyButton";
-import { IconAlertCircleFilled, IconBuildingSkyscraper, IconCircleCheck, IconCircleCheckFilled, IconExclamationMark, IconUserEdit } from "@tabler/icons-react";
+import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { useState } from "react";
 import classes from '../user/ModalStyles.module.css';
 import global from "./../../../ui/Global.module.css";
-import AddUserForm from "../user/AddUserForm";
 import CompanyProfileForm from "./forms/CompanyProfileForm";
 
 const CompanyModalContent = (

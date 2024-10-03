@@ -1,6 +1,6 @@
-import { Card, Center, Divider, Grid, Group, Modal, Overlay, Paper, rem, Text, ThemeIcon, Title, Tooltip } from "@mantine/core";
+import { Card, Center, Divider, Grid, Group, Modal, Paper, Text, Title } from "@mantine/core";
 import FancyButton from "../../../ui/FancyButton";
-import { IconAlertCircleFilled, IconBuildings, IconBuildingSkyscraper, IconCircleCheck, IconCircleCheckFilled, IconExclamationMark, IconUserEdit } from "@tabler/icons-react";
+import { IconBuildings } from "@tabler/icons-react";
 import { useState } from "react";
 import classes from '../user/ModalStyles.module.css';
 import global from "./../../../ui/Global.module.css";

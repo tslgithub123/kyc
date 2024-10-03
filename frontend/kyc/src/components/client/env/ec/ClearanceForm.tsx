@@ -1,4 +1,4 @@
-import { Button, Center, Divider, FileInput, Grid, Group, NativeSelect, NumberInput, Paper, Radio, rem, SimpleGrid, TextInput, Title, Tooltip } from "@mantine/core";
+import { Button, Center, Divider, FileInput, Grid, Group, NativeSelect, NumberInput, Paper, Radio, rem, SimpleGrid, TextInput, Title } from "@mantine/core";
 import { useForm } from '@mantine/form';
 import { useState } from "react";
 import { DateInput } from "@mantine/dates";
@@ -49,7 +49,7 @@ export default function ClearanceForm() {
         />
     );
 
-    const renderProductInputs = (nameKey: string, quantityKey: string, unitKey: string, label: string) => (
+    const renderProductInputs = (nameKey: string, quantityKey: string, _unitKey: string, label: string) => (
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="sm" mb="xl">
             <TextInput
                 m='md'

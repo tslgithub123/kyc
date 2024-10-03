@@ -1,7 +1,6 @@
 import { IconBuildingFactory, IconBuildings, IconGauge, IconUser } from "@tabler/icons-react";
 import Navigation from "../../../navigation/Navigation";
 import { ManRoutes } from "../../../../routes/Routes";
-import TslServices from "../../../tsl/services/TslServices";
 import ManServices from "../services/ManServices";
 import ManMenu from "./ManMenu";
 

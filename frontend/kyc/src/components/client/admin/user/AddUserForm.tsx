@@ -1,6 +1,5 @@
 import { useForm } from '@mantine/form';
-import { NumberInput, TextInput, Button, Container, Paper, Title, Group, UnstyledButton, ThemeIcon, Center, Select } from '@mantine/core';
-import { IconUserEdit } from '@tabler/icons-react';
+import { TextInput, Button, Container, Paper, Group, Center } from '@mantine/core';
 
 export default function AddUserForm() {
   const form = useForm({

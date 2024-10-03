@@ -1,4 +1,4 @@
-import { IconBuilding, IconGauge, IconUser } from "@tabler/icons-react";
+import { IconBuildingSkyscraper, IconGauge, IconUser } from "@tabler/icons-react";
 
 import { AdminRoutes} from "../../../../routes/Routes";
 import Navigation from "../../../navigation/Navigation";
@@ -7,9 +7,9 @@ import AdminServices from "../services/AdminServices";
 
 
 const adminNavData = [
-  { label: "Dashboard", icon: IconGauge, links: '/admin' },
-  { label: "Company", icon: IconBuilding, links: 'company' },
-  { label: "Users", icon: IconUser, links: 'users' },
+  { label: "Dashboard", icon: IconGauge, iconColor: 'blue', links: '/admin' },
+  { label: "Company", icon: IconBuildingSkyscraper, iconColor: 'green', links: 'company' },
+  { label: "Users", icon: IconUser, iconColor: 'grape', links: 'users' },
   // {
   //   label: "Companies",
   //   icon: IconBuilding,

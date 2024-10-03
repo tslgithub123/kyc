@@ -37,7 +37,7 @@ public class Employee {
     @Column(name = "gender", length = 20)
     private String gender;
 
-    @Column(name = "birthday")
+    @Column(name = "date_of_birth")
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
