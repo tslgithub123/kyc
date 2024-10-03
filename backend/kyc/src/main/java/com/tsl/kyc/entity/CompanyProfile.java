@@ -66,12 +66,11 @@ public class CompanyProfile {
 	@JsonIgnore
 	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Employee> employees;
-
-	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference // Manages the forward part of the reference
-	private Set<User> users;
-
-	// Getters and setters
+//
+//	@OneToMany(mappedBy = "companyProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+//	@JsonManagedReference // Manages the forward part of the reference
+//	private Set<User> users;
+	
 
 	public UUID getId() {
 		return id;
@@ -209,11 +208,13 @@ public class CompanyProfile {
 		this.employees = employees;
 	}
 
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
+//	public Set<User> getUsers() {
+//		return users;
+//	}
+//
+//	public void setUsers(Set<User> users) {
+//		this.users = users;
+//	}
+	
+	
 }

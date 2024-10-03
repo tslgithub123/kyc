@@ -16,7 +16,7 @@ const envNavData = [
     label: "Consent",
     icon: IconFileText,
     links: [
-      { label: "Add", link: "consent/create" },
+      { label: "Add", link: "consent/add" },
       { label: "View", link: "consent/view" },
     ],
   },
@@ -26,6 +26,13 @@ const envNavData = [
     links: [
       { label: "Add", link: "data/daily/add" },
       { label: "View", link: "data/daily/view" },
+    ],
+  },
+  {
+    label: "Compliance",
+    icon: IconPencilCheck,
+    links: [
+      { label: "Add", link: "compliance/add" },
     ],
   },
   

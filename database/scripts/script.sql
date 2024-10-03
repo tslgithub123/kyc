@@ -13,6 +13,7 @@ CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
 CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
+
 -- Create Role Table
 CREATE TABLE role (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -34,7 +35,7 @@ CREATE TABLE address (
     taluka VARCHAR(255),
     plot_number VARCHAR(255),
     ro VARCHAR(255),
-    sro VARCHAR(255),
+    sro VARCHAR(255)
 );
 
 CREATE TABLE contact_person (
@@ -101,7 +102,7 @@ CREATE TABLE company_unit (
     company_profile_id UUID,
     address_id UUID,
     name VARCHAR(50),
-    FOREIGN_KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL,
     FOREIGN KEY (company_profile_id) REFERENCES company_profile(id) ON DELETE CASCADE
 );
 
@@ -228,8 +229,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TABLE notifications (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
     message TEXT NOT NULL,
     type VARCHAR(50) NOT NULL,
     is_read BOOLEAN DEFAULT FALSE,
@@ -243,18 +244,6 @@ CREATE TRIGGER create_resource_transaction_partition_trigger
 AFTER INSERT ON company_profile
 FOR EACH ROW
 EXECUTE FUNCTION create_resource_transaction_partition();
-
--- Indexes
-CREATE INDEX idx_employee_company ON employee (company_id);
-CREATE INDEX idx_employee_user ON employee (user_id);
-CREATE INDEX idx_company_profile_name ON company_profile (name);
-CREATE INDEX idx_employee_email ON employee (email);
-CREATE INDEX idx_address_company ON address (company_profile_id);
-CREATE INDEX idx_resource_transaction_company ON resource_transaction (company_profile_id);
-CREATE INDEX idx_resource_transaction_resource ON resource_transaction (resource_id);
-CREATE INDEX idx_resource_transaction_timestamp ON resource_transaction (timestamp);
-CREATE INDEX idx_resource_transaction_type ON resource_transaction (transaction_type);
-
 
 
 -------------------------------------------------------------------------------
@@ -370,7 +359,7 @@ VALUES
 
 -- Insert addresses linked to company profiles
 INSERT INTO address (
-    company_profile_id, 
+    id,
     street, 
     line2, 
     line3, 
@@ -387,7 +376,7 @@ INSERT INTO address (
 )
 VALUES
     (
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        uuid_generate_v4(),
         '123 Main St', 
         'Apt 4B', 
         'City Center', 
@@ -403,7 +392,7 @@ VALUES
         'SRO1'
     ),
     (
-        (SELECT id FROM company_profile WHERE name = 'Techknowblue Ltd.'), 
+        uuid_generate_v4(),
         '456 Elm St', 
         NULL, 
         'Downtown', 
@@ -439,10 +428,10 @@ INSERT INTO users (
 VALUES
     (
         uuid_generate_v4(), 
-        'superadmin', 
-        '$2a$12$WZfY6W.y0iEHSs/xgVztxud3ry/Hto9OhVDx8rlv7WhLJdYVfLw0i', 
+        'tsl', 
+        '$2a$12$9AskmTUZBUf5wkDzuwI08euYs9GkVHLRbkL1Yb0PjceA.H.WN9m86', 
         TRUE, 
-        'Super Admin', 
+        'TSL', 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         0, 
         NOW(), 
@@ -451,10 +440,10 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'mpcb', 
-        '$2a$12$ve87lQVb5uTYFnkQCkt5wej3UfjUWT4rJcrVKj6KKF/jm9zz.ETU2', 
+        'authority', 
+        '$2a$12$exgN3EW00G6dk2GN13imD.C9JXRCzFbxAg5wIbPEAFXanrHzn5s96', 
         TRUE, 
-        'MPCB', 
+        'Regulation Authority', 
         (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
         0, 
         NOW(), 
@@ -519,8 +508,8 @@ INSERT INTO user_role (id, user_id, role_id)
 SELECT uuid_generate_v4(), u.id, r.id
 FROM users u
 JOIN role r ON 
-    (u.username = 'superadmin' AND r.name = 'ROLE_SUPERADMIN') OR
-    (u.username = 'mpcb' AND r.name = 'ROLE_MPCB') OR
+    (u.username = 'tsl' AND r.name = 'ROLE_TSL') OR
+    (u.username = 'authority' AND r.name = 'ROLE_AUTHORITY') OR
     (u.username = 'admin' AND r.name = 'ROLE_ADMIN') OR
     (u.username = 'env' AND r.name = 'ROLE_ENVIRONMENT_OFFICER') OR
     (u.username = 'man' AND r.name = 'ROLE_MANAGEMENT') OR
@@ -549,7 +538,7 @@ INSERT INTO employee (
 VALUES (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'superadmin'), 
+    (SELECT id FROM users WHERE username = 'tsl'), 
     (SELECT id FROM contact_person WHERE name = 'Dhananjay Yelwande'), 
     'John Doe', 
     'Male', 

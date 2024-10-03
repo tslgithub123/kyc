@@ -10,6 +10,9 @@ import ClearanceForm from '../components/client/env/ec/ClearanceForm';
 import AdminDashboard from '../components/client/admin/dashboard/AdminDashboard';
 import ManagementDashboard from '../components/client/management/ManagementDashboard';
 import ThirdPartyDashboard from '../components/client/thirdparty/ThirdPartyDashboard';
+import Transmission from '../components/client/env/Transmission';
+import Hazardous from '../components/client/env/hazardouswaste/Hazardous';
+import ConsentForm from '../components/client/env/consent/ConsentForm';
 
 export function SuperAdminRoutes() {
   return (
@@ -44,11 +47,11 @@ export function EnvRoutes() {
   return (
     <Routes>
       <Route path="/" element={<EnvDashboard/>} />
-      <Route path="/consent/add" element={<CompanyProfileAccordian />} />
-      <Route path="/consent/view" element={<CompanyProfileAccordian />} />
+      <Route path="/consent/add" element={<ConsentForm />} />
+      <Route path="/consent/view" element={<Transmission />} />
       <Route path="/ec/add" element={<ClearanceForm/>} />
       <Route path="/ec/view" element={<CompanyProfileAccordian />} />
-     
+      <Route path="/compliance/add" element={<Hazardous/>} />
       <Route path="/profile" element={<AdminProfile />} />
     </Routes>
   );
