@@ -112,7 +112,6 @@ export default function Navigation({
           paddingRight: navbarVisible ? undefined : '16px',
         }}
         pt={navbarVisible ? undefined : '76px'}
-       
       >
         {memoizedRoutes}
       </AppShell.Main>

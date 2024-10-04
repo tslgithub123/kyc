@@ -7,6 +7,7 @@ export default function CompanyPage() {
     return (
         <div>
             <CompanyMain/>
+            <CompanyMain/>
             <AddCompanyUnit/>
             <MyCompany/>
         </div>
