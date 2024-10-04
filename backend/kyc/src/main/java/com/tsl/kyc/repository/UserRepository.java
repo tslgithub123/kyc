@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     
     List<User> findAllById(Iterable<UUID> ids);
     
-    @Query("SELECT u FROM User u WHERE u.companyProfile.id = :companyProfileId")
+    @Query("SELECT u FROM User u WHERE u.companyUnit = :companyProfileId")
     List<User> findByCompanyProfileId(UUID companyProfileId);
 
 }
