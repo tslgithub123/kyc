@@ -16,13 +16,13 @@ public class IdorSecurityService {
         this.userService = userService;
     }
 
-    public boolean hasAccessToCompany(UUID companyId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getCompanyProfile().getId().equals(companyId);
-    }
+//    public boolean hasAccessToCompany(UUID companyUnitId) {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return user.getCompanyUnit().getId().equals(companyUnitId);
+//    }
 
-    public boolean hasAccessToCompanyUnit(UUID companyUnitId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return user.getCompanyProfile().getCompanyUnits().stream().anyMatch(companyUnit -> companyUnit.getId().equals(companyUnitId));
-    }
+//    public boolean hasAccessToCompanyUnit(UUID companyUnitId) {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return user.getCompanyUnit().getCompanyUnits().stream().anyMatch(companyUnit -> companyUnit.getId().equals(companyUnitId));
+//    }
 }
