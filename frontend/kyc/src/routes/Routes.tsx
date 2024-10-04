@@ -8,8 +8,8 @@ import UserPage from '../components/client/admin/user/UserPage';
 import CompanyPage from '../components/client/admin/company/CompanyPage';
 import ClearanceForm from '../components/client/env/ec/ClearanceForm';
 import AdminDashboard from '../components/client/admin/dashboard/AdminDashboard';
-import ManagementDashboard from '../components/client/management/ManagementDashboard';
 import ThirdPartyDashboard from '../components/client/thirdparty/ThirdPartyDashboard';
+import ManagementDashboard from '../components/client/management/ManagementDashboard';
 
 export function TslRoutes() {
   return (
@@ -70,8 +70,6 @@ export function ThpRoutes() {
       <Route path="/" element={<ThirdPartyDashboard/>} />
       <Route path="/company/create" element={<CompanyProfileAccordian />} />
       <Route path="/company/manage" element={<CompanyProfileAccordian />} />
-      
-     
       <Route path="/profile" element={<AdminProfile />} />
     </Routes>
   );

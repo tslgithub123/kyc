@@ -1,5 +1,4 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/store';
 
 
@@ -13,14 +12,9 @@ const LogoutButton = () => {
   };
 
   return (
-    <Link
-      onClick={handleLogout}
-      variant="outlined"
-      color='error'
-      underline='none'
-    >
-      Logout
-    </Link>
+    <a onClick={handleLogout} href="#" className="logout-button">
+      Logout </a>
+
   );
 };
 

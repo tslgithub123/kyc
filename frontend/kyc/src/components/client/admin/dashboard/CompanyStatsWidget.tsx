@@ -1,13 +1,13 @@
-import { Anchor, Avatar, Card, Center, Paper, SimpleGrid, Text } from "@mantine/core";
-import { faAtom, faUserPen, faUserTie } from '@fortawesome/free-solid-svg-icons'
+import { Anchor, Avatar, Card, Paper, SimpleGrid, Text } from "@mantine/core";
+import { faUserGear, faUserPen, faUsers, faUserTie } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default () => {
     return (
         <Card mb={'md'} withBorder padding="md" radius="sm">
-            <SimpleGrid cols={{ base: 2, sm: 4 }} spacing="sm" >
-                <Paper withBorder p='md' m="md">
+            <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="sm" >
+                <Paper withBorder  p='md' m="md">
                     
-                        <Avatar color="red" size='lg'><FontAwesomeIcon icon={faUserTie} /></Avatar>
+                        <Avatar color="red" size='lg'><FontAwesomeIcon icon={faUserGear} /></Avatar>
                         
                     
                         <Text
@@ -56,7 +56,7 @@ export default () => {
                 </Paper>
                 <Paper withBorder p='md' m="md">
                     
-                        <Avatar color="red" size='lg'><FontAwesomeIcon icon={faUserTie} /></Avatar>
+                        <Avatar color="yellow" size='lg'><FontAwesomeIcon icon={faUserTie} /></Avatar>
                         
                     
                         <Text
@@ -67,7 +67,7 @@ export default () => {
                             size="lg"
                             fw={900}
                             variant="gradient"
-                            gradient={{ from: 'red', to: 'orange', deg: 90 }}
+                            gradient={{ from: 'yellow', to: 'orange', deg: 90 }}
                         >
                             Management
                         </Text>
@@ -81,7 +81,7 @@ export default () => {
                 </Paper>
                 <Paper withBorder p='md' m="md">
                     
-                    <Avatar color="red" size='lg'><FontAwesomeIcon icon={faUserTie} /></Avatar>
+                    <Avatar color="grape" size='lg'><FontAwesomeIcon icon={faUsers} /></Avatar>
                     
                 
                     <Text
@@ -92,9 +92,9 @@ export default () => {
                         size="lg"
                         fw={900}
                         variant="gradient"
-                        gradient={{ from: 'red', to: 'orange', deg: 90 }}
+                        gradient={{ from: 'grape', to: 'orange', deg: 90 }}
                     >
-                        Administrator
+                        Third Party
                     </Text>
                 
                 
