@@ -11,7 +11,7 @@ import NavbarLinksGroup from "./NavbarLinksGroup";
 import ThemeButton from "../ui/ThemeButton";
 import Notifications from "../notifications/Notifications";
 import classes from './Navigation.module.css';
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 interface NavigationProps {
   navdata: Array<any>;
@@ -26,9 +26,16 @@ export default function Navigation({
   actions,
   menu,
 }: NavigationProps) {
+  
   const [opened, { close }] = useDisclosure();
-  const [navbarVisible, setNavbarVisible] = useState(true);
+  const [navbarVisible, setNavbarVisible] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const dhananjay = "dhananjay";
+
+  useEffect(() => {
+    setNavbarVisible(!isSmallScreen);
+  }, [isSmallScreen]);
+
   const memoizedRoutes = useMemo(() => routes, [routes]);
 
   console.log('navbarVisible', navbarVisible);
