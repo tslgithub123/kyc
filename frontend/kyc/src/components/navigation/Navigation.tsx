@@ -30,7 +30,7 @@ export default function Navigation({
   const [opened, { close }] = useDisclosure();
   const [navbarVisible, setNavbarVisible] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
-  const dhananjay = "dhananjay";
+  const Kajal = "kajal";
 
   useEffect(() => {
     setNavbarVisible(!isSmallScreen);
