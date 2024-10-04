@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import { useAuthStore } from '../../../store/store';
 import LogoutButton from '../../ui/LogoutButton';
 
 
-function EnvDashboard() {
+function ThirdPartyDashboard() {
   const { data: currentUser, isLoading, error } = useCurrentUser();
   const token = useAuthStore((state) => state.token);
 
@@ -20,8 +21,8 @@ function EnvDashboard() {
 
   return (
     <div>
-      <h1>Welcome Env Officer, {currentUser?.username}!</h1>
-      <p>Your role: {currentUser?.roles.join(', ')}</p>
+      <h1>Welcome Third Party, {currentUser?.username}!</h1>
+      <p>Your role: {JSON.stringify(currentUser?.roles)}</p>
       <div>
         <LogoutButton/>
       </div>
@@ -29,4 +30,4 @@ function EnvDashboard() {
   );
 }
 
-export default EnvDashboard;
+export default ThirdPartyDashboard;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 import LogoutButton from '../../ui/LogoutButton';
 import { useAuthStore } from '../../../store/store';
@@ -21,7 +21,7 @@ function ManagementDashboard() {
   return (
     <div>
       <h1>Welcome Management, {currentUser?.username}!</h1>
-      <p>Your role: {currentUser?.roles.join(', ')}</p>
+      <p>Your role: {JSON.stringify(currentUser?.roles)}</p>
       <div>
         <LogoutButton/>
       </div>
