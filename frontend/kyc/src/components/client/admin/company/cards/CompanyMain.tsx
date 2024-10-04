@@ -22,10 +22,10 @@ export default () => {
     };
 
     return (
-        <Card withBorder padding="md" radius="md">
+        <Card mb={'md'} withBorder  padding="md" radius="md">
 
 
-            <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="sm" >
+            <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="sm" >
                 <Paper p='sm' m="md">
                     <Center>
                         <Avatar color="blue" size='xl'>{companyData.name.charAt(0)}</Avatar>
@@ -48,20 +48,33 @@ export default () => {
 
                 </Paper>
 
-
-                <Paper p='sm' m="md" withBorder>
+                <Paper style={{width: 'fit-content'}} p='sm' m="md" withBorder>
                     <SimpleGrid m='md' cols={{ base: 1, sm: 1 }} spacing="sm">
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <ActionIcon size="lg" variant="light">
                                 <IconMail size={18} />
                             </ActionIcon>
-                            <Text size="sm" ml="xs"><strong>Email:</strong> {companyData.email}</Text>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700} >
+                                   {`Email: `}
+                                </Text>
+                                <Anchor href={`mailto:${companyData.email}`} c='dimmed' underline="hover">
+                                    {companyData.email}
+                                </Anchor>
+                            </Text>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <ActionIcon c={'green'} bg={'green.0'} size="lg" variant="light">
                                 <IconPhone size={18} />
                             </ActionIcon>
-                            <Text size="sm" ml="xs"><strong>Phone:</strong> {companyData.phoneNumber}</Text>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Phone: `}
+                                </Text>
+                                <Anchor href={`tel:${companyData.phoneNumber}`} c='dimmed' underline="hover">
+                                    {companyData.phoneNumber}
+                                </Anchor>
+                            </Text>
                         </div>
                     </SimpleGrid>
                     <SimpleGrid m='md' cols={{ base: 1, sm: 1 }} spacing="sm">
@@ -69,13 +82,89 @@ export default () => {
                             <ActionIcon c={'yellow'} bg={'yellow.0'} size="lg" variant="light">
                                 <IconPrinter size={18} />
                             </ActionIcon>
-                            <Text size="sm" ml="xs"><strong>Fax:</strong> {companyData.fax}</Text>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Fax: `}
+                                </Text>
+                                <Anchor href={`fax:${companyData.fax}`} c='dimmed' underline="hover">
+                                    {companyData.fax}
+                                </Anchor>
+                            </Text>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <ActionIcon c={'grape'} bg={'grape.0'} size="lg" variant="light">
                                 <IconCalendar size={18} />
                             </ActionIcon>
-                            <Text size="sm" ml="xs"><strong>Year Established:</strong> {companyData.yearEstablished}</Text>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Year Established: `}
+                                </Text>
+                                <Text component="span" c={'dimmed'}>
+                                    {companyData.yearEstablished}
+                                </Text>
+                            </Text>
+                        </div>
+                    </SimpleGrid>
+                </Paper>
+
+                
+
+
+                <Paper style={{width: 'fit-content'}} p='sm' m="md" withBorder>
+                    <SimpleGrid m='md' cols={{ base: 1, sm: 1 }} spacing="sm">
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ActionIcon size="lg" variant="light">
+                                <IconMail size={18} />
+                            </ActionIcon>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700} >
+                                   {`Email: `}
+                                </Text>
+                                <Anchor href={`mailto:${companyData.email}`} c='dimmed' underline="hover">
+                                    {companyData.email}
+                                </Anchor>
+                            </Text>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ActionIcon c={'green'} bg={'green.0'} size="lg" variant="light">
+                                <IconPhone size={18} />
+                            </ActionIcon>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Phone: `}
+                                </Text>
+                                <Anchor href={`tel:${companyData.phoneNumber}`} c='dimmed' underline="hover">
+                                    {companyData.phoneNumber}
+                                </Anchor>
+                            </Text>
+                        </div>
+                    </SimpleGrid>
+                    <SimpleGrid m='md' cols={{ base: 1, sm: 1 }} spacing="sm">
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ActionIcon c={'yellow'} bg={'yellow.0'} size="lg" variant="light">
+                                <IconPrinter size={18} />
+                            </ActionIcon>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Fax: `}
+                                </Text>
+                                <Anchor href={`fax:${companyData.fax}`} c='dimmed' underline="hover">
+                                    {companyData.fax}
+                                </Anchor>
+                            </Text>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <ActionIcon c={'grape'} bg={'grape.0'} size="lg" variant="light">
+                                <IconCalendar size={18} />
+                            </ActionIcon>
+                            <Text size="sm" ml="xs">
+                                <Text component="span" w={700}>
+                                    {`Year Established: `}
+                                </Text>
+                                <Text component="span" c={'dimmed'}>
+                                    {companyData.yearEstablished}
+                                </Text>
+                            </Text>
                         </div>
                     </SimpleGrid>
                 </Paper>
