@@ -7,7 +7,7 @@ export default () => {
             <SimpleGrid cols={{ base: 1, sm: 4 }} spacing="sm" >
                 <Paper withBorder  p='md' m="md">
                     
-                        <Avatar color="red" size='lg'><FontAwesomeIcon icon={faUserGear} /></Avatar>
+                        <Avatar color="red" size='lg' ><FontAwesomeIcon style={{ marginLeft: '5px' }} icon={faUserGear} /></Avatar>
                         
                     
                         <Text
@@ -32,7 +32,7 @@ export default () => {
                 </Paper>
                 <Paper withBorder p='md' m="md">
                     
-                        <Avatar color="green" size='lg'><FontAwesomeIcon icon={faUserPen} /></Avatar>
+                        <Avatar color="green" size='lg'><FontAwesomeIcon style={{ marginLeft: '5px' }} icon={faUserPen} /></Avatar>
                         
                     
                         <Text

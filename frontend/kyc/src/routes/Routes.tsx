@@ -48,7 +48,6 @@ export function EnvRoutes() {
       <Route path="/consent/view" element={<CompanyProfileAccordian />} />
       <Route path="/ec/add" element={<ClearanceForm/>} />
       <Route path="/ec/view" element={<CompanyProfileAccordian />} />
-     
       <Route path="/profile" element={<AdminProfile />} />
     </Routes>
   );

@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import global from '../ui/Global.module.css';
@@ -33,6 +33,14 @@ const NavbarLinksGroup = ({
   const isSingleLink = typeof links === 'string';
   const [opened, setOpened] = useState(initiallyOpened);
 
+  useEffect(() => {
+    
+    if (iconColor) {
+      console.log({ iconColor });
+      console.log({ iconColor: iconColor.slice(0, -2) + '0' });
+    }
+  }, []);
+
   const handleLinkClick = useCallback(() => {
     if (onLinkClick) {
       onLinkClick();
@@ -51,11 +59,12 @@ const NavbarLinksGroup = ({
           `${classes.link} ${isActive ? classes.activeLink : ''}`
         }
         
+        
         end
         onClick={handleLinkClick}
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <ThemeIcon c={link.iconColor} bg={`${link.iconColor}.0`} radius="xl" variant="light" size={30}>
+        <ThemeIcon c={link.iconColor} bg={`${iconColor?.slice(0,-2)}0`} radius="xl" variant="light" size={30}>
           <IconComponent style={{ width: rem(18), height: rem(18) }} />
         </ThemeIcon>
         <Box ml="sm">{link.label}</Box>
@@ -67,7 +76,7 @@ const NavbarLinksGroup = ({
   const content = (
     <Group className={global.navlinks} justify="space-between"  gap={0}>
       <Box style={{ display: 'flex', alignItems: 'center' }}>
-        <ThemeIcon c={iconColor} bg={`${iconColor}.0`} variant="light" size={30}>
+        <ThemeIcon c={iconColor} bg={`${iconColor?.slice(0,-2)}0`} variant="light" size={30}>
           <Icon style={{ width: rem(18), height: rem(18) }} />
         </ThemeIcon>
         <Box ml="md">{label}</Box>

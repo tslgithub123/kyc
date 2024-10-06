@@ -1,9 +1,8 @@
 .modalHeader {
-    background-color:var(--mantine-color-gray-2);
+    background-color:var(--mantine-color-green-4);
     border-bottom: 1px solid var(--mantine-color-gray-4);
     padding-left: rem(40px);
     color: light-dark(var(--mantine-color-dark), var(--mantine-color-dark));
-    
 }
 
 .title{

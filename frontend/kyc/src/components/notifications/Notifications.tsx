@@ -17,6 +17,7 @@ import {
     IconCalendar,
     IconBell,
     TablerIcon,
+    IconBellFilled,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './Notifications.module.css';
@@ -91,9 +92,9 @@ export function Notifications() {
                 withinPortal
             >
                 <Menu.Target>
-                    <Indicator>
+                    <Indicator color='red'>
                         <ActionIcon variant="default" size={'lg'}>
-                            <IconBell stroke={1.5} />
+                            <IconBellFilled style={{color: 'var(--mantine-color-blue-7)'}} stroke={1.5} />
                         </ActionIcon>
                     </Indicator>
                 </Menu.Target>

@@ -3,7 +3,7 @@ import UserStatsWidget from './UserStatsWidget';
 import CompanyStatsWidget from './CompanyStatsWidget';
 import UnitWidget from './UnitWidget';
 import TodoWidget from './TodoWidget';
-
+import animate from '../../../ui/RenderAnimation.module.css';
 
 function AdminDashboard() {
   const { data: currentUser, isLoading, error } = useCurrentUser  ();
@@ -11,7 +11,7 @@ function AdminDashboard() {
   if (error) return <p>Error fetching user data: {error.message}</p>;
 
   return (
-    <div>
+    <div className={animate['render-component']}>
       <UnitWidget/>
       <CompanyStatsWidget/>
       <TodoWidget/>
