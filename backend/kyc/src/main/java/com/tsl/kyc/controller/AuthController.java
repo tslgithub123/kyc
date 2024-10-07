@@ -1,6 +1,7 @@
 package com.tsl.kyc.controller;
 
 
+import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.*;
 import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.service.*;
@@ -41,7 +42,9 @@ public class AuthController {
 
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
-    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService) {
+    private final CompanyUnitService companyUnitService;
+
+    public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService, CompanyUnitService companyUnitService) {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
@@ -50,71 +53,86 @@ public class AuthController {
         this.companyProfileService = companyProfileService;
         this.employeeService = employeeService;
         this.emailService = emailService;
+        this.companyUnitService = companyUnitService;
     }
 
 
-//    @PostMapping({"/register"})
-//    public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistration> registrationDTOs) {
-//        List<String> errors = new ArrayList<>();
-//
-//        for (UserRegistration dto : registrationDTOs) {
-//            try {
-//                registerUser(dto);
-//            } catch (RuntimeException | MessagingException e) {
-//                errors.add(e.getMessage());
-//            }
-//        }
-//
-//        if (!errors.isEmpty()) {
-//            return ResponseEntity.badRequest().body(Map.of("errors", errors));
-//        }
-//
-//        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
-//        return ResponseEntity.ok(Map.of("message", message));
-//    }
-//
-//    private void registerUser(UserRegistrationDto dto) throws MessagingException {
-//        if (userService.findByUsername(dto.getUsername()).isPresent()) {
-//            throw new RuntimeException("Username is already taken!");
-//        }
-//
-//        User newUser = new User();
-//        newUser.setUsername(dto.getUsername());
-//        String password = PasswordGenerator.generatePassword(8);
-////        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
-//
-//        System.out.println("Password: " + password);
-//        newUser.setPassword(passwordEncoder.encode(password));
-//        newUser.setEnabled(true);
-//
-//        // for the time being, set the designation to the role
-//        newUser.setDesignation(switch (dto.getRoleId().toString()) {
-//            case "1" -> "Super Admin";
-//            case "2" -> "Admin";
-//            case "3" -> "Environment Officer";
-//            case "4" -> "Management";
-//            case "5" -> "Third Party";
-//            case "6" -> "MPCB Officer";
-//            default -> "Unknown";
-//        });
-//
-//        CompanyProfile companyProfile = companyProfileService.findById(dto.getCompanyProfileId());
-//        newUser.setCompanyProfile(companyProfile);
-//
-//        newUser.setLastLoginDate(LocalDateTime.now());
-//
-//        newUser.setLocked(false);
-//
-//        Role role = roleService.findById(dto.getRoleId());
-//        userService.assignRole(newUser, role.getName());
-//
-//        Employee employee = new Employee();
-//
-//        employee.setName(dto.getEmployeeName());
-//        employee.setUser(newUser);
-//        employee.setCompanyProfile(companyProfile);
-//        employeeService.save(employee);
-//    }
+    @PostMapping({"/register"})
+    public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
+        List<String> errors = new ArrayList<>();
+
+        for (UserRegistrationDto dto : registrationDTOs) {
+            try {
+                registerUser(dto);
+            } catch (RuntimeException | MessagingException e) {
+                errors.add(e.getMessage());
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("errors", errors));
+        }
+
+        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
+        return ResponseEntity.ok(Map.of("message", message));
+    }
+
+    private void registerUser(UserRegistrationDto dto) throws MessagingException {
+        if (userService.findByUsername(dto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username is already taken!");
+        }
+
+        User newUser = new User();
+        newUser.setUsername(dto.getUsername());
+        String password = PasswordGenerator.generatePassword(8);
+//        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
+
+        System.out.println("Password: " + password);
+        newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+        newUser.setEnabled(true);
+
+        // for the time being, set the designation to the role
+        newUser.setDesignation(switch (dto.getRoleId()) {
+            case "1" -> "TSL Super Admin";
+            case "2" -> "Admin";
+            case "3" -> "Environment Officer";
+            case "4" -> "Management";
+            case "5" -> "Third Party";
+            case "6" -> "Director";
+            default -> "Unknown";
+        });
+
+        CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(dto.getCompanyUnitId());
+        newUser.setCompanyUnit(companyUnit);
+
+        newUser.setLastLoginDate(LocalDateTime.now());
+
+        newUser.setLocked(false);
+
+        String role_name = switch (dto.getRoleId()) {
+            case "1" -> "ROLE_TSL";
+            case "2" -> "ROLE_ADMIN";
+            case "3" -> "ROLE_ENVIRONMENT_OFFICER";
+            case "4" -> "ROLE_MANAGEMENT";
+            case "5" -> "ROLE_THIRD_PARTY";
+            case "6" -> "ROLE_DIRECTOR";
+            default -> "";
+        };
+
+        Optional<Role> role = roleService.findByName(role_name);
+        if (role.isPresent()) {
+            userService.assignRole(newUser, role.get().getName());
+        } else {
+            throw new RuntimeException("Role not found: " + role_name);
+        }
+
+        Employee employee = new Employee();
+
+        employee.setName(dto.getEmployeeFullName());
+        employee.setUser(newUser);
+        employee.setCompanyProfile(companyUnit.getCompanyProfile());
+        employeeService.save(employee);
+    }
 
 
     @PostMapping("/login")

@@ -155,6 +155,7 @@ export default function AddUser() {
                 }
                 
                 opened={opened}
+                
                 radius={'md'}
                 onClose={closeModal}
                 size="xl"

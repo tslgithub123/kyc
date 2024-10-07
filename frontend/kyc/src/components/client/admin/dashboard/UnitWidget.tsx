@@ -2,7 +2,7 @@ import { Card, Center, Text } from "@mantine/core"
 
 export default () => {
     return (
-        <Card mb={'md'} withBorder radius="sm">
+        <Card mb={'md'} radius="sm">
             <Center>
             <Text
                 size="xl"
@@ -12,7 +12,8 @@ export default () => {
                 
             >
                 Unit Name
-            </Text></Center>
+            </Text>
+            </Center>
         </Card>
     )
 }

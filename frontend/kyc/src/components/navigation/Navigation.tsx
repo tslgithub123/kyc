@@ -3,7 +3,8 @@ import {
   Burger,
   Group,
   AppShellFooter,
-  Transition
+  Transition,
+  Divider
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconBrandMantine } from "@tabler/icons-react";
@@ -33,6 +34,7 @@ export default function Navigation({
 
   useEffect(() => {
     setNavbarVisible(!isSmallScreen);
+    console.log()
   }, [isSmallScreen]);
 
   const memoizedRoutes = useMemo(() => routes, [routes]);
@@ -84,6 +86,7 @@ export default function Navigation({
           <Group>
             {actions}
             <Notifications />
+            <Divider mt='xs' mb='xs' mr='sm' size='sm' orientation="vertical"/>
             <ThemeButton />
             {menu}
           </Group>
@@ -113,7 +116,6 @@ export default function Navigation({
       <AppShell.Main
         style={{
           display: 'block',
-          transition: 'all 300ms ease',
           paddingLeft: navbarVisible ? undefined : '16px',
           paddingRight: navbarVisible ? undefined : '16px',
         }}
