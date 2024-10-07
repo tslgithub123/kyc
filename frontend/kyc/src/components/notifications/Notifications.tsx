@@ -92,7 +92,7 @@ export function Notifications() {
                 withinPortal
             >
                 <Menu.Target>
-                    <Indicator color='red'>
+                    <Indicator inline processing color="red" size={12}>
                         <ActionIcon variant="default" size={'lg'}>
                             <IconBellFilled style={{color: 'var(--mantine-color-blue-7)'}} stroke={1.5} />
                         </ActionIcon>
