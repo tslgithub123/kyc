@@ -81,4 +81,9 @@ public class UserService {
     }
     return false;
 }
+
+    public List<User> getUsersByCompanyUnitId(UUID companyUnitId) {
+        List<User> users = userRepository.findByCompanyUnitId(companyUnitId);
+        return userRepository.findByCompanyUnitId(companyUnitId);
+    }
 }
