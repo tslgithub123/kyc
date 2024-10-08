@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u FROM User u WHERE u.companyUnit = :companyProfileId")
     List<User> findByCompanyProfileId(UUID companyProfileId);
 
+    @Query("SELECT u FROM User u WHERE u.companyUnit.id = :companyUnitId")
+    List<User> findByCompanyUnitId(UUID companyUnitId);
 }
