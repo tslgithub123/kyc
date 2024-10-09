@@ -86,4 +86,15 @@ public class UserService {
         List<User> users = userRepository.findByCompanyUnitId(companyUnitId);
         return userRepository.findByCompanyUnitId(companyUnitId);
     }
+
+    public boolean changePassword(UUID userId, String password) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(password);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }

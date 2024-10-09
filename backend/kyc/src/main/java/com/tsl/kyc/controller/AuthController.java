@@ -3,11 +3,15 @@ package com.tsl.kyc.controller;
 
 import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.*;
+import com.tsl.kyc.exception.EmptyFieldsException;
+import com.tsl.kyc.exception.InvalidPasswordException;
+import com.tsl.kyc.exception.UserAlreadyExistsException;
 import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.service.*;
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.utils.PasswordGenerator;
 import jakarta.mail.MessagingException;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,6 +48,8 @@ public class AuthController {
     private final EmailService emailService;
     private final CompanyUnitService companyUnitService;
 
+    Map<String, Object> result = new HashMap<>();
+
     public AuthController(JwtUtils jwtUtils, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserService userService, RoleService roleService, CompanyProfileService companyProfileService, EmployeeService employeeService, UserRepository userRepository, EmailService emailService, CompanyUnitService companyUnitService) {
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
@@ -56,31 +62,64 @@ public class AuthController {
         this.companyUnitService = companyUnitService;
     }
 
-
-    @PostMapping({"/register"})
+    @Transactional
+    @PostMapping("/register")
     public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
-        List<String> errors = new ArrayList<>();
+        List<Map<String, Object>> results = new ArrayList<>();
+        boolean hasErrors = false;
 
         for (UserRegistrationDto dto : registrationDTOs) {
+            result.put("email", dto.getEmail());
             try {
                 registerUser(dto);
-            } catch (RuntimeException | MessagingException e) {
-                errors.add(e.getMessage());
+                result.put("status", "SUCCESS");
+            } catch (UserAlreadyExistsException e) {
+                hasErrors = true;
+                result.put("status", "ALREADY_EXISTS");
+                result.put("message", "User with this email already exists");
+            } catch (InvalidPasswordException e) {
+                hasErrors = true;
+                result.put("status", "INVALID_PASSWORD");
+                result.put("message", "Password does not meet requirements");
+            } catch (MessagingException e) {
+                hasErrors = true;
+                result.put("status", "EMAIL_FAILURE");
+                result.put("message", "Failed to send confirmation email");
+            } catch (EmptyFieldsException e) {
+                hasErrors = true;
+                result.put("status", "EMPTY_FIELDS");
+                result.put("message", "One or more fields are empty");
             }
+            catch (Exception e) {
+                hasErrors = true;
+                result.put("status", "FAILURE");
+                result.put("message", "An unexpected error occurred");
+            }
+            results.add(result);
         }
 
-        if (!errors.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("errors", errors));
-        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("results", results);
 
-        String message = registrationDTOs.size() > 1 ? "Users registered successfully" : "User registered successfully";
-        return ResponseEntity.ok(Map.of("message", message));
+        if (hasErrors) {
+            response.put("overallStatus", "PARTIAL_SUCCESS");
+            return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(response);
+        } else {
+            response.put("overallStatus", "SUCCESS");
+            return ResponseEntity.ok(response);
+        }
     }
 
-    private void registerUser(UserRegistrationDto dto) throws MessagingException {
-        if (userService.findByUsername(dto.getUsername()).isPresent()) {
-            throw new RuntimeException("Username is already taken!");
+    private void registerUser(UserRegistrationDto dto) throws MessagingException, EmptyFieldsException {
+        if (dto.getUsername().isEmpty() || dto.getPassword().isEmpty() || dto.getRoleId().isEmpty() || dto.getCompanyUnitId().toString().isEmpty() || dto.getEmployeeFullName().isEmpty()) {
+            throw new EmptyFieldsException("Empty fields");
         }
+
+        if (userService.findByUsername(dto.getUsername()).isPresent()) {
+            throw new UserAlreadyExistsException("User already exists");
+        }
+
+
 
         User newUser = new User();
         newUser.setUsername(dto.getUsername());
@@ -101,7 +140,6 @@ public class AuthController {
             case "6" -> "Director";
             default -> "Unknown";
         });
-
         CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(dto.getCompanyUnitId());
         newUser.setCompanyUnit(companyUnit);
 
@@ -132,6 +170,7 @@ public class AuthController {
         employee.setUser(newUser);
         employee.setCompanyProfile(companyUnit.getCompanyProfile());
         employeeService.save(employee);
+        result.put("userId", newUser.getId());
     }
 
 
@@ -190,7 +229,5 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User not authenticated"));
         }
     }
-
-
 
 }

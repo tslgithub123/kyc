@@ -81,4 +81,17 @@ public class UserRegistrationDto {
     public void setEmployeeFullName(String employeeFullName) {
         this.employeeFullName = employeeFullName;
     }
+
+    @Override
+    public String toString() {
+        return "UserRegistrationDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", companyUnitId=" + companyUnitId +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", employeeFullName='" + employeeFullName + '\'' +
+                '}';
+    }
 }
