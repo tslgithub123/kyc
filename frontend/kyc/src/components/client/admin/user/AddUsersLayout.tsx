@@ -1,40 +1,42 @@
-import { ActionIcon, Box, Button, Card, Center, Container, CopyButton, Divider, Flex, Grid, Group, Modal, Paper, PasswordInput, rem, SimpleGrid, Space, Stepper, Table, Text, TextInput, ThemeIcon, Title, Tooltip, UnstyledButton } from "@mantine/core";
-import { showNotification } from '@mantine/notifications';
+import { ActionIcon, Button, Card, Center, Container, Divider, Grid, Group, Modal, Paper, PasswordInput, rem, SimpleGrid, Stepper, Text, TextInput, ThemeIcon, Title } from "@mantine/core";
 import FancyButton from "../../../ui/FancyButton";
-import { IconArrowLeft, IconArrowRight, IconCalendar, IconCheck, IconCopy, IconDownload, IconExclamationMark, IconMail, IconMailFilled, IconPassword, IconPhone, IconPhoneFilled, IconUser, IconUserCheck, IconUserEdit, IconUserFilled, IconUserPlus, IconUserShield } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight, IconCalendar, IconExclamationMark, IconMail, IconPassword, IconPhone, IconUser, IconUserCheck, IconUserEdit, IconUserPlus, IconUserShield, IconCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import classes from './ModalStyles.module.css';
 import global from "./../../../ui/Global.module.css";
-import AddUserForm from "./AddUserForm";
+import { DateInput } from "@mantine/dates";
+import { useRegister } from "../../../hooks/useRegister";
+import { RegistrationResponse } from "../../../../utils/types";
 import { useForm } from "@mantine/form";
-import { DateInput, DatePicker } from "@mantine/dates";
-import * as XLSX from 'xlsx';
+import { notifications } from "@mantine/notifications";
 
 export default function AddUser() {
     const [active, setActive] = useState(0);
 
     const form = useForm({
         initialValues: {
-            fullName: 'Dhananjay Jagannath Yelwande',
-            email: 'example@example.com',
+            employeeFullName: 'Dhananjay Yelwande',
+            email: 'yelwandedhananjay@gmail.com',
             dateOfBirth: null as Date | null,
-            phoneNumber: '1234567895',
-            username: 'dhananjay',
-            password: '12345',
-            confirmPassword: '12345',
+            roleId: '1',
+            phone: '9685741235',
+            username: 'dhananjay1',
+            password: 'dhananjay1',
+            confirmPassword: 'dhananjay1',
+            companyUnitId: '32b33b0f-16ce-4fcc-abed-24e7c8c5eace'
         },
 
-        // validate: {
-        //     fullName: (value) => (value.trim().length < 2 ? 'Full name must have at least 2 characters' : null),
-        //     email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-        //     dateOfBirth: (value) => (value ? null : 'Date of birth is required'),
-        //     phoneNumber: (value) => (/^\d{10}$/.test(value) ? null : 'Invalid phone number'),
-        //     username: (value) => (value.trim().length < 3 ? 'Username must have at least 3 characters' : null),
-        //     password: (value) =>
-        //         value.length < 6 ? 'Password must be at least 6 characters' : null,
-        //     confirmPassword: (value, values) =>
-        //         value !== values.password ? 'Passwords do not match' : null,
-        // },
+        validate: {
+            employeeFullName: (value) => (value.trim().length < 2 ? 'Full name must have at least 2 characters' : null),
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            dateOfBirth: (value) => (value ? null : 'Date of birth is required'),
+            phone: (value) => (/^\d{10}$/.test(value) ? null : 'Invalid phone number'),
+            username: (value) => (value.trim().length < 3 ? 'Username must have at least 3 characters' : null),
+            password: (value) =>
+                value.length < 6 ? 'Password must be at least 6 characters' : null,
+            confirmPassword: (value, values) =>
+                value !== values.password ? 'Passwords do not match' : null,
+        },
     });
 
     const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
@@ -42,10 +44,10 @@ export default function AddUser() {
 
     const handleNext = () => {
         if (active === 0) {
-            const isValid = form.validateField('fullName').hasError
+            const isValid = form.validateField('employeeFullName').hasError
                 || form.validateField('email').hasError
                 || form.validateField('dateOfBirth').hasError
-                || form.validateField('phoneNumber').hasError;
+                || form.validateField('phone').hasError;
 
             if (!isValid) {
                 nextStep();
@@ -61,13 +63,96 @@ export default function AddUser() {
         }
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const registerMutation = useRegister();
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         const validation = form.validate();
         if (validation.hasErrors) {
+            notifications.show({
+                icon: <IconExclamationMark />,
+                color: 'red',
+                bg: 'yellow.1',
+                title: 'Validation Error',
+                message: 'Please correct the errors in the form',
+                mt: 'md',
+                position: 'top-center',
+            });
+            console.error('Validation errors:', validation.errors);
             return;
         }
-        console.log('Form Data:', form.values);
+
+        try {
+            const registrationResponse: RegistrationResponse = await registerMutation.mutateAsync([form.values]);
+            const { results, overallStatus } = registrationResponse;
+            if (overallStatus === 'SUCCESS') {
+                console.log('All users registered successfully');
+            }
+            if (overallStatus === 'SUCCESS') {
+                console.log('All users registered successfully');
+            }
+
+            results.forEach((result: any) => {
+                switch (result.status) {
+                    case 'EMPTY_FIELDS':
+                        console.error(`Empty fields for ${result.email}: ${result.message}`);
+                        notifications.show({
+                            icon: <IconExclamationMark />,
+                            color: 'red',
+                            bg: 'yellow.1',
+                            title: 'Empty fields',
+                            message: `Input the required information`,
+                            mt: 'md',
+                            position: 'top-center',
+                        });
+                        break;
+                    case 'SUCCESS':
+                        console.log(`User ${result.email} registered successfully`);
+                        notifications.show({
+                            icon: <IconCheck />,
+                            color: 'green',
+                            bg: 'green.1',
+                            title: 'User created',
+                            message: `User ${result.email} registered successfully`,
+                            mt: 'md',
+                            position: 'top-center',
+                        });
+                        break;
+                    case 'ALREADY_EXISTS':
+                        console.warn(`User ${result.email} already exists`);
+                        notifications.show({
+                            icon: <IconExclamationMark />,
+                            
+                            color: 'red',
+                            bg: userType == "env" ? 'green.1': userType == 'man'? 'yellow.1': userType == 'thp'? 'grape.1': 'gray.1',
+                            title: 'User already exists',
+                            message: `User ${result.email} already exists`,
+                            mt: 'md',
+                            position: 'top-center',
+                        });
+                        break;
+                    case 'INVALID_PASSWORD':
+                        console.error(`Invalid password for ${result.email}: ${result.message}`);
+                        break;
+                    case 'EMAIL_FAILURE':
+                        console.error(`Failed to send confirmation email to ${result.email}: ${result.message}`);
+                        break;
+                    case 'FAILURE':
+                        console.error(`An unexpected error occurred for ${result.email}: ${result.message}`);
+                        break;
+                }
+            });
+        } catch (error: any) {
+            if (error.response) {
+                console.error('Server responded with error:', error.response.data);
+                console.error('Status code:', error.response.status);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+        }
+ 
     };
 
     const [opened, setOpened] = useState(false);
@@ -203,14 +288,13 @@ export default function AddUser() {
                 size="1000px"
             >
                 <Container my={40}>
-                    <form id="form" onSubmit={handleSubmit}>
                         <Stepper color={userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'green'} active={active} onStepClick={setActive} allowNextStepsSelect={true}>
                             <Stepper.Step c={active == 0 ? userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'green' : ''} label="General" description="Employee details">
                                 <TextInput
                                     required
                                     label="Full Name"
                                     placeholder="John Doe"
-                                    {...form.getInputProps('fullName')}
+                                    {...form.getInputProps('employeeFullName')}
                                     mt="md"
                                     style={{ fontFamily: 'Arial, sans-serif' }}
                                 />
@@ -228,7 +312,7 @@ export default function AddUser() {
                                         required
                                         label="Phone Number"
                                         placeholder="1234567890"
-                                        {...form.getInputProps('phoneNumber')}
+                                        {...form.getInputProps('phone')}
                                         mt="md"
                                         style={{ fontFamily: 'Arial, sans-serif' }}
                                     />
@@ -277,8 +361,8 @@ export default function AddUser() {
 
                             <Stepper.Step c={active == 2 ? userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'green' : ''} label="Confirmation" description="Verify">
 
-                            <Paper ml='xl' mr='xl' radius='md' style={{ position: 'relative' }}>
-    {/* <Button
+                                <Paper ml='xl' mr='xl' radius='md' style={{ position: 'relative' }}>
+                                    {/* <Button
     mt= '16px'
         style={{
             position: 'absolute',
@@ -341,14 +425,14 @@ export default function AddUser() {
         Copy <Space w='xs'></Space>
         <IconCopy style={{ width: rem(16) }} />
     </Button> */}
-    <Center>
-                                        <SimpleGrid mt='md' bg={`var(--mantine-color-${userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'gray'}-0)`} style={{border: `1px solid var(--mantine-color-${userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'gray'}-4)`, borderRadius: '4px'}} p='md' cols={2} spacing="sm">
+                                    <Center>
+                                        <SimpleGrid mt='md' bg={`var(--mantine-color-${userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'gray'}-0)`} style={{ border: `1px solid var(--mantine-color-${userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'gray'}-4)`, borderRadius: '4px' }} p='md' cols={2} spacing="sm">
 
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }}>
                                                 <ActionIcon c='gray.7' p='sm' variant="transparent" w='auto'> <IconUser style={{ margin: '12px' }} /> Name: </ActionIcon>
                                             </Text>
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }} c='dimmed'>
-                                                <ActionIcon c='gray.7' p='sm' variant="light" w='auto'> {form.values.fullName} </ActionIcon>
+                                                <ActionIcon c='gray.7' p='sm' variant="light" w='auto'> {form.values.employeeFullName} </ActionIcon>
                                             </Text>
 
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -362,7 +446,7 @@ export default function AddUser() {
                                                 <ActionIcon c='gray.7' p='sm' variant="transparent" w='auto'> <IconPhone style={{ margin: '12px' }} /> Phone Number: </ActionIcon>
                                             </Text>
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }} c='dimmed'>
-                                                <ActionIcon c='gray.7' p='sm' variant="light" w='auto'>{form.values.phoneNumber}</ActionIcon>
+                                                <ActionIcon c='gray.7' p='sm' variant="light" w='auto'>{form.values.phone}</ActionIcon>
                                             </Text>
 
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }}>
@@ -371,8 +455,8 @@ export default function AddUser() {
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }} c='dimmed'>
                                                 <ActionIcon c='gray.7' p='sm' variant="light" w='auto'>{form.values.dateOfBirth?.toLocaleDateString()}</ActionIcon>
                                             </Text>
-                                            <Divider color="gray.5" my="sm" variant="dashed"/>
-                                            <Divider color="gray.5" my="sm" variant="dashed"/>
+                                            <Divider color="gray.5" my="sm" variant="dashed" />
+                                            <Divider color="gray.5" my="sm" variant="dashed" />
 
                                             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }}>
                                                 <ActionIcon c='gray.7' p='sm' variant="transparent" w='auto'> <IconUserCheck style={{ margin: '12px' }} /> Username: </ActionIcon>
@@ -394,23 +478,21 @@ export default function AddUser() {
                                     </Center>
 
                                 </Paper>
-                                <Center>
-                                
-     </Center>
+
                                 <div style={{ height: '400px' }}></div>
                             </Stepper.Step>
-                        </Stepper></form>
+                        </Stepper>
                     <Group justify="flex-end" mt="xl" style={{ position: 'sticky', bottom: 0, width: '100%' }}>
                         <Button variant="default" onClick={prevStep} disabled={active === 0}>
                             <IconArrowLeft />
-                            <Text style={{paddingLeft: '8px'}}>Back</Text>
-                            
+                            <Text style={{ paddingLeft: '8px' }}>Back</Text>
+
                         </Button>
                         {active < 2 ? (
-                            <Button onClick={handleNext}><Text style={{paddingRight: '8px'}}>Next</Text>
-                            <IconArrowRight/></Button>
+                            <Button variant="outline" color={userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'green'} onClick={handleNext} type="button"><Text style={{ paddingRight: '8px' }}>Next</Text>
+                                <IconArrowRight /></Button>
                         ) : (
-                            <Button type="submit" form="form"><Text style={{paddingRight: '8px'}}>Create</Text><IconUserPlus/></Button>
+                            <Button variant="filled" color={userType === 'man' ? 'yellow' : userType === 'env' ? 'green' : userType === 'thp' ? 'grape' : 'green'} onClick={handleSubmit}><Text style={{ paddingRight: '8px' }}>Create</Text><IconUserPlus /></Button>
                         )}
                     </Group>
                 </Container>

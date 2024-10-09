@@ -3,6 +3,25 @@ export interface Credentials {
     password: string;
 }
 
+export interface IUserRegistration {
+  employeeFullName: string;
+  email: string;
+  roleId: string;
+  companyUnitId: string;
+  phone: string;
+  username: string;
+  password: string;
+}
+
+export interface RegistrationResponse {
+    results: Array<{
+        email: string;
+        status: 'SUCCESS' | 'ALREADY_EXISTS' | 'INVALID_PASSWORD' | 'EMAIL_FAILURE' | 'EMPTY_FIELDS' | 'FAILURE';
+        message?: string;
+    }>;
+    overallStatus: 'SUCCESS' | 'PARTIAL_SUCCESS';
+  }
+
 
 export interface User {
     id: number;
