@@ -19,6 +19,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/all/company/{companyUnitId}")
+    public List<User> getUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
+        return userService.getUsersByCompanyUnitId(companyUnitId);
+    }
+
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAll();
@@ -29,6 +34,7 @@ public class UserController {
         User user = userService.changeLockStatus(id, locked);
         return ResponseEntity.ok(user);
     }
+
 
     @GetMapping("/username-exists/{username}")
     public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
