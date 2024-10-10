@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/all/company/{companyUnitId}")
     public List<User> getUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
-        return userService.getUsersByCompanyUnitId(companyUnitId);
+        return userService.findUsersByCompanyUnitId(companyUnitId);
     }
 
     @GetMapping("/all")
