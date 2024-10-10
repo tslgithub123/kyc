@@ -72,7 +72,7 @@ export default function AddUser() {
             notifications.show({
                 icon: <IconExclamationMark />,
                 color: 'red',
-                bg: 'yellow.1',
+                bg: userType == "env" ? 'green.1': userType == 'man'? 'yellow.1': userType == 'thp'? 'grape.1': 'gray.1',
                 title: 'Validation Error',
                 message: 'Please correct the errors in the form',
                 mt: 'md',
@@ -111,7 +111,7 @@ export default function AddUser() {
                         notifications.show({
                             icon: <IconCheck />,
                             color: 'green',
-                            bg: 'green.1',
+                            bg: userType == "env" ? 'green.1': userType == 'man'? 'yellow.1': userType == 'thp'? 'grape.1': 'gray.1',
                             title: 'User created',
                             message: `User ${result.email} registered successfully`,
                             mt: 'md',
