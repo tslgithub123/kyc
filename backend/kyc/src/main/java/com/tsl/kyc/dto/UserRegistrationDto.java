@@ -1,6 +1,9 @@
 package com.tsl.kyc.dto;
 
+import java.sql.Date;
 import java.util.UUID;
+
+import com.tsl.kyc.entity.ContactPerson;
 
 public class UserRegistrationDto {
     private String username;
@@ -10,27 +13,34 @@ public class UserRegistrationDto {
     private String email;
     private String phone;
     private String employeeFullName;
+    private String gender;
+    private Date birthday;    
+    
 
     public UserRegistrationDto() {
         super();
     }
 
-    public UserRegistrationDto(String username, String password, String roleId, UUID companyUnitId, String email, String phone, String employeeFullName) {
-        super();
-        this.username = username;
-        this.password = password;
-        this.roleId = roleId;
-        this.companyUnitId = companyUnitId;
-        this.email = email;
-        this.phone = phone;
-        this.employeeFullName = employeeFullName;
+    public UserRegistrationDto(String username, String password, String roleId, UUID companyUnitId, String email,
+    		String phone, String employeeFullName, String gender, Date birthday) {
+    	super();
+    	this.username = username;
+    	this.password = password;
+    	this.roleId = roleId;
+    	this.companyUnitId = companyUnitId;
+    	this.email = email;
+    	this.phone = phone;
+    	this.employeeFullName = employeeFullName;
+    	this.gender = gender;
+    	this.birthday = birthday;
     }
-
+    
+    
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+	public void setUsername(String username) {
         this.username = username;
     }
 
@@ -81,4 +91,28 @@ public class UserRegistrationDto {
     public void setEmployeeFullName(String employeeFullName) {
         this.employeeFullName = employeeFullName;
     }
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRegistrationDto [username=" + username + ", password=" + password + ", roleId=" + roleId
+				+ ", companyUnitId=" + companyUnitId + ", email=" + email + ", phone=" + phone + ", employeeFullName="
+				+ employeeFullName + ", gender=" + gender + ", birthday=" + birthday + "]";
+	}
+	
 }

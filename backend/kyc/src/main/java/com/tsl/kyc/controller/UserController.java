@@ -2,6 +2,7 @@ package com.tsl.kyc.controller;
 
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/all/company/{companyUnitId}")
+    public List<User> getUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
+        return userService.getUsersByCompanyUnitId(companyUnitId);
+    }
+
     @GetMapping("/all")
     public List<User> getAllUsers() {
         return userService.getAll();
@@ -29,8 +35,10 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+
     @GetMapping("/username-exists/{username}")
     public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
         return ResponseEntity.ok(userService.checkUsernameExists(username));
     }
+    
 }
