@@ -4,7 +4,6 @@ import com.tsl.kyc.entity.User;
 import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.security.UserDetailsImpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

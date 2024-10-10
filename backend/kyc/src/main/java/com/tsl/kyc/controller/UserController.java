@@ -2,6 +2,7 @@ package com.tsl.kyc.controller;
 
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,4 +34,5 @@ public class UserController {
     public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
         return ResponseEntity.ok(userService.checkUsernameExists(username));
     }
+    
 }

@@ -1,6 +1,5 @@
 package com.tsl.kyc.controller;
 
-
 import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.*;
 import com.tsl.kyc.repository.UserRepository;
@@ -8,6 +7,7 @@ import com.tsl.kyc.service.*;
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.utils.PasswordGenerator;
 import jakarta.mail.MessagingException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,6 +60,7 @@ public class AuthController {
     @PostMapping({"/register"})
     public ResponseEntity<?> registerUsers(@Validated @RequestBody List<UserRegistrationDto> registrationDTOs) {
         List<String> errors = new ArrayList<>();
+        System.out.println(registrationDTOs);
 
         for (UserRegistrationDto dto : registrationDTOs) {
             try {
@@ -83,6 +84,7 @@ public class AuthController {
         }
 
         User newUser = new User();
+        System.out.println("username: " + dto.getUsername());
         newUser.setUsername(dto.getUsername());
         String password = PasswordGenerator.generatePassword(8);
 //        emailService.sendEmail("yelwandedhananjay@gmail.com", "New User Registration", "New User Registration: " + dto.getUsername() + " with role: " + dto.getRoleId() + " and password: " + password);
@@ -129,12 +131,73 @@ public class AuthController {
         Employee employee = new Employee();
 
         employee.setName(dto.getEmployeeFullName());
+        employee.setGender(dto.getGender());
+        employee.setBirthday(dto.getBirthday());
         employee.setUser(newUser);
         employee.setCompanyProfile(companyUnit.getCompanyProfile());
         employeeService.save(employee);
     }
+    
+    
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Validated @RequestBody UserRegistrationDto userRegistrationDto) {
+        Optional<User> userOptional = userService.findById(id);
+        
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+        }
 
+        User user = userOptional.get();
 
+        // Update fields as needed
+        if (userRegistrationDto.getUsername() != null) {
+            user.setUsername(userRegistrationDto.getUsername());
+            
+        }
+
+        if (userRegistrationDto.getEmployeeFullName() != null) {
+            // Assuming you have a method to update the Employee details
+        	Employee employee = employeeService.getEmployeeByUserId(id);
+            if (employee != null) {
+            	employee.setName(userRegistrationDto.getEmployeeFullName());
+            	employee.setGender(userRegistrationDto.getGender());
+            	employee.setBirthday(userRegistrationDto.getBirthday());
+            	employee.setEmail(userRegistrationDto.getEmail());
+                employeeService.save(employee);
+            }
+        }
+
+        if (userRegistrationDto.getRoleId() != null) {
+            String role_name = switch (userRegistrationDto.getRoleId()) {
+                case "1" -> "ROLE_TSL";
+                case "2" -> "ROLE_ADMIN";
+                case "3" -> "ROLE_ENVIRONMENT_OFFICER";
+                case "4" -> "ROLE_MANAGEMENT";
+                case "5" -> "ROLE_THIRD_PARTY";
+                case "6" -> "ROLE_DIRECTOR";
+                default -> null;
+            };
+
+            Optional<Role> role = roleService.findByName(role_name);
+            if (role.isPresent()) {
+                userService.assignRole(user, role.get().getName());
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("message", "Role not found: " + role_name));
+            }
+        }
+
+        if (userRegistrationDto.getCompanyUnitId() != null) {
+            CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(userRegistrationDto.getCompanyUnitId());
+            user.setCompanyUnit(companyUnit);
+        }
+
+        // Save the updated user
+        userService.saveUser(user);
+        
+        return ResponseEntity.ok(Map.of("message", "User updated successfully", "user", user));
+    }
+
+    
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
         String username = request.get("username");
@@ -156,7 +219,6 @@ public class AuthController {
 
         return ResponseEntity.ok(Map.of("token", jwt, "user", user));
     }
-
 
     @GetMapping("/success")
     public ResponseEntity<?> loginSuccess() {
@@ -190,4 +252,32 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "User not authenticated"));
         }
     }
+    
+    @GetMapping("/users/{companyUnitId}")
+    public ResponseEntity<List<User>> getUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
+        List<User> users = userService.findUsersByCompanyUnitId(companyUnitId);
+        return ResponseEntity.ok(users);
+    }
+
+    @PostMapping("/forget-password")
+    public ResponseEntity<String> forgetPassword(@RequestParam UUID uid, @RequestParam String newPassword) {
+        boolean user = userService.forgetPassword(uid, newPassword);
+        if (user) {
+            return ResponseEntity.ok("Password has been reset.");
+        } else {
+            return ResponseEntity.badRequest().body("User not found.");
+        }
+
+  }
+
+
 }
+
+
+
+
+
+
+
+
+//return success ? ResponseEntity.ok("Password has been reset.") : ResponseEntity.badRequest().body("User not found.");
