@@ -1,0 +1,8 @@
+.user-stepper .mantine-Stepper-steps,
+.user-stepper .mantine-Stepper-stepLine {
+    display: none;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+
+
