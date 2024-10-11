@@ -19,6 +19,7 @@ interface AuthCardProps {
 
 const AuthCard: FC<AuthCardProps> = ({ isRegistered, userType, form }) => {
     return (
+       
         <SimpleGrid
             id="userIdentityCard"
             mt="md"
@@ -27,7 +28,7 @@ const AuthCard: FC<AuthCardProps> = ({ isRegistered, userType, form }) => {
             p="md"
             cols={2}
             spacing="sm"
-        >
+        > 
             <Text size="xs" style={{ fontFamily: 'Arial, sans-serif' }}>
                 <ActionIcon c="gray.7" p="sm" variant="transparent" w="auto">
                     <IconUser style={{ margin: '12px' }} /> Name:

@@ -20,17 +20,15 @@ export interface RegistrationResponse {
         message?: string;
     }>;
     overallStatus: 'SUCCESS' | 'PARTIAL_SUCCESS';
-  }
-
+}
 
 export interface User {
-    id: number;
+    id: string;
     username: string;
-    password: string;
-    roles: Role;
+    roles: Role[];
     enabled: boolean;
     designation: string;
-    companyProfile: CompanyProfile;
+    companyUnit: CompanyUnit;
     failedLoginCount: number;
     lastLoginDate: string;
     locked: boolean;
@@ -40,8 +38,6 @@ export interface User {
 }
 
 export interface Role {
-    some(arg0: (role: { authority: string; }) => boolean): unknown;
-    map(arg0: (role: any) => any): string[];
     authority: string;
 }
 
@@ -49,6 +45,7 @@ export interface AuthResponse {
     token: string;
     user: User;
 }
+
 export interface CurrentUser {
     roles: string[];
     username: string;
@@ -56,35 +53,73 @@ export interface CurrentUser {
 
 export interface CompanyProfile {
     id: string;
-    contactPerson: ContactPerson | null;
-    mpcbId: number | null;
-    industryLink: IndustryLink | null;
-    branch: string;
-    category: string;
+    contactPerson: ContactPerson;
+    mpcbId: number;
     name: string;
     email: string;
-    fax: string | null;
-    lastEnvironment: string | null;
-    workDay: number | null;
+    fax: string;
+    lastEnvironment: string;
     phoneNumber: string;
-    website: string | null;
-    workingHour: number | null;
-    yearEstablished: number | null;
-    addresses: Address[];
-    employees: Employee[];
-    users: User[];
+    website: string;
+    yearEstablished: number;
 }
 
 export interface ContactPerson {
-
+    id: string;
+    name: string;
+    designation: string;
+    phone: string;
+    email: string;
 }
 
 export interface IndustryLink {
-    // Define the properties of IndustryLink based on your requirements
+    id: string;
+    industryScale: IndustryScale;
+    industryType: IndustryType;
+    industryCategory: IndustryCategory;
+}
+
+export interface IndustryScale {
+    id: string;
+    name: string;
+}
+
+export interface IndustryType {
+    id: string;
+    name: string;
+}
+
+export interface IndustryCategory {
+    // Define the properties of IndustryCategory based on your requirements
 }
 
 export interface Address {
-    // Define the properties of Address based on your requirements
+    id: string;
+    street: string;
+    line2: string;
+    line3: string;
+    city: string;
+    state: string;
+    district: string;
+    country: string;
+    pincode: string;
+    village: string;
+    taluka: string;
+    plotNumber: string;
+    ro: string;
+    sro: string;
+}
+
+export interface CompanyUnit {
+    id: string;
+    companyProfile: CompanyProfile;
+    address: Address;
+    industryLink: IndustryLink;
+    name: string;
+    email: string;
+    fax: string;
+    workDay: number;
+    workingHour: number;
 }
 
 interface Employee {

@@ -2,7 +2,7 @@ import { Button, Group, Text } from "@mantine/core";
 import { IconArrowLeft, IconArrowRight, IconUserPlus, IconFileExcel, IconImageInPicture } from "@tabler/icons-react";
 import DownloadExcelButton from "../../../ui/buttons/DownloadExcelButton";
 import CaptureButton from "../../../ui/buttons/CaptureScreenshotButton";
-import { useForm, UseFormReturnType } from "@mantine/form";
+import { UseFormReturnType } from "@mantine/form";
 import { getUserTypeColor } from "../../../../utils/colorUtils";
 
 interface FormNavigationButtonsProps<T> {
@@ -13,7 +13,7 @@ interface FormNavigationButtonsProps<T> {
     prevStep: () => void;
     isRegistered: boolean;
     userType: string;
-    form: UseFormReturnType<T>;
+    form: UseFormReturnType<{ employeeFullName: string; email: string; dateOfBirth: Date | null; roleId: string; phone: string; username: string; password: string; confirmPassword: string; companyUnitId: string; }, (values: { employeeFullName: string; email: string; dateOfBirth: Date | null; roleId: string; phone: string; username: string; password: string; confirmPassword: string; companyUnitId: string; }) => { employeeFullName: string; email: string; dateOfBirth: Date | null; roleId: string; phone: string; username: string; password: string; confirmPassword: string; companyUnitId: string; }>;
 }
 
 function FormNavigationButtons<T extends { values: Record<string, any>; }>({

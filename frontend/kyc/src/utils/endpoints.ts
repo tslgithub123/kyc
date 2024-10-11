@@ -16,6 +16,7 @@ interface Endpoints {
     allProfiles: string;
     updateLockStatus: (id: string) => string;
     deleteProfiles: string;
+    allByCompanyUnitId: (companyUnitId: string) => string;
   };
   employee: {
     all: string;
@@ -42,6 +43,7 @@ const endpoints: Endpoints = {
     allProfiles: `${BASE_API}/user/all`,
     updateLockStatus: (id: string) => `${BASE_API}/user/${id}/lock`,
     deleteProfiles: `${BASE_API}/user/delete`,
+    allByCompanyUnitId: (companyUnitId: string) => `${BASE_API}/user/all/company/${companyUnitId}`,
   },
   employee: {
     all: `${BASE_API}/employee/all`,

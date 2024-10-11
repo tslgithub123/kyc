@@ -1,20 +1,16 @@
-import { Button, Card, Center, Container, Divider, Grid, Group, Modal, Paper, PasswordInput, rem, SimpleGrid, Stepper, Text, TextInput, ThemeIcon, Title } from "@mantine/core";
+import { Card, Center, Container, Divider, Grid, Group, Modal, Paper, rem, Stepper, Text, ThemeIcon, Title } from "@mantine/core";
 import FancyButton from "../../../ui/FancyButton";
-import { IconArrowLeft, IconArrowRight, IconExclamationMark, IconUserCheck, IconUserEdit, IconUserPlus, IconUserShield, IconCheck, IconFileExcel, IconImageInPicture } from "@tabler/icons-react";
+import { IconExclamationMark, IconUserCheck, IconUserEdit, IconUserShield } from "@tabler/icons-react";
 import { useState } from "react";
 import './userStepper.css';
 import classes from './ModalStyles.module.css';
 import global from "./../../../ui/Global.module.css";
-import { DateInput } from "@mantine/dates";
 import { useRegister } from "../../../hooks/useRegister";
 import { RegistrationResponse } from "../../../../utils/types";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
-import AuthCard from "../../../ui/cards/AuthCard";
-import DownloadExcelButton from "../../../ui/buttons/DownloadExcelButton";
-import CaptureButton from "../../../ui/buttons/CaptureScreenshotButton";
 import api from "../../../../utils/api";
-import UserRegistrationToasts from "../../../notifications/toasts/UserRegistrationToasts";
+import UserRegistrationToasts from "../../../notifications/toasts/ServerUserRegistrationToasts";
 import { getUserTypeColor } from "../../../../utils/colorUtils";
 import GeneralStep from "./registration-stepper/GeneralStep";
 import AuthenticationStep from "./registration-stepper/AuthenticationStep";
@@ -25,7 +21,12 @@ export default function AddUser() {
     const [active, setActive] = useState(0);
     const [isRegistered, setIsRegistered] = useState(false);
     const [usernameError, setUsernameError] = useState<string | null>(null);
-    
+
+    const [opened, setOpened] = useState(false);
+    const [userType, setUserType] = useState('');
+
+    const registerMutation = useRegister();
+
 
     const form = useForm({
         initialValues: {
@@ -56,10 +57,6 @@ export default function AddUser() {
     const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
-    const checkUsername = async (username: string) => {
-        return api.checkUsernameExists(username);
-    }
-
     const handleNext = async () => {
         if (active === 0) {
             const isValid = form.validateField('employeeFullName').hasError
@@ -77,7 +74,7 @@ export default function AddUser() {
 
             if (!isValid) {
                 const username = form.values.username;
-                const isUnAvailable = await checkUsername(username);
+                const isUnAvailable = await api.checkUsernameExists(username);
 
                 if (isUnAvailable) {
                     setUsernameError('Username is already taken');
@@ -90,8 +87,6 @@ export default function AddUser() {
     };
 
 
-    const registerMutation = useRegister();
-
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
         const validation = form.validate();
@@ -99,7 +94,7 @@ export default function AddUser() {
             notifications.show({
                 icon: <IconExclamationMark />,
                 color: 'red',
-                bg: userType == "env" ? 'green.1' : userType == 'man' ? 'yellow.1' : userType == 'thp' ? 'grape.1' : 'gray.1',
+                bg: getUserTypeColor(userType, '1'),
                 title: 'Validation Error',
                 message: 'Please correct the errors in the form',
                 mt: 'md',
@@ -116,9 +111,6 @@ export default function AddUser() {
             setIsRegistered,
         });
     };
-
-    const [opened, setOpened] = useState(false);
-    const [userType, setUserType] = useState('');
 
     function openModal(type: string) {
         setUserType(type);
@@ -148,17 +140,17 @@ export default function AddUser() {
                     <Grid >
                         <Grid.Col pt={0} span={4}>
                             <Center>
-                                <FancyButton onClick={() => openModal('env')} color="green" icon={<IconUserEdit />} title={"Environment Officer"} />
+                                <FancyButton onClick={() => openModal('Environment Officer')} color="green" icon={<IconUserEdit />} title={"Environment Officer"} />
                             </Center>
                         </Grid.Col>
                         <Grid.Col pt={0} span={4}>
                             <Center>
-                                <FancyButton onClick={() => openModal('man')} color="yellow" icon={<IconUserShield />} title={"Management"} />
+                                <FancyButton onClick={() => openModal('Manager')} color="yellow" icon={<IconUserShield />} title={"Management"} />
                             </Center>
                         </Grid.Col>
                         <Grid.Col pt={0} span={4}>
                             <Center>
-                                <FancyButton onClick={() => openModal('thp')} color="violet" icon={<IconUserCheck />} title={"Third Party"} />
+                                <FancyButton onClick={() => openModal('Third Party')} color="violet" icon={<IconUserCheck />} title={"Third Party"} />
                             </Center>
                         </Grid.Col>
                     </Grid>
@@ -237,13 +229,8 @@ export default function AddUser() {
                         padding: '0',
                     }
                 }}
-                classNames={{ title: classes.title, header: `${userType === 'env' ? classes.envHeader : userType === 'man' ? classes.manHeader : userType === 'thp' ? classes.thpHeader : ''}` }}
-                title={
-                    userType === 'env' ? "Environment Officer" :
-                        userType === 'man' ? "Management" :
-                            userType === 'thp' ? "Third Party" :
-                                ""
-                }
+                classNames={{ title: classes.title, header: `${userType === 'Environment Officer' ? classes.envHeader : userType === 'Manager' ? classes.manHeader : userType === 'Third Party' ? classes.thpHeader : ''}` }}
+                title={userType}
 
                 opened={opened}
                 radius={'sm'}
@@ -252,7 +239,7 @@ export default function AddUser() {
             >
                 <Container my={40}>
                     <Stepper className={isRegistered ? 'user-stepper' : ''} color={getUserTypeColor(userType)} active={active} onStepClick={setActive} allowNextStepsSelect={true}>
-                        <Stepper.Step c={getUserTypeColor(userType)} label="General" description="Employee details">
+                        <Stepper.Step c={active == 0 ? getUserTypeColor(userType) : ''} label="General" description="Employee details">
                             <GeneralStep form={form} />
                         </Stepper.Step>
                         <Stepper.Step c={active == 1 ? getUserTypeColor(userType) : ''} label="Authentication" description="Create credentials">
@@ -264,17 +251,17 @@ export default function AddUser() {
                     </Stepper>
 
                 </Container>
-                <div style={{ backgroundColor: getUserTypeColor(userType, '2', true), height: '56px', width: 'auto', position: 'sticky', bottom: 0 }}>
-                <FormNavigationButtons
-        active={active}
-        setActive={setActive}
-        handleNext={handleNext}
-        handleSubmit={handleSubmit}
-        prevStep={prevStep}
-        isRegistered={isRegistered}
-        userType={userType}
-        form={form}
-    />
+                <div style={{ backgroundColor: getUserTypeColor(userType, '2'), height: '56px', width: 'auto', position: 'sticky', bottom: 0 }}>
+                    <FormNavigationButtons
+                        active={active}
+                        setActive={setActive}
+                        handleNext={handleNext}
+                        handleSubmit={handleSubmit}
+                        prevStep={prevStep}
+                        isRegistered={isRegistered}
+                        userType={userType}
+                        form={form}
+                    />
                 </div>
             </Modal>
         </>

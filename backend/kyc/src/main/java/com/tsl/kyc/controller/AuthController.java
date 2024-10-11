@@ -132,7 +132,7 @@ public class AuthController {
 
         // for the time being, set the designation to the role
         newUser.setDesignation(switch (dto.getRoleId()) {
-            case "1" -> "TSL Super Admin";
+            case "1" -> "TSL";
             case "2" -> "Admin";
             case "3" -> "Environment Officer";
             case "4" -> "Management";
