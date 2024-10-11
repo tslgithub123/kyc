@@ -4,6 +4,18 @@
     color: light-dark(var(--mantine-color-green-9), var(--mantine-color-dark));
 }
 
+.tslHeader {
+    background-color: var(--mantine-color-red-2);
+    padding-left: rem(40px);
+    color: light-dark(var(--mantine-color-red-9), var(--mantine-color-dark));
+}
+
+.dirHeader {
+    background-color: var(--mantine-color-violet-2);
+    padding-left: rem(40px);
+    color: light-dark(var(--mantine-color-violet-9), var(--mantine-color-dark));
+}
+
 .manHeader {
     background-color: var(--mantine-color-yellow-2);
     padding-left: rem(40px);
