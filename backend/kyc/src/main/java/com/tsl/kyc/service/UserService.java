@@ -15,6 +15,7 @@ import com.tsl.kyc.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +55,16 @@ public class UserService {
 
     public void replaceRole(User user, String roleId) {
         Optional<UserRole> userRole = userRolesRepository.findByUserId(user.getId());
+        String designation = switch (roleId) {
+            case "1" -> "TSL";
+            case "2" -> "Director";
+            case "3" -> "Admin";
+            case "4" -> "Environment Officer";
+            case "5" -> "Management";
+            case "6" -> "Third Party";
+            default -> "";
+        };
+        user.setDesignation(designation);
         userRole.get().setRole(getRole(roleId).get());
         userRolesRepository.save(userRole.get());
         userRepository.save(user);

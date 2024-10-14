@@ -104,10 +104,7 @@ public class UserController {
                 employeeService.save(employee);
             }
         }
-                userService.assignRole(user, userRegistrationDto.getRoleId());
-
-
-
+        userService.replaceRole(user, userRegistrationDto.getRoleId());
         if (userRegistrationDto.getCompanyUnitId() != null) {
             CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(userRegistrationDto.getCompanyUnitId());
             user.setCompanyUnit(companyUnit);
