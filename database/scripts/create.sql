@@ -50,7 +50,6 @@ CREATE TABLE industry_link (
     FOREIGN KEY (industry_type_id) REFERENCES industry_type(id) ON DELETE SET NULL
 );
 
--- pcb
 -- Create Company Profile Table
 CREATE TABLE company_profile (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
