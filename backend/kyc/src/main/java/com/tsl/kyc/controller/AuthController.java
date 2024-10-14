@@ -170,68 +170,10 @@ public class AuthController {
         employee.setGender(dto.getGender());
         employee.setBirthday(dto.getBirthday());
         employee.setUser(newUser);
+        employee.setEmail(dto.getEmail());
         employee.setCompanyProfile(companyUnit.getCompanyProfile());
         employeeService.save(employee);
         result.put("userId", newUser.getId());
-    }
-    
-    
-    @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Validated @RequestBody UserRegistrationDto userRegistrationDto) {
-        Optional<User> userOptional = userService.findById(id);
-        
-        if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
-        }
-
-        User user = userOptional.get();
-
-        // Update fields as needed
-        if (userRegistrationDto.getUsername() != null) {
-            user.setUsername(userRegistrationDto.getUsername());
-            
-        }
-
-        if (userRegistrationDto.getEmployeeFullName() != null) {
-            // Assuming you have a method to update the Employee details
-        	Employee employee = employeeService.getEmployeeByUserId(id);
-            if (employee != null) {
-            	employee.setName(userRegistrationDto.getEmployeeFullName());
-            	employee.setGender(userRegistrationDto.getGender());
-            	employee.setBirthday(userRegistrationDto.getBirthday());
-            	employee.setEmail(userRegistrationDto.getEmail());
-                employeeService.save(employee);
-            }
-        }
-
-        if (userRegistrationDto.getRoleId() != null) {
-            String role_name = switch (userRegistrationDto.getRoleId()) {
-                case "1" -> "ROLE_TSL";
-                case "2" -> "ROLE_ADMIN";
-                case "3" -> "ROLE_ENVIRONMENT_OFFICER";
-                case "4" -> "ROLE_MANAGEMENT";
-                case "5" -> "ROLE_THIRD_PARTY";
-                case "6" -> "ROLE_DIRECTOR";
-                default -> null;
-            };
-
-            Optional<Role> role = roleService.findByName(role_name);
-            if (role.isPresent()) {
-                userService.assignRole(user, role.get().getName());
-            } else {
-                return ResponseEntity.badRequest().body(Map.of("message", "Role not found: " + role_name));
-            }
-        }
-
-        if (userRegistrationDto.getCompanyUnitId() != null) {
-            CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(userRegistrationDto.getCompanyUnitId());
-            user.setCompanyUnit(companyUnit);
-        }
-
-        // Save the updated user
-        userService.saveUser(user);
-        
-        return ResponseEntity.ok(Map.of("message", "User updated successfully", "user", user));
     }
 
     
@@ -309,12 +251,3 @@ public class AuthController {
 
 
 }
-
-
-
-
-
-
-
-
-//return success ? ResponseEntity.ok("Password has been reset.") : ResponseEntity.badRequest().body("User not found.");

@@ -14,7 +14,10 @@ public class UserRegistrationDto {
     private String phone;
     private String employeeFullName;
     private String gender;
-    private Date birthday;    
+    private Date birthday;
+    private String maritalStatus;
+    private String profileStatus;
+    private String emailStatus;
     
 
     public UserRegistrationDto() {
@@ -22,7 +25,7 @@ public class UserRegistrationDto {
     }
 
     public UserRegistrationDto(String username, String password, String roleId, UUID companyUnitId, String email,
-    		String phone, String employeeFullName, String gender, Date birthday) {
+    		String phone, String employeeFullName, String gender, Date birthday, String maritalStatus) {
     	super();
     	this.username = username;
     	this.password = password;
@@ -33,9 +36,24 @@ public class UserRegistrationDto {
     	this.employeeFullName = employeeFullName;
     	this.gender = gender;
     	this.birthday = birthday;
+        this.maritalStatus = maritalStatus;
     }
-    
-    
+
+//    public UserRegistrationDto(String username, String password, String roleId, UUID companyUnitId, String email, String phone, String employeeFullName, String gender, Date birthday, String maritalStatus, String profileStatus, String emailStatus) {
+//        this.username = username;
+//        this.password = password;
+//        this.roleId = roleId;
+//        this.companyUnitId = companyUnitId;
+//        this.email = email;
+//        this.phone = phone;
+//        this.employeeFullName = employeeFullName;
+//        this.gender = gender;
+//        this.birthday = birthday;
+//        this.maritalStatus = maritalStatus;
+//        this.profileStatus = profileStatus;
+//        this.emailStatus = emailStatus;
+//    }
+
     public String getUsername() {
         return username;
     }
@@ -108,11 +126,52 @@ public class UserRegistrationDto {
 		this.birthday = birthday;
 	}
 
-	@Override
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+//    public String getProfileStatus() {
+//        return profileStatus;
+//    }
+//
+//    public void setProfileStatus(String profileStatus) {
+//        this.profileStatus = profileStatus;
+//    }
+//
+//    public String getEmailStatus() {
+//        return emailStatus;
+//    }
+//
+//    public void setEmailStatus(String emailStatus) {
+//        this.emailStatus = emailStatus;
+//    }
+
+    @Override
 	public String toString() {
 		return "UserRegistrationDto [username=" + username + ", password=" + password + ", roleId=" + roleId
 				+ ", companyUnitId=" + companyUnitId + ", email=" + email + ", phone=" + phone + ", employeeFullName="
-				+ employeeFullName + ", gender=" + gender + ", birthday=" + birthday + "]";
+				+ employeeFullName + ", gender=" + gender + ", birthday=" + birthday + ", maritalStatus=" + maritalStatus +"]";
 	}
-	
+
+//    @Override
+//    public String toString() {
+//        return "UserRegistrationDto{" +
+//                "username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", roleId='" + roleId + '\'' +
+//                ", companyUnitId=" + companyUnitId +
+//                ", email='" + email + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", employeeFullName='" + employeeFullName + '\'' +
+//                ", gender='" + gender + '\'' +
+//                ", birthday=" + birthday +
+//                ", maritalStatus='" + maritalStatus + '\'' +
+//                ", profileStatus='" + profileStatus + '\'' +
+//                ", emailStatus='" + emailStatus + '\'' +
+//                '}';
+//    }
 }
