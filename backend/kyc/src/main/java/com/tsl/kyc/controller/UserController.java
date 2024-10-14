@@ -111,4 +111,32 @@ public class UserController {
 
         return ResponseEntity.ok(Map.of("message", "User updated successfully", "user", user));
     }
+
+    @GetMapping("/officer/{id}")
+    public ResponseEntity<?> getUser(@PathVariable UUID id) {
+        Optional<User> userOptional = userService.findById(id);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+        }
+
+        User user = userOptional.get();
+        Employee employee = employeeService.getEmployeeByUserId(id);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", user.getId());
+        response.put("username", user.getUsername());
+        response.put("employeeFullName", employee != null ? employee.getName() : null);
+        response.put("gender", employee != null ? employee.getGender() : null);
+        response.put("birthday", employee != null ? employee.getBirthday() : null);
+        response.put("email", employee != null ? employee.getEmail() : null);
+//        response.put("maritalStatus", employee != null ? employee.getMaritalStatus() : null);
+//        response.put("profileStatus", employee != null ? employee.getProfileStatus() : null);
+        response.put("emailStatus", employee != null ? employee.getEmailStatus() : null);
+        response.put("designation", user.getDesignation());
+        response.put("companyUnit", user.getCompanyUnit() != null ? user.getCompanyUnit().getName() : null);
+        response.put("roles", user.getRoles());
+
+        return ResponseEntity.ok(response);
+    }
 }

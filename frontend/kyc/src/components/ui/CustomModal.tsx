@@ -49,7 +49,7 @@ const CustomModal: React.FC<PromptModalProps> = ({
                 onClose={close}
                 size={size}>
         {showComponent}
-        {JSON.stringify(userType)}
+        
       </Modal>
 
       <Button
