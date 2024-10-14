@@ -15,11 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -104,10 +100,7 @@ public class UserController {
                 employeeService.save(employee);
             }
         }
-                userService.replaceRole(user, userRegistrationDto.getRoleId());
-
-
-
+        userService.replaceRole(user, userRegistrationDto.getRoleId());
         if (userRegistrationDto.getCompanyUnitId() != null) {
             CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(userRegistrationDto.getCompanyUnitId());
             user.setCompanyUnit(companyUnit);
