@@ -560,7 +560,7 @@ INSERT INTO users (
     username, 
     password, 
     enabled, 
-    atdesignion, 
+    designation, 
     company_unit_id, 
     failed_login_count, 
     last_login_date, 
