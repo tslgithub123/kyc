@@ -1,5 +1,7 @@
 package com.tsl.kyc.service;
 
+import com.tsl.kyc.entity.UserRole;
+import com.tsl.kyc.repository.UserRolesRepository;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +23,16 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
+    private static RoleRepository roleRepository = null;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRolesRepository userRolesRepository;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        UserService.roleRepository = roleRepository;
     }
 
     public List<User> getAll() {
@@ -48,7 +52,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void assignRole(User user, String roleId) {
+    public void replaceRole(User user, String roleId) {
+        Optional<UserRole> userRole = userRolesRepository.findByUserId(user.getId());
+        userRole.get().setRole(getRole(roleId).get());
+        userRolesRepository.save(userRole.get());
+        userRepository.save(user);
+    }
+
+    public static Optional<Role> getRole(String roleId) {
         String roleName = switch (roleId) {
             case "1" -> "ROLE_TSL";
             case "2" -> "ROLE_DIRECTOR";
@@ -58,12 +69,17 @@ public class UserService {
             case "6" -> "ROLE_THIRD_PARTY";
             default -> "";
         };
-        Optional<Role> roleOpt = roleRepository.findByName(roleName);
-        if (roleOpt.isPresent()) {
-            user.getRoles().add(roleOpt.get());
+        return roleRepository.findByName(roleName);
+    }
+
+    public void assignRole(User user, String roleId) {
+
+        Optional<Role> role = getRole(roleId);
+        if (role.isPresent()) {
+            user.getRoles().add(role.get());
             userRepository.save(user);
         } else {
-            throw new RuntimeException("Role not found: " + roleName);
+            throw new RuntimeException("Role not found: " + roleId);
         }
     }
 

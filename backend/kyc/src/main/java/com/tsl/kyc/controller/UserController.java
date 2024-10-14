@@ -104,46 +104,9 @@ public class UserController {
                 employeeService.save(employee);
             }
         }
+                userService.assignRole(user, userRegistrationDto.getRoleId());
 
-        String designation = null; // Variable to hold designation
-        if (userRegistrationDto.getRoleId() != null) {
-            String role_name = switch (userRegistrationDto.getRoleId()) {
-                case "1" -> {
-                    designation = "TSL"; // Set designation for ROLE_TSL
-                    yield "ROLE_TSL";
-                }
-                case "2" -> {
-                    designation = "Admin"; // Set designation for ROLE_ADMIN
-                    yield "ROLE_ADMIN";
-                }
-                case "3" -> {
-                    designation = "Environment Officer"; // Set designation for ROLE_ENVIRONMENT_OFFICER
-                    yield "ROLE_ENVIRONMENT_OFFICER";
-                }
-                case "4" -> {
-                    designation = "Management"; // Set designation for ROLE_MANAGEMENT
-                    yield "ROLE_MANAGEMENT";
-                }
-                case "5" -> {
-                    designation = "Third Party"; // Set designation for ROLE_THIRD_PARTY
-                    yield "ROLE_THIRD_PARTY";
-                }
-                case "6" -> {
-                    designation = "Director"; // Set designation for ROLE_DIRECTOR
-                    yield "ROLE_DIRECTOR";
-                }
-                default -> null;
-            };
 
-            Optional<Role> role = roleService.findByName(role_name);
-            if (role.isPresent()) {
-                user.getRoles().clear();
-                userService.assignRole(user, role.get().getName());
-                user.setDesignation(designation); // Set the designation in user table
-            } else {
-                return ResponseEntity.badRequest().body(Map.of("message", "Role not found: " + role_name));
-            }
-        }
 
         if (userRegistrationDto.getCompanyUnitId() != null) {
             CompanyUnit companyUnit = companyUnitService.getCompanyUnitById(userRegistrationDto.getCompanyUnitId());
