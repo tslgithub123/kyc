@@ -54,7 +54,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-
     @GetMapping("/username-exists/{username}")
     public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
         return ResponseEntity.ok(userService.checkUsernameExists(username));

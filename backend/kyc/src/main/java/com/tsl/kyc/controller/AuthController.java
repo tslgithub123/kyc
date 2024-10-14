@@ -147,22 +147,7 @@ public class AuthController {
 
         newUser.setLocked(false);
 
-        String role_name = switch (dto.getRoleId()) {
-            case "1" -> "ROLE_TSL";
-            case "2" -> "ROLE_ADMIN";
-            case "3" -> "ROLE_ENVIRONMENT_OFFICER";
-            case "4" -> "ROLE_MANAGEMENT";
-            case "5" -> "ROLE_THIRD_PARTY";
-            case "6" -> "ROLE_DIRECTOR";
-            default -> "";
-        };
-
-        Optional<Role> role = roleService.findByName(role_name);
-        if (role.isPresent()) {
-            userService.assignRole(newUser, role.get().getName());
-        } else {
-            throw new RuntimeException("Role not found: " + role_name);
-        }
+        userService.assignRole(newUser, dto.getRoleId());
 
         Employee employee = new Employee();
 
