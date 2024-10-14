@@ -156,6 +156,7 @@ public class AuthController {
         employee.setBirthday(dto.getBirthday());
         employee.setUser(newUser);
         employee.setEmail(dto.getEmail());
+        employee.setMaritalStatus(dto.getMaritalStatus());
         employee.setCompanyProfile(companyUnit.getCompanyProfile());
         employeeService.save(employee);
         result.put("userId", newUser.getId());
