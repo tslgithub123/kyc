@@ -48,7 +48,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void assignRole(User user, String roleName) {
+    public void assignRole(User user, String roleId) {
+        String roleName = switch (roleId) {
+            case "1" -> "ROLE_TSL";
+            case "2" -> "ROLE_DIRECTOR";
+            case "3" -> "ROLE_ADMIN";
+            case "4" -> "ROLE_ENVIRONMENT_OFFICER";
+            case "5" -> "ROLE_MANAGEMENT";
+            case "6" -> "ROLE_THIRD_PARTY";
+            default -> "";
+        };
         Optional<Role> roleOpt = roleRepository.findByName(roleName);
         if (roleOpt.isPresent()) {
             user.getRoles().add(roleOpt.get());
