@@ -1,5 +1,6 @@
 package com.tsl.kyc.controller;
 
+import com.tsl.kyc.dto.LoginRequestDto;
 import com.tsl.kyc.dto.UserRegistrationDto;
 import com.tsl.kyc.entity.*;
 import com.tsl.kyc.exception.EmptyFieldsException;
@@ -9,6 +10,11 @@ import com.tsl.kyc.repository.UserRepository;
 import com.tsl.kyc.service.*;
 import com.tsl.kyc.security.JwtUtils;
 import com.tsl.kyc.utils.PasswordGenerator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -161,11 +167,16 @@ public class AuthController {
         result.put("userId", newUser.getId());
     }
 
-    
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
+    @Operation(summary = "User login", description = "Authenticate user and return JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
+            @ApiResponse(responseCode = "401", description = "User is locked or authentication failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
+    })
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)

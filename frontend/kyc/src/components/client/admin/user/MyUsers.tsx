@@ -281,7 +281,7 @@ export default function MyUsers() {
               showComponent={<UserInformation id={selectedProfile?.id || ''}/>} 
               exportButtonText={'View'} 
               disabled={!selectedProfile}
-              size=''
+              size='xl'
               />
 
               <PromptModal

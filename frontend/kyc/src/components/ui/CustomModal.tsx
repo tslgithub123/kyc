@@ -41,7 +41,7 @@ const CustomModal: React.FC<PromptModalProps> = ({
                         padding: '0',
                     }
                 }}
-                classNames={{ title: classes.title, header: `${userType === 'Environment Officer' ? classes.envHeader : userType === 'Manager' ? classes.manHeader : userType === 'Third Party' ? classes.thpHeader : userType === 'Director' ? classes.dirHeader : userType === 'TSL' ? classes.tslHeader : ''}` }}
+                classNames={{ title: classes.title, header: `${userType === 'Environment Officer' ? classes.envHeader : userType === 'Manager' ? classes.manHeader : userType === 'Third Party' ? classes.thpHeader : userType === 'Director' ? classes.dirHeader : userType === 'TSL' ? classes.tslHeader : userType === 'Administrator' ? classes.adminHeader : ''}` }}
                 title={title}
 
                 opened={opened}
