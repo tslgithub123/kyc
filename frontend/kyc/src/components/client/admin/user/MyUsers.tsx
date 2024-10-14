@@ -11,41 +11,46 @@ import {
   Divider,
   ActionIcon,
   useMantineTheme,
-  Button,
   Text,
   Center,
-  Pill,
   Menu,
   rem,
+  Pill,
 } from '@mantine/core';
-import { IconArrowUp, IconArrowDown, IconSearch, IconSend2, IconCircleOff, IconDownload, IconFileExcel, IconPdf, IconRestore, IconUser } from '@tabler/icons-react';
+import {
+  IconArrowUp,
+  IconArrowDown,
+  IconSearch,
+  IconSend2,
+  IconCircleOff,
+  IconDownload,
+  IconFileExcel,
+  IconPdf,
+  IconRestore,
+  IconUser
+} from '@tabler/icons-react';
 import api from '../../../../utils/api';
 import PromptModal from '../../../ui/PromptModal';
-import global from "./../../../ui/Global.module.css";
+import global from "../../../ui/Global.module.css";
 import { useAuthStore } from '../../../../store/store';
-
-interface UserProfile {
-  id: number;
-  username: string;
-  companyName: string;
-  designation: string;
-  lastLoginDate: string | null;
-  locked: boolean;
-}
+import { getUserTypeColor } from '../../../../utils/colorUtils';
+import UserInformation from './UserInformation';
+import { User } from '../../../../utils/types';
+import CustomModal from '../../../ui/CustomModal';
 
 interface SortConfig {
-  key: keyof UserProfile;
+  key: keyof User;
   direction: 'ascending' | 'descending';
 }
 
 export default function MyUsers() {
-  const [userProfiles, setUserProfiles] = useState<UserProfile[]>([]);
-  const [currentProfile, setCurrentProfile] = useState<UserProfile>();
+  const [userProfiles, setUserProfiles] = useState<User[]>([]);
+  const [currentProfile, setCurrentProfile] = useState<User | undefined>();
   const [page, setPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'id', direction: 'ascending' });
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [selectedProfile, setSelectedProfile] = useState<User | undefined>();
   const [refresh, setRefresh] = useState<boolean>(false);
   const theme = useMantineTheme();
 
@@ -62,19 +67,80 @@ export default function MyUsers() {
 
   const fetchUserProfiles = async () => {
     try {
-      const compProfileId = useAuthStore.getState().user?.companyProfile.id;
-      console.log("Company Profile ID:", compProfileId);
+      const compUnitId = useAuthStore.getState().user?.companyUnit.id;
+      console.log("Company Unit ID:", compUnitId);
       let response: any[] = [];
-      if (compProfileId !== undefined) {
-        response = await api.fetchUsersByCompanyId(compProfileId.toString());
+      if (compUnitId !== undefined) {
+        response = await api.fetchUsersByCompanyUnitId(compUnitId.toString());
+        console.log("Response:", response);
       }
-      const userProfiles: UserProfile[] = response.map((user: any) => ({
+      const userProfiles: User[] = response.map((user: any) => ({
         id: user.id,
         username: user.username,
         companyName: user.companyName || '',
         designation: user.designation || '',
         lastLoginDate: user.lastLoginDate || null,
         locked: user.locked || false,
+        roles: user.roles || [],
+        enabled: user.enabled || false,
+        companyUnit: user.companyUnit || {
+          id: '',
+          companyProfile: {
+            id: '',
+            contactPerson: {
+              id: '',
+              name: '',
+              designation: '',
+              phone: '',
+              email: '',
+            },
+            mpcbid: 0,
+            name: '',
+            email: '',
+            fax: '',
+            lastEnvironment: '',
+            phoneNumber: '',
+            website: '',
+            yearEstablished: 0,
+          },
+          address: {
+            id: '',
+            street: '',
+            line2: '',
+            line3: '',
+            city: '',
+            state: '',
+            district: '',
+            country: '',
+            pincode: '',
+            village: '',
+            taluka: '',
+            plotNumber: '',
+            ro: '',
+            sro: '',
+          },
+          industryLink: {
+            id: '',
+            industryScale: {
+              id: '',
+              name: '',
+            },
+            industryType: {
+              id: '',
+              name: '',
+            },
+            industryCategory: {},
+          },
+          name: '',
+          email: '',
+          fax: '',
+          workDay: 0,
+          workingHour: 0,
+        },
+        failedLoginCount: user.failedLoginCount || 0,
+        accountNonLocked: user.accountNonLocked || false,
+        accountNonExpired: user.accountNonExpired || false,
+        credentialsNonExpired: user.credentialsNonExpired || false,
       }));
       setUserProfiles(userProfiles);
     } catch (error) {
@@ -86,7 +152,7 @@ export default function MyUsers() {
     const fetchAndFilterUserProfiles = async () => {
       await fetchUserProfiles();
       setUserProfiles((prevUserProfiles) => {
-        const currentUserProfile = prevUserProfiles.find(profile => profile.id === uid);
+        const currentUserProfile = prevUserProfiles.find(profile => profile.id === uid ? Number(uid) : undefined);
         console.log("Current User Profile:", currentUserProfile);
         if (currentUserProfile) {
           setCurrentProfile(currentUserProfile);
@@ -96,9 +162,9 @@ export default function MyUsers() {
       });
     };
     fetchAndFilterUserProfiles();
-  }, [refresh]);
+  }, [refresh, uid]);
 
-  const handleLockChange = async (id: number, currentLockedStatus: boolean) => {
+  const handleLockChange = async (id: string, currentLockedStatus: boolean) => {
     try {
       const response = await api.updateUserLockStatus(id.toString(), !currentLockedStatus);
       setUserProfiles((prevProfiles) =>
@@ -111,7 +177,7 @@ export default function MyUsers() {
     }
   };
 
-  const handleSort = (key: keyof UserProfile) => {
+  const handleSort = (key: keyof User) => {
     let direction: 'ascending' | 'descending' = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
@@ -119,48 +185,44 @@ export default function MyUsers() {
     setSortConfig({ key, direction });
   };
 
-  const handleSelectId = (id: number) => {
-    setSelectedIds((prevSelectedIds) =>
-      prevSelectedIds.includes(id)
-        ? prevSelectedIds.filter((selectedId) => selectedId !== id)
-        : [...prevSelectedIds, id]
-    );
+  const handleSelectProfile = (profile: User) => {
+    setSelectedProfile((prevSelectedProfile) => {
+      if (prevSelectedProfile?.id === profile.id) {
+        return undefined;
+      } else {
+        return profile;
+      }
+    });
   };
 
   const handleDeactivate = () => {
-    console.log("Deleting profiles with IDs:", selectedIds);
-
+    console.log("Deleting profile:", selectedProfile);
+    // Implement your deactivate logic here, possibly using profile ID
     setRefresh(!refresh);
-    setSelectedIds([]);
+    setSelectedProfile(undefined);
   };
 
   const sendEmails = () => {
-    console.log("Sending emails to profiles with IDs:", selectedIds);
+    console.log("Sending email to profile:", selectedProfile);
+    // Implement your email sending logic here
   }
 
-  // const deactivateProfiles = async (ids: number[]) => {
-  //   try {
-  //     //await api.deleteUserProfiles(ids);
-  //     setUserProfiles((prevProfiles) => prevProfiles.filter((profile) => !ids.includes(profile.id)));
-  //   } catch (error) {
-  //     console.error("Error deleting profiles:", error);
-  //   }
-  // }
-
   const sortedProfiles = useMemo(() => {
-    let sortedProfiles = [...userProfiles];
+    let sorted = [...userProfiles];
     if (sortConfig.key) {
-      sortedProfiles.sort((a, b) => {
-        if (a[sortConfig.key] !== null && b[sortConfig.key] !== null && a[sortConfig.key]! < b[sortConfig.key]!) {
+      sorted.sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue !== null && bValue !== null && aValue! < bValue!) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
         }
-        if (a[sortConfig.key] !== null && b[sortConfig.key] !== null && a[sortConfig.key]! > b[sortConfig.key]!) {
+        if (aValue !== null && bValue !== null && aValue! > bValue!) {
           return sortConfig.direction === 'ascending' ? 1 : -1;
         }
         return 0;
       });
     }
-    return sortedProfiles;
+    return sorted;
   }, [userProfiles, sortConfig]);
 
   const filteredProfiles = useMemo(() =>
@@ -174,44 +236,20 @@ export default function MyUsers() {
 
   const paginatedProfiles = filteredProfiles.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const renderSortIcon = (key: keyof UserProfile) => {
+  const renderSortIcon = (key: keyof User) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === 'ascending' ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />;
     }
     return null;
   };
 
-  const getOutlineColor = (designation: string): string => {
-    const designationColors: { [key: string]: string } = {
-      'Administrator': '1px solid red',
-      'Environment Officer': '1px solid green',
-      'Manager': '1px solid purple',
-      'Third Party': '1px solid gray',
-
-    };
-
-    return designationColors[designation] || '1px solid black';
-  };
-
-
-  const getTextColor = (designation: string): string => {
-    const textColors: { [key: string]: string } = {
-      'Administrator': 'red',
-      'Environment Officer': 'darkgreen',
-      'Manager': 'purple',
-      'Third Party': 'gray.9',
-    };
-
-    return textColors[designation] || 'black';
-  };
-
   return (
     <Paper withBorder mt={'md'} radius="sm">
       <Grid p="sm" pl='lg' bg={'gray.1'} justify="space-between" align="center">
         <Grid.Col span={6}>
-            <Title className={global.title} order={3} c="gray.7">
-              My Users
-            </Title>
+          <Title className={global.title} order={3} c="gray.7">
+            My Users
+          </Title>
         </Grid.Col>
         <Grid.Col span={6} style={{ textAlign: 'right' }}>
           <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
@@ -236,62 +274,45 @@ export default function MyUsers() {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              {/* <Button
-                color="blue"
-                ml={'sm'}
-                disabled={selectedIds.length === 0}
-                onClick={() => {
-                  setSelectedIds([]);
-                }}
-                leftSection={<IconClearAll />}
-                style={{ minWidth: '110px' }}
-                mr={'sm'}
-              >
-                Clear
-              </Button> */}
-              <Button
-                color="blue"
-                ml={'sm'}
-                disabled={!(selectedIds.length === 1)}
-                onClick={() => {
-                  setSelectedIds([]);
-                }}
-                leftSection={<IconUser />}
-                style={{ minWidth: '110px' }}
-                mr={'sm'}
-              >
-                View
-              </Button>
+              <CustomModal 
+              icon={<IconUser />}
+              title='User Information'
+              userType={selectedProfile?.designation || ''} 
+              showComponent={<UserInformation id={selectedProfile?.id || ''}/>} 
+              exportButtonText={'View'} 
+              disabled={!selectedProfile}
+              size=''
+              />
 
               <PromptModal
-                disabled={selectedIds.length === 0}
-                color="red"
-                exportButtonText={'Deactivate'}
-                icon={<IconCircleOff />}
-                title={'Deactivate Profile(s)?'}
-                description="Are you sure you want to deactivate the selected profile(s)?"
-                trueButtonText="Deactivate"
-                onConfirm={handleDeactivate}
+              disabled={!selectedProfile}
+              color="red"
+              exportButtonText={'Deactivate'}
+              icon={<IconCircleOff />}
+              title={'Deactivate Profile?'}
+              description="Are you sure you want to deactivate the selected profile?"
+              trueButtonText="Deactivate"
+              onConfirm={handleDeactivate}
               />
               <PromptModal
-                disabled={selectedIds.length === 0}
-                color="yellow"
-                exportButtonText={'Send Email'}
-                icon={<IconSend2 />}
-                title={'Send Email?'}
-                description="Are you sure you want to send email to selected profiles?"
-                trueButtonText="Send"
-                onConfirm={sendEmails}
+              disabled={!selectedProfile}
+              color="yellow"
+              exportButtonText={'Send Email'}
+              icon={<IconSend2 />}
+              title={'Send Email?'}
+              description="Are you sure you want to send email to the selected profile?"
+              trueButtonText="Send"
+              onConfirm={sendEmails}
               />
               <PromptModal
-                disabled={!(selectedIds.length === 1)}
-                color="dark"
-                exportButtonText={'Reset Password'}
-                icon={<IconRestore />}
-                title={'Reset Password?'}
-                description="Are you sure you want to reset password of the selected profile? This will send an email to the user with reset credentials."
-                trueButtonText="Send"
-                onConfirm={sendEmails}
+              disabled={!selectedProfile}
+              color="dark"
+              exportButtonText={'Reset Password'}
+              icon={<IconRestore />}
+              title={'Reset Password?'}
+              description="Are you sure you want to reset password of the selected profile? This will send an email to the user with reset credentials."
+              trueButtonText="Send"
+              onConfirm={sendEmails}
               />
             </div>
           </Grid.Col>
@@ -304,7 +325,6 @@ export default function MyUsers() {
               </Menu.Target>
 
               <Menu.Dropdown>
-
                 <Menu.Item leftSection={<IconFileExcel style={{ width: rem(14), height: rem(14) }} />}>
                   Download Excel
                 </Menu.Item>
@@ -313,7 +333,6 @@ export default function MyUsers() {
                 </Menu.Item>
               </Menu.Dropdown>
             </Menu>
-
           </Grid.Col>
         </Grid>
         <Table withColumnBorders striped highlightOnHover withTableBorder>
@@ -321,95 +340,77 @@ export default function MyUsers() {
             <Table.Tr>
               <Table.Th>
                 <Center>
-                  <ActionIcon size={42} variant="light" onClick={() => handleSort('id')}>{renderSortIcon('id')} ID </ActionIcon>
+                  <ActionIcon size={42} variant="light" onClick={() => handleSort('id')}>
+                    {renderSortIcon('id')} #
+                  </ActionIcon>
                 </Center>
               </Table.Th>
               <Table.Th>
                 <Center>
-                  <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" onClick={() => handleSort('username')}>{renderSortIcon('username')}Username</ActionIcon>
-                </Center>
-              </Table.Th>
-              {/* <Table.Th>
-                <Center>
-                  <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" onClick={() => handleSort('companyName')}>Company Name{renderSortIcon('companyName')}</ActionIcon>
-                </Center>
-              </Table.Th> */}
-              <Table.Th>
-                <Center>
-                  <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" onClick={() => handleSort('designation')}>Designation{renderSortIcon('designation')}</ActionIcon>
+                  <ActionIcon 
+                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
+                    variant="subtle" 
+                    onClick={() => handleSort('username')}
+                  >
+                    {renderSortIcon('username')} Username
+                  </ActionIcon>
                 </Center>
               </Table.Th>
               <Table.Th>
                 <Center>
-                  <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" onClick={() => handleSort('lastLoginDate')}>Last Login Date{renderSortIcon('lastLoginDate')}</ActionIcon>
+                  <ActionIcon 
+                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
+                    variant="subtle" 
+                    onClick={() => handleSort('designation')}
+                  >
+                    Designation {renderSortIcon('designation')}
+                  </ActionIcon>
                 </Center>
               </Table.Th>
               <Table.Th>
                 <Center>
-                  <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle">Lock</ActionIcon>
+                  <ActionIcon 
+                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
+                    variant="subtle" 
+                    onClick={() => handleSort('lastLoginDate')}
+                  >
+                    Last Login Date {renderSortIcon('lastLoginDate')}
+                  </ActionIcon>
+                </Center>
+              </Table.Th>
+              <Table.Th>
+                <Center>
+                  <ActionIcon 
+                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
+                    variant="subtle"
+                  >
+                    Lock
+                  </ActionIcon>
                 </Center>
               </Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody style={{ textAlign: 'center' }}>
-          {currentProfile && (<Table.Tr bg={'blue.1'} key={currentProfile.id}>
-            <Table.Td >
-            <ActionIcon style={{ height: '42px', width: 'auto', padding: '8px' }} variant="subtle" >
-                    Current User
-                    </ActionIcon>
-                </Table.Td>
-                <Table.Td>{currentProfile.username}</Table.Td>
-                <Table.Td>
-                  <Pill c={getTextColor(currentProfile.designation)} style={{
-                    width: '130px',
-                    justifyContent: 'center',
-                    outline: getOutlineColor(currentProfile.designation),
-                  }}>{currentProfile.designation}</Pill></Table.Td>
-                <Table.Td>
-                  {currentProfile.lastLoginDate ? (
-                    <Text size="sm" c="dimmed">
-                      {new Date(currentProfile.lastLoginDate).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </Text>
-                  ) : (
-                    <Text size="sm" c="dimmed">
-                      N/A
-                    </Text>
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <Center>
-                    <Switch
-                      checked={currentProfile.locked}
-                      onChange={() => handleLockChange(currentProfile.id, currentProfile.locked)}
-                      color={currentProfile.locked ? "red" : "teal"}
-                      size="md"
-                      disabled
-                    /></Center>
-                </Table.Td>
-              </Table.Tr>)}
             {paginatedProfiles.map((profile, index) => (
               <Table.Tr key={profile.id}>
                 <Table.Td>
                   <ActionIcon
-                    variant={selectedIds.includes(profile.id) ? 'filled' : 'subtle'}
-                    onClick={() => handleSelectId(profile.id)}
+                    variant={selectedProfile?.id === profile.id ? 'filled' : 'subtle'}
+                    onClick={() => handleSelectProfile(profile)}
                   >
                     {index + 1 + (page - 1) * rowsPerPage}
                   </ActionIcon>
                 </Table.Td>
-                <Table.Td>{profile.username}</Table.Td>
                 <Table.Td>
-                  <Pill c={getTextColor(profile.designation)} style={{
-                    width: '130px',
-                    justifyContent: 'center',
-                    outline: getOutlineColor(profile.designation),
-                  }}>{profile.designation}</Pill></Table.Td>
+                  <Text variant='text'>{profile.username}</Text>
+                </Table.Td>
+                <Table.Td>
+                  <Pill bg={getUserTypeColor(profile.designation, '1')} size='lg'>
+                    <Text variant='text' c={getUserTypeColor(profile.designation)}>
+                      {profile.designation}
+                    </Text>
+                  </Pill>
+                </Table.Td>
                 <Table.Td>
                   {profile.lastLoginDate ? (
                     <Text size="sm" c="dimmed">
@@ -422,9 +423,7 @@ export default function MyUsers() {
                       })}
                     </Text>
                   ) : (
-                    <Text size="sm" c="dimmed">
-                      N/A
-                    </Text>
+                    <Text size="sm" c="dimmed">N/A</Text>
                   )}
                 </Table.Td>
                 <Table.Td>
@@ -434,7 +433,8 @@ export default function MyUsers() {
                       onChange={() => handleLockChange(profile.id, profile.locked)}
                       color={profile.locked ? "red" : "teal"}
                       size="md"
-                    /></Center>
+                    />
+                  </Center>
                 </Table.Td>
               </Table.Tr>
             ))}
