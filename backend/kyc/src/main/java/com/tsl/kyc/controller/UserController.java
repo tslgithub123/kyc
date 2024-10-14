@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -64,7 +61,7 @@ public class UserController {
     }
 
 
-    @PutMapping("/officers/{id}")
+    @PutMapping("/edit/officer/{id}")
     public ResponseEntity<?> updateUser(@PathVariable UUID id, @Validated @RequestBody UserRegistrationDto userRegistrationDto) {
         Optional<User> userOptional = userService.findById(id);
 
@@ -105,31 +102,31 @@ public class UserController {
             }
         }
 
-        String designation = null; // Variable to hold designation
+        String designation = null;
         if (userRegistrationDto.getRoleId() != null) {
             String role_name = switch (userRegistrationDto.getRoleId()) {
                 case "1" -> {
-                    designation = "TSL"; // Set designation for ROLE_TSL
+                    designation = "TSL";
                     yield "ROLE_TSL";
                 }
                 case "2" -> {
-                    designation = "Admin"; // Set designation for ROLE_ADMIN
+                    designation = "Admin";
                     yield "ROLE_ADMIN";
                 }
                 case "3" -> {
-                    designation = "Environment Officer"; // Set designation for ROLE_ENVIRONMENT_OFFICER
+                    designation = "Environment Officer";
                     yield "ROLE_ENVIRONMENT_OFFICER";
                 }
                 case "4" -> {
-                    designation = "Management"; // Set designation for ROLE_MANAGEMENT
+                    designation = "Management";
                     yield "ROLE_MANAGEMENT";
                 }
                 case "5" -> {
-                    designation = "Third Party"; // Set designation for ROLE_THIRD_PARTY
+                    designation = "Third Party";
                     yield "ROLE_THIRD_PARTY";
                 }
                 case "6" -> {
-                    designation = "Director"; // Set designation for ROLE_DIRECTOR
+                    designation = "Director";
                     yield "ROLE_DIRECTOR";
                 }
                 default -> null;
@@ -139,7 +136,7 @@ public class UserController {
             if (role.isPresent()) {
                 user.getRoles().clear();
                 userService.assignRole(user, role.get().getName());
-                user.setDesignation(designation); // Set the designation in user table
+                user.setDesignation(designation);
             } else {
                 return ResponseEntity.badRequest().body(Map.of("message", "Role not found: " + role_name));
             }
@@ -150,9 +147,36 @@ public class UserController {
             user.setCompanyUnit(companyUnit);
         }
 
-        // Save the updated user
         userService.saveUser(user);
 
         return ResponseEntity.ok(Map.of("message", "User updated successfully", "user", user));
+    }
+
+    @GetMapping("/officer/{id}")
+    public ResponseEntity<?> getUser(@PathVariable UUID id) {
+        Optional<User> userOptional = userService.findById(id);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User not found"));
+        }
+
+        User user = userOptional.get();
+        Employee employee = employeeService.getEmployeeByUserId(id);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", user.getId());
+        response.put("username", user.getUsername());
+        response.put("employeeFullName", employee != null ? employee.getName() : null);
+        response.put("gender", employee != null ? employee.getGender() : null);
+        response.put("birthday", employee != null ? employee.getBirthday() : null);
+        response.put("email", employee != null ? employee.getEmail() : null);
+//        response.put("maritalStatus", employee != null ? employee.getMaritalStatus() : null);
+//        response.put("profileStatus", employee != null ? employee.getProfileStatus() : null);
+        response.put("emailStatus", employee != null ? employee.getEmailStatus() : null);
+        response.put("designation", user.getDesignation());
+        response.put("companyUnit", user.getCompanyUnit() != null ? user.getCompanyUnit().getName() : null);
+        response.put("roles", user.getRoles());
+
+        return ResponseEntity.ok(response);
     }
 }
