@@ -1,3 +1,5 @@
+
+
 fontlink {
   font-family: Inter;
 }
@@ -29,7 +31,7 @@ fontlink {
     var(--mantine-color-blue-1),
     var(--mantine-color-dark-7)
   );
-  background: linear-gradient(45deg, #d2e0ff 10%, #90b6fc 90%);
+  background: linear-gradient(90deg, var(--mantine-color-blue-2), var(--mantine-color-blue-5));
   &:hover {
     background-color: light-dark(
       var(--mantine-color-blue-1),

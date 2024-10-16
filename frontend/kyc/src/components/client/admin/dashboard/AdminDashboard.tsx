@@ -1,7 +1,9 @@
-import {CSSProperties } from 'react';
 import { useCurrentUser } from '../../../hooks/useCurrentUser';
 import UserStatsWidget from './UserStatsWidget';
-
+import CompanyStatsWidget from './CompanyStatsWidget';
+import UnitWidget from './UnitWidget';
+import TodoWidget from './TodoWidget';
+import animate from '../../../ui/RenderAnimation.module.css';
 
 function AdminDashboard() {
   const { data: currentUser, isLoading, error } = useCurrentUser  ();
@@ -9,25 +11,17 @@ function AdminDashboard() {
   if (error) return <p>Error fetching user data: {error.message}</p>;
 
   return (
-    <div>
+    <div className={animate['render-component']}>
+      <UnitWidget/>
+      <CompanyStatsWidget/>
+      <TodoWidget/>
       <UserStatsWidget/>
       <h1>Welcome Admin, {currentUser?.username}!</h1>
       <p>Your role: {JSON.stringify(currentUser?.roles)}</p>
-      <div style={styles.cardContainer}>  
-      </div>
     </div>
   );
 }
 
-const styles: { cardContainer: CSSProperties } = {
-  cardContainer: {
-    display: 'flex',
-    gap: '20px',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap',
-    maxWidth: '100%',
-    margin: '0 auto',
-  }
-};
+
 
 export default AdminDashboard;

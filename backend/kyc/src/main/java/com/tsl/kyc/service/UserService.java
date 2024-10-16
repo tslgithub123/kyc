@@ -1,6 +1,9 @@
 package com.tsl.kyc.service;
 
 import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tsl.kyc.entity.Role;
@@ -12,7 +15,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -20,6 +22,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -43,7 +48,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void assignRole(User user, String roleName) {
+    public void assignRole(User user, String roleId) {
+        String roleName = switch (roleId) {
+            case "1" -> "ROLE_TSL";
+            case "2" -> "ROLE_DIRECTOR";
+            case "3" -> "ROLE_ADMIN";
+            case "4" -> "ROLE_ENVIRONMENT_OFFICER";
+            case "5" -> "ROLE_MANAGEMENT";
+            case "6" -> "ROLE_THIRD_PARTY";
+            default -> "";
+        };
         Optional<Role> roleOpt = roleRepository.findByName(roleName);
         if (roleOpt.isPresent()) {
             user.getRoles().add(roleOpt.get());
@@ -81,4 +95,24 @@ public class UserService {
     }
     return false;
 }
+    
+    public Optional<User> findById(UUID id) {
+        return userRepository.findById(id);
+    }
+
+    
+    public List<User> findUsersByCompanyUnitId(UUID companyUnitId) {
+        return userRepository.findByCompanyUnitId(companyUnitId);
+    }
+
+    public boolean forgetPassword(UUID uid, String newPassword) {
+        Optional<User> userOpt = userRepository.findById(uid);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
 }

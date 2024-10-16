@@ -1,6 +1,5 @@
 package com.tsl.kyc.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,11 +40,9 @@ public class User implements UserDetails {
 
     private String designation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_profile_id", referencedColumnName = "id")
-    @JsonBackReference
-    @JsonIgnore
-    private CompanyProfile companyProfile;
+    @ManyToOne
+    @JoinColumn(name = "company_unit_id")
+    private CompanyUnit companyUnit;
 
     @Column
     private Integer failedLoginCount;
@@ -112,12 +109,12 @@ public class User implements UserDetails {
         this.designation = designation;
     }
 
-    public CompanyProfile getCompanyProfile() {
-        return companyProfile;
+    public CompanyUnit getCompanyUnit() {
+        return companyUnit;
     }
 
-    public void setCompanyProfile(CompanyProfile companyProfile) {
-        this.companyProfile = companyProfile;
+    public void setCompanyUnit(CompanyUnit companyUnit) {
+        this.companyUnit = companyUnit;
     }
 
     public Integer getFailedLoginCount() {
@@ -174,4 +171,6 @@ public class User implements UserDetails {
     public String toString() {
         return "User [id=" + id + ", username=" + username + ", password=PROTECTED, roles=" + roles + "]";
     }
+
+
 }

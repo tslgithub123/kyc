@@ -195,13 +195,13 @@ CREATE TABLE resource (
 -- Create the partitioned table
 CREATE TABLE resource_transaction (
     id UUID NOT NULL,
-    company_profile_id UUID NOT NULL,
+    company_unit_id UUID NOT NULL,
     resource_id UUID NOT NULL,
     transaction_type transaction_type NOT NULL,
     quantity NUMERIC(10, 2) NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
     FOREIGN KEY (resource_id) REFERENCES resource(id) ON DELETE CASCADE
-) PARTITION BY LIST (company_profile_id);
+) PARTITION BY LIST (company_unit_id);
 
 CREATE OR REPLACE FUNCTION create_resource_transaction_partition()
 RETURNS TRIGGER AS $$
@@ -242,7 +242,7 @@ CREATE TABLE notifications (
 );
 
 CREATE TRIGGER create_resource_transaction_partition_trigger
-AFTER INSERT ON company_profile
+AFTER INSERT ON company_unit
 FOR EACH ROW
 EXECUTE FUNCTION create_resource_transaction_partition();
 
@@ -1021,11 +1021,11 @@ VALUES
 -------------------------------------------------------------------------------
 
 -- Insert resource transactions linked to company profiles and resources
-INSERT INTO resource_transaction (id, company_profile_id, resource_id, transaction_type, quantity, timestamp)
+INSERT INTO resource_transaction(id, company_unit_id, resource_id, transaction_type, quantity, timestamp)
 VALUES
     (
         uuid_generate_v4(), 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit'), 
         (SELECT id FROM resource WHERE name = 'Steel'), 
         'IN', 
         50, 
@@ -1033,7 +1033,7 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit'), 
         (SELECT id FROM resource WHERE name = 'Diesel'), 
         'OUT', 
         20, 

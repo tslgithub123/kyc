@@ -55,6 +55,16 @@ const fetchUsersByCompanyId = async (companyId: string): Promise<User[]> => {
   }
 };
 
+const fetchUsersByCompanyUnitId = async (companyUnitId: string): Promise<User[]> => {
+  try {
+    const response = await base_api.get<User[]>(endpoints.user.allByCompanyUnitId(companyUnitId));
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users by company ID:', error);
+    throw error;
+  }
+};
+
 const checkUsernameExists = async (username: string): Promise<boolean | undefined> => {
   if (username === '') {
     return;
@@ -141,6 +151,7 @@ const api = {
   updateUserLockStatus,
   fetchAllRoles,
   fetchUser,
+  fetchUsersByCompanyUnitId,
 };
 
 export default api;

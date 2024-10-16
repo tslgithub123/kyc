@@ -11,7 +11,7 @@ import {
   Box,
   Modal,
 } from '@mantine/core';
-import { IconCategory } from '@tabler/icons-react';
+import { IconCategory, IconCategoryFilled } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import classes from './ServicesGrid.module.css';
 
@@ -72,8 +72,8 @@ export default function ServicesGrid({ data = [] }: ActionsGridProps) {
         withinPortal
       >
         <Menu.Target>
-          <ActionIcon variant="default" size={'lg'}>
-            <IconCategory stroke={1.5} />
+          <ActionIcon c='pink' variant="default" size={'lg'}>
+            <IconCategoryFilled  stroke={1.5} />
           </ActionIcon>
         </Menu.Target>
         <Box>
