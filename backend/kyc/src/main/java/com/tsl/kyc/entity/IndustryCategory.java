@@ -14,6 +14,32 @@ public class IndustryCategory {
     @Column(name = "name", unique = true)
     private String name;
 
-    // Getters and setters
-    // ...
+	public IndustryCategory() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public IndustryCategory(UUID id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+    
 }
