@@ -1,5 +1,6 @@
 package com.tsl.kyc.controller;
 
+import com.tsl.kyc.dto.CompanyProfileAddDto;
 import com.tsl.kyc.entity.CompanyProfile;
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.CompanyProfileService;
@@ -43,13 +44,20 @@ public class CompanyProfileController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfile companyProfile) {
-        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfile);
+    public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileAddDto companyProfileAddDto) {
+        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileAddDto);
         return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
     }
     
     @GetMapping("/users/{id}")
     public List<User> getUsersByCompanyProfileId(@PathVariable UUID id){
     	return userService.getUserByCompanyProfileId(id);
+    }
+    
+    @PostMapping("/save")
+    public ResponseEntity<CompanyProfile> saveCompanyUnit(@RequestBody CompanyProfileAddDto cdto) {
+        System.out.println("In Controller");
+        CompanyProfile companyProfile=companyProfileService.saveCompanyProfile(cdto);
+        return new ResponseEntity<CompanyProfile>(companyProfile, HttpStatus.CREATED);
     }
 }

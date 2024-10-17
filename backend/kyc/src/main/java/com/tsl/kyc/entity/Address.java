@@ -3,21 +3,21 @@ package com.tsl.kyc.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "address")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Address {
-    @Id
-    @ColumnDefault("uuid_generate_v4()")
-    @Column(name = "id", nullable = false)
-    private UUID id;
-
+//    @Id
+//    @ColumnDefault("uuid_generate_v4()")
+//    @Column(name = "id", nullable = false)
+//    private UUID id;
+	    @Id
+	    @GeneratedValue(strategy = GenerationType.AUTO)
+	    private UUID id;
+	
     @Size(max = 255)
     @Column(name = "street")
     private String street;

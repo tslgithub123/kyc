@@ -15,9 +15,13 @@ import java.util.UUID;
 @Table(name = "company_profile")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CompanyProfile {
-    @Id
-    @ColumnDefault("uuid_generate_v4()")
-    @Column(name = "id", nullable = false)
+//    @Id
+//    @ColumnDefault("uuid_generate_v4()")
+//    @Column(name = "id", nullable = false)
+//    private UUID id;
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
