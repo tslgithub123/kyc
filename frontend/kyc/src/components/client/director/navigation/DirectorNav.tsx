@@ -1,8 +1,8 @@
 import { IconGauge } from "@tabler/icons-react";
-import Navigation from "../../navigation/Navigation";
-import { DirectorRoutes } from "../../../routes/Routes";
-import MpcbServices from "../services/MpcbServices";
+import MpcbServices from "../services/DirectorServices";
 import MpcbMenu from "./DirectorMenu";
+import Navigation from "../../../navigation/Navigation";
+import { DirectorRoutes } from "../../../../routes/Routes";
 
 
 const directorNavData = [

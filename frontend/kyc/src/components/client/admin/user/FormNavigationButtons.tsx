@@ -45,7 +45,7 @@ function FormNavigationButtons<T extends { values: Record<string, any>; }>({
                             <IconArrowRight />
                         </Button>
                     ) : (
-                        <Button variant="gradient" onClick={handleSubmit}>
+                        <Button onClick={handleSubmit}>
                             <Text style={{ paddingRight: '8px' }}>Create</Text>
                             <IconUserPlus />
                         </Button>

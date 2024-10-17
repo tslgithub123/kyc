@@ -10,7 +10,7 @@ import {
     IconHelp,
 } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../../store/store';
+import { useAuthStore } from '../../../../store/store';
 
 const menuItems = [
     
@@ -47,7 +47,7 @@ export default function MpcbMenu() {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/home');
     };
 
     return (

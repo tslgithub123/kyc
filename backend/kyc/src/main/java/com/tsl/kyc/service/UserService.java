@@ -98,6 +98,8 @@ public class UserService {
         return userRepository.findByCompanyProfileId(id);
     }
 
+
+
     @Transactional
     public User changeLockStatus(UUID userId, Boolean locked) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -125,6 +127,10 @@ public class UserService {
     
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
+    }
+
+    public List<User> findSpecificUsersByCompanyUnitId(UUID id) {
+        return userRepository.findSpecificByCompanyUnitId(id);
     }
 
     

@@ -10,6 +10,16 @@ import com.tsl.kyc.service.EmployeeService;
 import com.tsl.kyc.service.RoleService;
 import com.tsl.kyc.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@Tag(name = "User", description = "Endpoints for managing users within the system.")
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -38,9 +49,44 @@ public class UserController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/all/company/{companyUnitId}")
+    @Operation(
+            summary = "Retrieve all users by Company Unit ID",
+            description = "Fetches a list of all users associated with a specific company unit."
+    )
+    @Parameters({
+            @Parameter(
+                    name = "companyUnitId",
+                    description = "UUID of the company unit",
+                    required = true,
+                    in = ParameterIn.PATH,
+                    schema = @Schema(type = "string", format = "uuid")
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List of users retrieved successfully",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = User.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid Company Unit ID supplied",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Company Unit not found",
+                    content = @Content
+            )
+    })
+    @GetMapping("/all/unit/{companyUnitId}")
     public List<User> getUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
         return userService.findUsersByCompanyUnitId(companyUnitId);
+    }
+
+    @GetMapping("/all/unit/specific/{companyUnitId}")
+    public List<User> getSpecificUsersByCompanyUnitId(@PathVariable UUID companyUnitId) {
+        return userService.findSpecificUsersByCompanyUnitId(companyUnitId);
     }
 
     @GetMapping("/all")

@@ -16,6 +16,8 @@ import {
   Menu,
   rem,
   Pill,
+  Group,
+  Button,
 } from '@mantine/core';
 import {
   IconArrowUp,
@@ -27,7 +29,15 @@ import {
   IconFileExcel,
   IconPdf,
   IconRestore,
-  IconUser
+  IconUser,
+  IconSettings,
+  IconMessageCircle,
+  IconPhoto,
+  IconArrowsLeftRight,
+  IconTrash,
+  IconPng,
+  IconImageInPicture,
+  IconCsv
 } from '@tabler/icons-react';
 import api from '../../../../utils/api';
 import PromptModal from '../../../ui/PromptModal';
@@ -37,6 +47,7 @@ import { getUserTypeColor } from '../../../../utils/colorUtils';
 import UserInformation from './UserInformation';
 import { User } from '../../../../utils/types';
 import CustomModal from '../../../ui/CustomModal';
+import { useMediaQuery } from '@mantine/hooks';
 
 interface SortConfig {
   key: keyof User;
@@ -57,6 +68,7 @@ export default function MyUsers() {
   const uid = useAuthStore().user?.id;
 
   const handleChangePage = (newPage: number) => setPage(newPage);
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const handleChangeRowsPerPage = (value: string | null) => {
     if (value !== null) {
@@ -150,6 +162,7 @@ export default function MyUsers() {
 
   useEffect(() => {
     const fetchAndFilterUserProfiles = async () => {
+      
       await fetchUserProfiles();
       setUserProfiles((prevUserProfiles) => {
         const currentUserProfile = prevUserProfiles.find(profile => profile.id === uid ? Number(uid) : undefined);
@@ -260,9 +273,9 @@ export default function MyUsers() {
         </Grid.Col>
       </Grid>
       <Divider />
-      <Paper p="lg" radius="lg">
-        <Grid mb="md">
-          <Grid.Col span={{ base: 12, md: 3 }}>
+      <Paper pt="lg" pl="lg" pr="lg" radius="lg">
+        <Grid >
+        {!isMobile && <Grid.Col span={3} style={{ textAlign: 'left' }}>
             <TextInput
               radius="sm"
               onChange={(event) => setSearchTerm(event.currentTarget.value)}
@@ -271,196 +284,261 @@ export default function MyUsers() {
               rightSectionWidth={42}
               leftSection={<IconSearch stroke={1.5} />}
             />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <CustomModal 
-              icon={<IconUser />}
-              title='User Information'
-              userType={selectedProfile?.designation || ''} 
-              showComponent={<UserInformation id={selectedProfile?.id || ''}/>} 
-              exportButtonText={'View'} 
-              disabled={!selectedProfile}
-              size='xl'
-              />
-
-              <PromptModal
-              disabled={!selectedProfile}
-              color="red"
-              exportButtonText={'Deactivate'}
-              icon={<IconCircleOff />}
-              title={'Deactivate Profile?'}
-              description="Are you sure you want to deactivate the selected profile?"
-              trueButtonText="Deactivate"
-              onConfirm={handleDeactivate}
-              />
-              <PromptModal
-              disabled={!selectedProfile}
-              color="yellow"
-              exportButtonText={'Send Email'}
-              icon={<IconSend2 />}
-              title={'Send Email?'}
-              description="Are you sure you want to send email to the selected profile?"
-              trueButtonText="Send"
-              onConfirm={sendEmails}
-              />
-              <PromptModal
-              disabled={!selectedProfile}
-              color="dark"
-              exportButtonText={'Reset Password'}
-              icon={<IconRestore />}
-              title={'Reset Password?'}
-              description="Are you sure you want to reset password of the selected profile? This will send an email to the user with reset credentials."
-              trueButtonText="Send"
-              onConfirm={sendEmails}
-              />
-            </div>
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 3 }} style={{ textAlign: 'right' }}>
-            <Menu shadow="md" width={200}>
-              <Menu.Target>
-                <ActionIcon size="lg" color="green">
-                  <IconDownload size={20} />
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <Menu.Item leftSection={<IconFileExcel style={{ width: rem(14), height: rem(14) }} />}>
-                  Download Excel
-                </Menu.Item>
-                <Menu.Item leftSection={<IconPdf style={{ width: rem(14), height: rem(14) }} />}>
-                  Download PDF
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Grid.Col>
-        </Grid>
-        <Table withColumnBorders striped highlightOnHover withTableBorder>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>
-                <Center>
-                  <ActionIcon size={42} variant="light" onClick={() => handleSort('id')}>
-                    {renderSortIcon('id')} #
-                  </ActionIcon>
-                </Center>
-              </Table.Th>
-              <Table.Th>
-                <Center>
-                  <ActionIcon 
-                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
-                    variant="subtle" 
-                    onClick={() => handleSort('username')}
-                  >
-                    {renderSortIcon('username')} Username
-                  </ActionIcon>
-                </Center>
-              </Table.Th>
-              <Table.Th>
-                <Center>
-                  <ActionIcon 
-                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
-                    variant="subtle" 
-                    onClick={() => handleSort('designation')}
-                  >
-                    Designation {renderSortIcon('designation')}
-                  </ActionIcon>
-                </Center>
-              </Table.Th>
-              <Table.Th>
-                <Center>
-                  <ActionIcon 
-                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
-                    variant="subtle" 
-                    onClick={() => handleSort('lastLoginDate')}
-                  >
-                    Last Login Date {renderSortIcon('lastLoginDate')}
-                  </ActionIcon>
-                </Center>
-              </Table.Th>
-              <Table.Th>
-                <Center>
-                  <ActionIcon 
-                    style={{ height: '42px', width: 'auto', padding: '8px' }} 
-                    variant="subtle"
-                  >
-                    Lock
-                  </ActionIcon>
-                </Center>
-              </Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody style={{ textAlign: 'center' }}>
-            {paginatedProfiles.map((profile, index) => (
-              <Table.Tr key={profile.id}>
-                <Table.Td>
-                  <ActionIcon
-                    variant={selectedProfile?.id === profile.id ? 'filled' : 'subtle'}
-                    onClick={() => handleSelectProfile(profile)}
-                  >
-                    {index + 1 + (page - 1) * rowsPerPage}
-                  </ActionIcon>
-                </Table.Td>
-                <Table.Td>
-                  <Text variant='text'>{profile.username}</Text>
-                </Table.Td>
-                <Table.Td>
-                  <Pill bg={getUserTypeColor(profile.designation, '1')} size='lg'>
-                    <Text variant='text' c={getUserTypeColor(profile.designation)}>
-                      {profile.designation}
-                    </Text>
-                  </Pill>
-                </Table.Td>
-                <Table.Td>
-                  {profile.lastLoginDate ? (
-                    <Text size="sm" c="dimmed">
-                      {new Date(profile.lastLoginDate).toLocaleDateString(undefined, {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </Text>
-                  ) : (
-                    <Text size="sm" c="dimmed">N/A</Text>
-                  )}
-                </Table.Td>
-                <Table.Td>
-                  <Center>
-                    <Switch
-                      checked={profile.locked}
-                      onChange={() => handleLockChange(profile.id, profile.locked)}
-                      color={profile.locked ? "red" : "teal"}
-                      size="md"
-                    />
-                  </Center>
-                </Table.Td>
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
-        <Grid mt="lg" justify="space-between" align="center">
-          <Grid.Col span="content">
-            <Select
-              value={rowsPerPage.toString()}
-              onChange={handleChangeRowsPerPage}
-              data={['10', '25']}
-              label="Rows per page"
-              size="sm"
+          </Grid.Col>}
+          {isMobile && <Grid.Col span={12} style={{ textAlign: 'left' }}>
+            <TextInput
+              radius="sm"
+              onChange={(event) => setSearchTerm(event.currentTarget.value)}
+              value={searchTerm}
+              placeholder="Search..."
+              rightSectionWidth={42}
+              leftSection={<IconSearch stroke={1.5} />}
             />
+          </Grid.Col>}
+          {!isMobile && (
+            <Grid.Col span={6} style={{ textAlign: 'center' }}>
+              
+              
+              <CustomModal
+                icon={<IconSettings />}
+                title='User Information'
+                userType={selectedProfile?.designation || ''}
+                showComponent={<UserInformation id={selectedProfile?.id || ''} />}
+                exportButtonText={'View'}
+                disabled={!selectedProfile}
+                size='xl'
+              />
+              <PromptModal
+                disabled={!selectedProfile}
+                color="red"
+                exportButtonText={'Deactivate'}
+                icon={<IconCircleOff />}
+                title={'Deactivate Profile?'}
+                description="Are you sure you want to deactivate the selected profile?"
+                trueButtonText="Deactivate"
+                onConfirm={handleDeactivate}
+              />
+              <PromptModal
+                disabled={!selectedProfile}
+                color="yellow"
+                exportButtonText={'Send Email'}
+                icon={<IconSend2 />}
+                title={'Send Email?'}
+                description="Are you sure you want to send email to the selected profile?"
+                trueButtonText="Send"
+                onConfirm={sendEmails}
+              />
+            </Grid.Col>
+          )}
+          {!isMobile && (
+            <Grid.Col span={3} style={{ textAlign: 'right' }}>
+            <Menu trigger="click-hover" shadow="md" width={200}>
+      <Menu.Target>
+        <Button c='orange' bg='orange.0' variant='default' leftSection={<IconDownload/>}>Download</Button>
+      </Menu.Target>
+
+      <Menu.Dropdown>
+        <Menu.Label>Download</Menu.Label>
+        <Menu.Item leftSection={<IconFileExcel style={{ width: rem(14), height: rem(14) }} />}>
+          Excel
+        </Menu.Item>
+        <Menu.Item leftSection={<IconCsv style={{ width: rem(14), height: rem(14) }} />}>
+          CSV
+        </Menu.Item>
+        
+      
+      </Menu.Dropdown>
+    </Menu>
           </Grid.Col>
-          <Grid.Col span="content">
-            <Pagination
-              total={Math.ceil(filteredProfiles.length / rowsPerPage)}
-              value={page}
-              onChange={handleChangePage}
-              size="md"
-              color={theme.primaryColor}
-            />
+          )}
+          {isMobile && (
+            <Grid.Col >
+            <PromptModal
+            disabled={!selectedProfile}
+            color="yellow"
+            exportButtonText={'Send Email 2'}
+            icon={<IconSend2 />}
+            title={'Send Email?'}
+            description="Are you sure you want to send email to the selected profile?"
+            trueButtonText="Send"
+            onConfirm={sendEmails}
+          />
           </Grid.Col>
+          )}
+          {isMobile && (
+            <Grid.Col span={12} style={{ textAlign: 'center' }}>
+              <Group >
+                <CustomModal
+                  icon={<IconUser />}
+                  title='User Information'
+                  userType={selectedProfile?.designation || ''}
+                  showComponent={<UserInformation id={selectedProfile?.id || ''} />}
+                  exportButtonText={'View'}
+                  disabled={!selectedProfile}
+                  size='xl'
+                />
+                <CustomModal
+                  icon={<IconSettings />}
+                  title='User Information'
+                  userType={selectedProfile?.designation || ''}
+                  showComponent={<UserInformation id={selectedProfile?.id || ''} />}
+                  exportButtonText={'View'}
+                  disabled={!selectedProfile}
+                  size='xl'
+                />
+                <PromptModal
+                  disabled={!selectedProfile}
+                  color="red"
+                  exportButtonText={'Deactivate'}
+                  icon={<IconCircleOff />}
+                  title={'Deactivate Profile?'}
+                  description="Are you sure you want to deactivate the selected profile?"
+                  trueButtonText="Deactivate"
+                  onConfirm={handleDeactivate}
+                />
+                <PromptModal
+                  disabled={!selectedProfile}
+                  color="yellow"
+                  exportButtonText={'Send Email'}
+                  icon={<IconSend2 />}
+                  title={'Send Email?'}
+                  description="Are you sure you want to send email to the selected profile?"
+                  trueButtonText="Send"
+                  onConfirm={sendEmails}
+                />
+              </Group>
+            </Grid.Col>
+          )}
         </Grid>
       </Paper>
+      <div style={{ margin: 'var(--mantine-spacing-lg)' }}>
+      <Table  withColumnBorders striped highlightOnHover withTableBorder>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>
+              <Center>
+                <ActionIcon size={42} variant="light" onClick={() => handleSort('id')}>
+                  {renderSortIcon('id')} #
+                </ActionIcon>
+              </Center>
+            </Table.Th>
+            <Table.Th>
+              <Center>
+                <ActionIcon
+                  style={{ height: '42px', width: 'auto', padding: '8px' }}
+                  variant="subtle"
+                  onClick={() => handleSort('username')}
+                >
+                  {renderSortIcon('username')} Username
+                </ActionIcon>
+              </Center>
+            </Table.Th>
+            <Table.Th>
+              <Center>
+                <ActionIcon
+                  style={{ height: '42px', width: 'auto', padding: '8px' }}
+                  variant="subtle"
+                  onClick={() => handleSort('designation')}
+                >
+                  Designation {renderSortIcon('designation')}
+                </ActionIcon>
+              </Center>
+            </Table.Th>
+            <Table.Th>
+              <Center>
+                <ActionIcon
+                  style={{ height: '42px', width: 'auto', padding: '8px' }}
+                  variant="subtle"
+                  onClick={() => handleSort('lastLoginDate')}
+                >
+                  Last Login Date {renderSortIcon('lastLoginDate')}
+                </ActionIcon>
+              </Center>
+            </Table.Th>
+            <Table.Th>
+              <Center>
+                <ActionIcon
+                  style={{ height: '42px', width: 'auto', padding: '8px' }}
+                  variant="subtle"
+                >
+                  Lock
+                </ActionIcon>
+              </Center>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody style={{ textAlign: 'center' }}>
+          {paginatedProfiles.map((profile, index) => (
+            <Table.Tr key={profile.id}>
+              <Table.Td>
+                <ActionIcon
+                  variant={selectedProfile?.id === profile.id ? 'filled' : 'subtle'}
+                  onClick={() => handleSelectProfile(profile)}
+                >
+                  {index + 1 + (page - 1) * rowsPerPage}
+                </ActionIcon>
+              </Table.Td>
+              <Table.Td>
+                <Text variant='text'>{profile.username}</Text>
+              </Table.Td>
+              <Table.Td>
+                <Pill bg={getUserTypeColor(profile.designation, '1')} size='lg'>
+                  <Text variant='text' c={getUserTypeColor(profile.designation)}>
+                    {profile.designation}
+                  </Text>
+                </Pill>
+              </Table.Td>
+              <Table.Td>
+                {profile.lastLoginDate ? (
+                  <Text size="sm" c="dimmed">
+                    {new Date(profile.lastLoginDate).toLocaleDateString(undefined, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </Text>
+                ) : (
+                  <Text size="sm" c="dimmed">N/A</Text>
+                )}
+              </Table.Td>
+              <Table.Td>
+                <Center>
+                  <Switch
+                    checked={profile.locked}
+                    onChange={() => handleLockChange(profile.id, profile.locked)}
+                    color={profile.locked ? "red" : "teal"}
+                    size="md"
+                  />
+                </Center>
+              </Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+      </div>
+      <Grid mt="lg" justify="space-between" align="center">
+        <Grid.Col span="content">
+          <Select
+            value={rowsPerPage.toString()}
+            onChange={handleChangeRowsPerPage}
+            data={['10', '25']}
+            label="Rows per page"
+            size="sm"
+          />
+        </Grid.Col>
+        <Grid.Col span="content">
+          <Pagination
+            total={Math.ceil(filteredProfiles.length / rowsPerPage)}
+            value={page}
+            onChange={handleChangePage}
+            size="md"
+            color={theme.primaryColor}
+          />
+        </Grid.Col>
+      </Grid>
     </Paper>
+
   );
 }

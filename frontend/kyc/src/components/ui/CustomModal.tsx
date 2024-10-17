@@ -54,12 +54,14 @@ const CustomModal: React.FC<PromptModalProps> = ({
 
       <Button
         mr={'sm'}
-        style={{ minWidth: '140px' }}
+       
         leftSection={icon}
         onClick={open}
         disabled={disabled}
+        
       >
         {exportButtonText}
+        
       </Button>
     </>
   );

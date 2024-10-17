@@ -14,6 +14,7 @@ CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
 CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
+CREATE TYPE designation_type AS ENUM ('TSL', 'Administrator', 'Manager', 'Director', 'Environment Officer', 'Third Party');
 
 -- Create Role Table
 CREATE TABLE role (
@@ -76,6 +77,7 @@ CREATE TABLE industry_link (
 
 -- pcb
 -- Create Company Profile Table
+-- add comp reg no
 CREATE TABLE company_profile (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     contact_person_id UUID,
@@ -113,7 +115,7 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     enabled BOOLEAN,
-    designation VARCHAR(45),
+    designation designation_type,
     company_unit_id UUID,
     failed_login_count INT CHECK (failed_login_count >= 0),
     last_login_date TIMESTAMPTZ,
@@ -229,6 +231,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER create_resource_transaction_partition_trigger
+AFTER INSERT ON company_unit
+FOR EACH ROW
+EXECUTE FUNCTION create_resource_transaction_partition();
+
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
@@ -241,10 +248,26 @@ CREATE TABLE notifications (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TRIGGER create_resource_transaction_partition_trigger
-AFTER INSERT ON company_unit
-FOR EACH ROW
-EXECUTE FUNCTION create_resource_transaction_partition();
+
+CREATE TABLE request_type (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT
+)
+
+CREATE TABLE request (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    request_type_id UUID NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    status VARCHAR(50) DEFAULT 'pending',
+    from_user UUID NOT NULL,
+    to_user UUID NOT NULL,
+    message TEXT,
+    FOREIGN KEY (request_type_id) REFERENCES request_type(id),
+    FOREIGN KEY (from_user) REFERENCES users(id),
+    FOREIGN KEY (to_user) REFERENCES users(id)
+)
 
 
 -------------------------------------------------------------------------------
@@ -574,7 +597,7 @@ VALUES
         '$2a$12$vYPpThZEkVYeGZl8TpVTmORZLzIDnJwYYhgeF6oz/cbo3WoQbxgBa', 
         TRUE, 
         'TSL', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
+        NULL, 
         0, 
         NOW(), 
         FALSE, 
@@ -582,12 +605,12 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'director', 
-        '$2a$12$91s3EN/u8hSWOeJQ5MOVR.achEV2Xrou/2Y30eiG0XUiZNVGSn6oy', 
+        'director1', 
+        '$2a$12$A0A1tWXqhTmzEjQ6J90Qr.aXoDo0.3wsO8zNdBA8lF5DTCozTbcJy', 
         TRUE, 
         'Director', 
         (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
-        0, 
+        0,
         NOW(), 
         FALSE, 
         'active'
@@ -606,8 +629,8 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'env1', 
-        '$2a$12$13acWj93fOjTAZNBGULDYuyuXmJt04vEgeBJ5Z.cUcv2LH/vbyOO.', 
+        '1env1', 
+        '$2a$12$Yw2kVbSGVSqDuWVuUDrqh.874D4T6cv/Mttn/r068Z60V5/3AO4mW', 
         TRUE, 
         'Environment Officer', 
         (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
@@ -618,167 +641,11 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        'man1', 
-        '$2a$12$EBavzyNzTir96MEz5fM0peZeD62TRuVCiyd.vfIkiQrzeHKbraLIm', 
-        TRUE, 
-        'Manager', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'thp1', 
-        '$2a$12$aK62VQba49JNZKy7gIDKk.vCEJa6v/CIIpOvUvmiZrzJnro5t/qXK', 
-        TRUE, 
-        'Third Party', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'admin2', 
-        '$2a$12$pMwMNvsjxyPWLScAczSDbeqS.k5NMpFzwmUxgF3eB26xaSaG4CT7W', 
-        TRUE, 
-        'Administrator', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'env2', 
-        '$2a$12$38dr6N1fIATx4lf5L/yO4ujWyhflPfZpNnPVNuXeqMKF0/HVvNTm2', 
-        TRUE, 
-        'Environment Officer',
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'man2', 
-        '$2a$12$k8V1Q/W1U7AyvY9psKYkJOqeOVKM11C2k1PeO.aDr9ocAHm08WDn.', 
-        TRUE, 
-        'Manager', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'thp2', 
-        '$2a$12$Ztjv1/BPRfqo/KBkIS8ABemlDLMpPHLSp2QolWFYxRFceYDz.N4X6', 
-        TRUE, 
-        'Third Party', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'admin3', 
-        '$2a$12$ckr3MmIDiRlP8Y93Cj7mY.41uYoGUwOhKhiCqqt507Ddi3QURbcpq', 
-        TRUE, 
-        'Administrator', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'env3', 
-        '$2a$12$VS0EGPyK6gXDgCWTJ1WMsuYnGPyzG2HW8vMoAxtMhbGPaJwSFHhoG', 
-        TRUE, 
-        'Environment Officer',
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'man3', 
-        '$2a$12$9fCGFIss9Sc38sDvLMT1DeLWz/Y8YD5RZiHoNVexI9wNAfQqlm40u', 
-        TRUE, 
-        'Manager', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'thp3', 
-        '$2a$12$lNR6IC3OAl0VUqd754SOB.AP8ivukQIv6e4kMPHkCPrwtZ4QFgU.O', 
-        TRUE, 
-        'Third Party', 
-        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        'director1', 
-        '$2a$12$v99.2NKRklCiKSlDwNbfe.BVJILdsqOi3McGil6vtF8rSzXAk4BnG', 
-        TRUE, 
-        'director',
-        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        '1admin1', 
-        '$2a$12$FoJ8yK4liByi4xECEE0wEuzClL50lNk8prGDti9FIz9/SSJpceNly', 
-        TRUE, 
-        'Administrator', 
-        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        '1env1', 
-        '$2a$12$NwD1KwvkhsA6qnz00SFs3OZEVgNlbUF0nBCFCv/p4.pAIU87l6cTC', 
-        TRUE, 
-        'Environment Officer',
-        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
         '1man1', 
-        '$2a$12$K9Lohn203HE.MOsQ7Ei33OcQNpM2IJ5Maeou0fWYsO7XFaNyKzP6y', 
+        '$2a$12$75tj6mIUUTcqX4IP470h6.HFX6P988JjpTB3/oe.rtkyOluMKB9Hq', 
         TRUE, 
         'Manager', 
-        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
         0, 
         NOW(), 
         FALSE, 
@@ -787,7 +654,139 @@ VALUES
     (
         uuid_generate_v4(), 
         '1thp1', 
-        '$2a$12$IF7OdFclCSVWmBYzOtTHRu8vHgVVFhmxYzi.Dh9eYqbxc/f.xF29K', 
+        '$2a$12$JJHlrgEFtMm3Jlqph8DbO.RlwB8LspM1Atb.w2KFcKPCkSfQxaoI2', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '2env1', 
+        '$2a$12$tZ.NVZ5l3HddcTySkhSQJeMDwgeez.hLlUqyb3eKJ/xClsBsOwbiy', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '2man1', 
+        '$2a$12$Z8wtL5RctoddEqa0plb3r.G0PY86Df8sZhoSWvtGL.l5OsYQpaQM.', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '2thp1', 
+        '$2a$12$gAnw2JqDsToQZCAHzKSxlOtSieL.kRltNs4OxTquV1141YIDAEHvO', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 1' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '3env1', 
+        '$2a$12$bQNcfAa/kiv07uvvxTC7suNrPXYZ/8cdx.iQO68Ts8UUN4KrInnkG', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '3man1', 
+        '$2a$12$vfTsBKRVwcOEVWe9HrPLVODOqG/FhR/swT.W.DUOcVbI7IkN.J/22', 
+        TRUE, 
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '3thp1', 
+        '$2a$12$YPQWMWlsfJnr1VWRgcRvDuQg5sS3xhZSnOwjYzKw3FVi.pY3SjjLa', 
+        TRUE, 
+        'Third Party', 
+        (SELECT id FROM company_unit WHERE name = 'TSL Sub Unit 2' AND type = 'sub'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'director2', 
+        '$2a$12$grTYnOfAKAKOa0oVSm23c.uDOEolPuQdJ5Qbwb5cmEG6mBnUxcZqa', 
+        TRUE, 
+        'Director',
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        'admin2', 
+        '$2a$12$GKdMJnElenSD7T4rnF9UeOh3A.EtMrDYa03Jzzh8s9hEzVN5gWVTm', 
+        TRUE, 
+        'Administrator', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1env2', 
+        '$2a$12$3nMhKsVaaFgIrfo0gf5.rOqKfeDyglVJC5CmqJizdkmd8OcDRKR.6', 
+        TRUE, 
+        'Environment Officer',
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1man2', 
+        '$2a$12$sYhu8GCoEJVaR0vKObq51eKDFHBe5O9o9TfOTEoTycFEv1xeygUpy', 
+        TRUE,
+        'Manager', 
+        (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
+        0, 
+        NOW(), 
+        FALSE, 
+        'active'
+    ),
+    (
+        uuid_generate_v4(), 
+        '1thp2', 
+        '$2a$12$yb14H1zivxFTNkRafjHjxeY0N6X8fecHoDaj2o/3x4hZaoZ0Mp6re', 
         TRUE, 
         'Third Party', 
         (SELECT id FROM company_unit WHERE name = 'TBL Main Unit' AND type = 'main'), 
@@ -798,20 +797,8 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        '1admin2', 
-        '$2a$12$f3dQt3N/JYdUxIwTPFZHV.6IysStVs7iGZMhFe7OEUQ1Y88XHl0yC', 
-        TRUE, 
-        'Administrator', 
-        (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
-        0, 
-        NOW(), 
-        FALSE, 
-        'active'
-    ),
-    (
-        uuid_generate_v4(), 
-        '1env2', 
-        '$2a$12$spRAYgKXASLgBjTauM9pM.FuDiL637taIGdbCC0G9ys35JcJQOd3W', 
+        '2env2', 
+        '$2a$12$6xIrQNKaFWuaTI9TOljfI.6exRQtzAAHxevPUxzjxIHql2yWO.AES', 
         TRUE, 
         'Environment Officer',
         (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
@@ -822,8 +809,8 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        '1man2', 
-        '$2a$12$rmXEpxSHKxERlX80/2ywF.msnsMXsbaWNLx0stUYlirPMrzkNAVnO', 
+        '2man2', 
+        '$2a$12$c6tS9FWXC3CsWOT09p4TaeGQK1u3gi7sU3M5G8Hgw7kijFnfOcPv.', 
         TRUE, 
         'Manager', 
         (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
@@ -834,8 +821,8 @@ VALUES
     ),
     (
         uuid_generate_v4(), 
-        '1thp2', 
-        '$2a$12$NCFh.y3PqCZ3R12mGW9/bOUuKgiDqF8bcfIatFcBwoLdJ5dPgPt7G', 
+        '2thp2', 
+        ' $2a$12$pVanQqO4U2xl5MxORv4V2urgyflfnxRwXYmTpwQw/thA73UWaU0Sy', 
         TRUE, 
         'Third Party', 
         (SELECT id FROM company_unit WHERE name = 'TBL Sub Unit 1' AND type = 'sub'), 
@@ -852,31 +839,27 @@ VALUES
 INSERT INTO user_role (id, user_id, role_id)
 VALUES
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'tsl'), (SELECT id FROM role WHERE name = 'ROLE_TSL')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin1'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin2'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env2'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man2'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin3'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'env3'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'man3'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'thp3'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director1'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1admin1'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin1'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1admin2'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '3env1'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '3man1'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '3thp1'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'director2'), (SELECT id FROM role WHERE name = 'ROLE_DIRECTOR')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = 'admin2'), (SELECT id FROM role WHERE name = 'ROLE_ADMIN')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1env2'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
     (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1man2'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
-    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY'));
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '1thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2env2'), (SELECT id FROM role WHERE name = 'ROLE_ENVIRONMENT_OFFICER')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2man2'), (SELECT id FROM role WHERE name = 'ROLE_MANAGEMENT')),
+    (uuid_generate_v4(), (SELECT id FROM users WHERE username = '2thp2'), (SELECT id FROM role WHERE name = 'ROLE_THIRD_PARTY'));
 
 -- Map each user to their respective role
-
 -------------------------------------------------------------------------------
 -- 11. Insert Dummy Employee Data
 -------------------------------------------------------------------------------
@@ -915,7 +898,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'director'), 
+    (SELECT id FROM users WHERE username = 'director1'), 
     (SELECT id FROM contact_person WHERE name = 'Ajay Ojha'), 
     'Omkar Patil', 
     'Male', 
@@ -945,7 +928,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'env1'), 
+    (SELECT id FROM users WHERE username = '1env1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Kajal Dudhe', 
     'Female', 
@@ -960,7 +943,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'man1'), 
+    (SELECT id FROM users WHERE username = '1man1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Rishikesh Kharade', 
     'Male', 
@@ -975,7 +958,7 @@ VALUES (
 (
     uuid_generate_v4(),
     (SELECT id FROM company_profile WHERE name = 'Techknowgreen Ltd.'), 
-    (SELECT id FROM users WHERE username = 'thp1'), 
+    (SELECT id FROM users WHERE username = '1thp1'), 
     (SELECT id FROM contact_person WHERE name = 'Ritesh Gujar'), 
     'Harish Buddy', 
     'Male', 
