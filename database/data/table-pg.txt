@@ -1,0 +1,19 @@
+1. request_type:
+    - id
+    - request_type_name
+    - request_type_description
+
+2. request
+    - id
+    - request_type_id
+    - created_at
+    - priority_level
+    - status - pending, approved, rejected
+    - from_user_id
+    - to_user_id
+    - message
+
+----------------------------------------
+
+
+

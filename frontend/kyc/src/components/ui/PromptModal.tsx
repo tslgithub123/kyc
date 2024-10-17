@@ -49,7 +49,6 @@ const PromptModal: React.FC<PromptModalProps> = ({
 
       <Button
         mr={'sm'}
-        style={{ minWidth: '140px' }}
         disabled={disabled}
         color={color}
         leftSection={icon}

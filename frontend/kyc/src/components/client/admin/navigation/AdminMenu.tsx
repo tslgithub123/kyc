@@ -47,7 +47,7 @@ export default function AdminMenu() {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/home');
     };
 
     return (

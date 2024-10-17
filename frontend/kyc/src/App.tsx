@@ -12,15 +12,21 @@ import EnvNav from './components/client/env/navigation/EnvNav';
 import ManNav from './components/client/management/navigation/ManNav';
 import Unauthorized from './components/auth/Unauthorized';
 import TslNav from './components/tsl/navigation/TslNav';
-import DirectorNav from './components/director/navigation/DirectorNav';
 import ThpNav from './components/client/thirdparty/navigation/ThpNav';
+import DirectorNav from './components/client/director/navigation/DirectorNav';
+import ClientRegistration from './components/auth/client/ClientRegistration';
+import HomePage from './components/home/HomePage';
+import HomeNav from './components/home/HomeNav';
+import NotificationsPage from './components/notifications/NotificationsPage';
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomeNav/>} />
+        <Route path="/home" element={<HomeNav/>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<ClientRegistration/>} />
         
         <Route path="/tsl/*" element={
           <ProtectedRoute allowedRoles={['ROLE_TSL']}>

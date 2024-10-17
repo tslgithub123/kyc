@@ -43,7 +43,7 @@ const endpoints: Endpoints = {
     allProfiles: `${BASE_API}/user/all`,
     updateLockStatus: (id: string) => `${BASE_API}/user/${id}/lock`,
     deleteProfiles: `${BASE_API}/user/delete`,
-    allByCompanyUnitId: (companyUnitId: string) => `${BASE_API}/user/all/company/${companyUnitId}`,
+    allByCompanyUnitId: (companyUnitId: string) => `${BASE_API}/user/all/unit/${companyUnitId}`,
   },
   employee: {
     all: `${BASE_API}/employee/all`,
