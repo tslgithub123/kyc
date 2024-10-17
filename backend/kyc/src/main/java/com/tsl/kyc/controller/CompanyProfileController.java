@@ -45,9 +45,8 @@ public class CompanyProfileController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileAddDto companyProfileAddDto) {
-		return null;
-//        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileAddDto);
-//        return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
+        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileAddDto);
+        return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
     }
     
     @GetMapping("/users/{id}")

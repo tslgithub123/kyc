@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -35,13 +36,13 @@ public class CompanyUnitController {
         return companyUnitService.getAllCompanyUnits();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/byprofile/{id}")
     public List<CompanyUnit> getCompanyUnitsByCompanyProfileId(@PathVariable UUID id){
     	System.out.println("In Controller");
     	return companyUnitService.getCompanyUnitsByCompanyProfileId(id);
     }
     
-    @GetMapping("/{companyUnitId}")
+    @GetMapping("/byunit/{companyUnitId}")
     public ResponseEntity<CompanyUnit> getCompanyUnitById(@PathVariable UUID companyUnitId){
     	CompanyUnit companyUnit=companyUnitService.getCompanyUnitById(companyUnitId);
     	return new ResponseEntity<CompanyUnit>(companyUnit, HttpStatus.OK);
@@ -54,12 +55,12 @@ public class CompanyUnitController {
         return new ResponseEntity<CompanyUnit>(companyUnit, HttpStatus.CREATED);
     }
     
-    @GetMapping("/edit")
+    @PutMapping("/update/{id}")
     public ResponseEntity<CompanyUnit> editCompanyUnit(@PathVariable UUID id,@RequestBody CompanyUnitDto dto) {
     	logger.info("In Controller");
-//    	CompanyUnit companyUnit=companyUnitService.updateCompanyUnit(id,dto);
-//        return new ResponseEntity<CompanyUnit>(companyUnit, HttpStatus.OK);
-		return null;
+    	CompanyUnit companyUnit=companyUnitService.updateCompanyUnit(id,dto);
+        return new ResponseEntity<CompanyUnit>(companyUnit, HttpStatus.OK);
+		
     }
     
     

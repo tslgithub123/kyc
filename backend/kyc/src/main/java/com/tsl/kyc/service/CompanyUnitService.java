@@ -1,5 +1,6 @@
 package com.tsl.kyc.service;
 
+import com.tsl.kyc.dto.AddressDto;
 import com.tsl.kyc.dto.CompanyUnitDto;
 import com.tsl.kyc.entity.Address;
 import com.tsl.kyc.entity.CompanyProfile;
@@ -9,12 +10,12 @@ import com.tsl.kyc.exception.ResourceNotFoundException;
 import com.tsl.kyc.repository.CompanyUnitRepository;
 import com.tsl.kyc.security.IdorSecurityService;
 
-import jakarta.transaction.Transactional;
-
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,13 +27,15 @@ public class CompanyUnitService {
     private final CompanyProfileService companyProfileService;
     private final AddressService addressService;
     private final IndustryLinkService industryLinkService;
+    private final ModelMapper modelMapper;
     private static final Logger logger = LoggerFactory.getLogger(CompanyUnitService.class);
 
-    public CompanyUnitService(CompanyUnitRepository companyUnitRepository, IdorSecurityService idorSecurityService,CompanyProfileService companyProfileService,AddressService addressService,IndustryLinkService industryLinkService) {
+    public CompanyUnitService(CompanyUnitRepository companyUnitRepository, IdorSecurityService idorSecurityService,CompanyProfileService companyProfileService,AddressService addressService,IndustryLinkService industryLinkService,ModelMapper modelMapper) {
         this.companyUnitRepository = companyUnitRepository;
         this.companyProfileService=companyProfileService;
         this.addressService=addressService;
         this.industryLinkService=industryLinkService;
+        this.modelMapper=modelMapper;
     }
 
     public List<CompanyUnit> getAllCompanyUnits() {
@@ -47,13 +50,41 @@ public class CompanyUnitService {
         return companyUnitRepository.save(companyUnit);
     }
 
-    public CompanyUnit updateCompanyUnit(UUID id, CompanyUnit companyUnit) {
-        CompanyUnit existingCompanyUnit = companyUnitRepository.findById(id).orElse(null);
-        if (existingCompanyUnit == null) {
-            return null;
-        }
-        companyUnit.setId(id);
-        return companyUnitRepository.save(companyUnit);
+    @Transactional
+    public CompanyUnit updateCompanyUnit(UUID id, CompanyUnitDto cdto) {
+        CompanyUnit existingCompanyUnit = companyUnitRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Company Unit Not Exit In System of Id :"+id));
+        
+ //     CompanyProfile companyProfile=companyProfileService.getCompanyProfileById(cdto.getCompanyUuid());
+//      Address address=addressService.getAddressById(existingCompanyUnit.getAddress().getId());
+        AddressDto addressDto=new AddressDto();
+        addressDto.setStreet(cdto.getStreet());
+        addressDto.setLine2(cdto.getLine2());
+        addressDto.setCity(cdto.getCity());
+        addressDto.setState(cdto.getState());
+        addressDto.setDistrict(cdto.getDistrict());
+        addressDto.setCountry(cdto.getCountry());
+        addressDto.setPincode(cdto.getPincode());
+        addressDto.setVillage(cdto.getVillage());
+        addressDto.setTaluka(cdto.getTaluka());
+        addressDto.setPlotNumber(cdto.getPlotNumber());
+        addressDto.setRo(cdto.getRo());
+        addressDto.setSro(cdto.getSro());
+        
+        Address address=addressService.updateAddress(existingCompanyUnit.getAddress().getId(),addressDto);
+        
+        IndustryLink industryLink=industryLinkService.updateIndustryLink(existingCompanyUnit.getIndustryLink().getId(),cdto.getIndCatName(),cdto.getIndScaleName());
+        //Set the Data.
+        existingCompanyUnit.setIndustryLink(industryLink);
+        existingCompanyUnit.setAddress(address);
+        existingCompanyUnit.setName(cdto.getName());
+        existingCompanyUnit.setType(cdto.getType());
+        existingCompanyUnit.setEmail(cdto.getEmail());
+        existingCompanyUnit.setFax(cdto.getFax());
+        existingCompanyUnit.setUnitphoneNumber(cdto.getUnitPhoneNumber());
+        existingCompanyUnit.setWorkDay(cdto.getWorkDay());
+        existingCompanyUnit.setWorkingHour(cdto.getWorkingHour());
+        
+        return companyUnitRepository.save(existingCompanyUnit);
     }
 
     public void deleteCompanyUnit(UUID id) {

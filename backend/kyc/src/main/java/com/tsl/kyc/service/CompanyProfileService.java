@@ -78,32 +78,32 @@ public class CompanyProfileService {
         return savedCompanyProfile;
     }
 
-//    public CompanyProfile updateCompanyProfile(UUID id, CompanyProfileAddDto cDto) {
-//        CompanyProfile companyProfile = companyProfileRepository.findById(id)
-//            .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found"));
-//
-//        	companyProfile.getContactPerson().setName(cDto.getPersonName());
-//        	companyProfile.getContactPerson().setDesignation(cDto.getPersonDesignation());
-//        	companyProfile.getContactPerson().setPhone(cDto.getPersonPhone());
-//        	companyProfile.getContactPerson().setEmail(cDto.getPersonEmail());
-//        	companyProfile.setMpcbid(cDto.getMpcbId());
-//        	companyProfile.setName(cDto.getCompanyName());
-//        	companyProfile.setEmail(cDto.getCompanyEmail());
-//        	companyProfile.setFax(cDto.getCompanyFax());
-//        	companyProfile.setLastEnvironment(cDto.getLastEnvironment());
-//        	companyProfile.setPhoneNumber(cDto.getCompanyPhoneNumber());
-//        	companyProfile.setWebsite(cDto.getCompanyWebsite());
-//        	companyProfile.setYearEstablished(cDto.getYearEstalished());
-//
-//        try {
-//        	CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
-//        	logger.info("Data Updated Successfully with ID :"+updatedCompanyProfile.getId());
-//        	return updatedCompanyProfile;
-//		} catch (Exception e) {
-//			logger.error("Error at Update Company Profile", e);
-//            throw new RuntimeException("Could not Update Company Profile :", e);
-//		}
-//    }
+    public CompanyProfile updateCompanyProfile(UUID id, CompanyProfileAddDto cDto) {
+        CompanyProfile companyProfile = companyProfileRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("CompanyProfile not found"));
+
+        	companyProfile.getContactPerson().setName(cDto.getPersonName());
+        	companyProfile.getContactPerson().setDesignation(cDto.getPersonDesignation());
+        	companyProfile.getContactPerson().setPhone(cDto.getPersonPhone());
+        	companyProfile.getContactPerson().setEmail(cDto.getPersonEmail());
+        	companyProfile.setMpcbid(cDto.getMpcbId());
+        	companyProfile.setName(cDto.getCompanyName());
+        	companyProfile.setEmail(cDto.getCompanyEmail());
+        	companyProfile.setFax(cDto.getCompanyFax());
+        	companyProfile.setLastEnvironment(cDto.getLastEnvironment());
+        	companyProfile.setPhoneNumber(cDto.getCompanyPhoneNumber());
+        	companyProfile.setWebsite(cDto.getCompanyWebsite());
+        	companyProfile.setYearEstablished(cDto.getYearEstalished());
+
+        try {
+        	CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
+        	logger.info("Data Updated Successfully with ID :"+updatedCompanyProfile.getId());
+        	return updatedCompanyProfile;
+		} catch (Exception e) {
+			logger.error("Error at Update Company Profile", e);
+            throw new RuntimeException("Could not Update Company Profile :", e);
+		}
+    }
     
     
     
