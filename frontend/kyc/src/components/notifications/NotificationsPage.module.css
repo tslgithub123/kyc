@@ -42,12 +42,12 @@
   
     &[data-active] {
       z-index: 1;
-      background-color: var(--mantine-color-blue-3);
-      border-color: var(--mantine-color-blue-3);
+      background-color: var(--mantine-color-gray-3);
+      border-color: var(--mantine-color-gray-3);
       color: var(--mantine-color-dark);
   
       @mixin hover {
-        background-color: var(--mantine-color-blue-3);
+        background-color: var(--mantine-color-gray-3);
       }
     }
 }

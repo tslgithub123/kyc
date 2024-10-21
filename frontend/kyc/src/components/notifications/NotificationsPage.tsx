@@ -1,10 +1,13 @@
-import { Divider, Paper, Tabs, rem } from "@mantine/core";
-import { IconSettings, IconMessageCircle, IconPhoto, IconGitPullRequest, IconBellFilled, IconRosetteDiscountCheckFilled, IconRosetteDiscountCheckOff } from "@tabler/icons-react";
+import { Divider, Grid, Paper, SimpleGrid, Tabs, Text, Title, rem } from "@mantine/core";
+import { IconSettings, IconMessageCircle, IconPhoto, IconGitPullRequest, IconBellFilled, IconAlarmFilled, IconLeaf, IconHistory, IconPinFilled, IconBuilding } from "@tabler/icons-react";
 import classes from './NotificationsPage.module.css';
 import { useMediaQuery } from "@mantine/hooks";
+import NotificationSlice from "./NotificationSlice";
+
 
 export default () => {
     const isMobile = useMediaQuery('(max-width: 768px)');
+
     return (
         <div>
             <Tabs m='sm' variant="unstyled" defaultValue="all" classNames={classes}>
@@ -25,78 +28,100 @@ export default () => {
                         <Tabs.Tab
                             mr='md'
                             value="all"
-                            leftSection={<IconBellFilled color="var(--mantine-color-yellow-7)" />}
+                            leftSection={<IconBellFilled color="var(--mantine-color-blue-7)" />}
                         >
                             All
                         </Tabs.Tab>
                     </Tabs.List>
+
                     <Tabs.List>
                         <Tabs.Tab
-                            value="read"
-                            leftSection={<IconRosetteDiscountCheckFilled color="var(--mantine-color-green-7)"/>}
+
+                            value="reminders"
+                            leftSection={<IconAlarmFilled color="var(--mantine-color-yellow-7)" />}
                         >
-                            Read
+                            Reminders
                         </Tabs.Tab>
                         <Tabs.Tab
-                            mr='md'
-                            value="unread"
-                            leftSection={<IconRosetteDiscountCheckOff color="var(--mantine-color-red-7)"/>}
-                        >
-                            Unread
-                        </Tabs.Tab>
-                    </Tabs.List>
-                    <Tabs.List>
-                        <Tabs.Tab
-                            value="settings"
-                            leftSection={<IconGitPullRequest />}
+                            value="requests"
+                            leftSection={<IconGitPullRequest color="var(--mantine-color-red-7)" />}
                         >
                             Requests
                         </Tabs.Tab>
                         <Tabs.Tab
-                            value="messages"
-                            leftSection={<IconMessageCircle />}
+                            mr='md'
+                            value="tsl"
+                            leftSection={<IconLeaf color="var(--mantine-color-green-7)" />}
                         >
-                            Messages
-                        </Tabs.Tab>
-                        <Tabs.Tab
-                            value="gallery"
-                            leftSection={<IconPhoto />}
-                        >
-                            Gallery
+                            TSL
                         </Tabs.Tab>
                     </Tabs.List>
+
+                    <Tabs.List>
+                        <Tabs.Tab
+                            value="history"
+                            leftSection={<IconHistory color="var(--mantine-color-gray-7)" />}
+                        >
+                            History
+                        </Tabs.Tab>
+
+                    </Tabs.List>
+
                 </div>
                 )}
             </Tabs>
-            <Paper mt='md' ml='sm' mr='sm' p='sm' withBorder>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Paper w='100%' style={{display: 'flex'}} withBorder>
-                        <IconBellFilled color="var(--mantine-color-yellow-7)" />
-                        <div>
-                            <strong>New Notification</strong>
-                            <p style={{ margin: 0 }}>You have a new message.</p>
+            <SimpleGrid cols={{ base: 1, sm: 2, lg: 2 }} spacing="sm" mb="xl">
+                <Paper mt='md' ml='sm' mr='sm' withBorder>
+
+                    <Grid p="xs" pl='lg' bg={'gray.1'} justify="space-between" align="center">
+                        <Grid.Col span={6}>
+                            <Title order={4} c="gray.7">
+                                Notifications
+                            </Title>
+                        </Grid.Col>
+                        <Grid.Col span={6} style={{ textAlign: 'right' }}>
+                            <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
+                                <Text component="span" >
+                                    1
+                                </Text>
+                            </Text>
+                        </Grid.Col>
+                    </Grid>
+                    <Divider />
+                    <Paper p='sm'>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <NotificationSlice title={""} description={"A new unit [unit-name] has just been added."} icon={<IconBuilding size='2rem' color="var(--mantine-color-gray-7)" />} />
+                            <NotificationSlice title={"Reminder"} description={"Please reset your password"} icon={<IconAlarmFilled size='2rem' color="var(--mantine-color-gray-7)" />} />
+                            <NotificationSlice title={"Reminder"} description={"Your clearance is about to expire. "} icon={<IconAlarmFilled size='2rem' color="var(--mantine-color-yellow-7)" />} />
+                            <NotificationSlice title={"Client Registration"} description={"A new client has just registered. Click to review."} icon={<IconGitPullRequest size='2rem' color="var(--mantine-color-red-7)" />} />
+                            <NotificationSlice title={"Congratulations!"} description={"Your account has been successfully created. Let's get started."} icon={<IconLeaf size='2rem' color="var(--mantine-color-green-7)" />} />
                         </div>
-                        </Paper>
-                    </div>
-                    <Divider/>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <IconRosetteDiscountCheckFilled color="var(--mantine-color-green-7)" />
-                        <div>
-                            <strong>Discount Applied</strong>
-                            <p style={{ margin: 0 }}>Your discount has been applied successfully.</p>
+                    </Paper>
+                </Paper>
+                <Paper mt='md' ml='sm' mr='sm' withBorder>
+
+                    <Grid p="xs" pl='lg' bg={'gray.1'} justify="space-between" align="center">
+                        <Grid.Col span={6}>
+                            <Title order={4} c="gray.7">
+                                Pinned
+                            </Title>
+                        </Grid.Col>
+                        <Grid.Col span={6} style={{ textAlign: 'right' }}>
+                            <Text size="sm" c="dimmed" style={{ marginRight: '1rem' }}>
+                                <IconPinFilled />
+                            </Text>
+                        </Grid.Col>
+                    </Grid>
+                    <Divider />
+                    <Paper p='sm'>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <NotificationSlice title={"We notify you that"} description={"You are now obligated to give a star."} icon={<IconBellFilled size='2rem' color="var(--mantine-color-blue-7)" />} />
+                            <NotificationSlice title={"We notify you that"} description={"You are now obligated to give a star."} icon={<IconAlarmFilled size='2rem' color="var(--mantine-color-yellow-7)" />} />
                         </div>
-                    </div>
-                    <Divider/>  
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <IconRosetteDiscountCheckOff color="var(--mantine-color-red-7)" />
-                        <div>
-                            <strong>Discount Expired</strong>
-                            <p style={{ margin: 0 }}>Your discount has expired.</p>
-                        </div>
-                    </div>
-                </div>
-            </Paper>
+                    </Paper>
+                </Paper>
+            </SimpleGrid>
+
         </div>
     );
 }
