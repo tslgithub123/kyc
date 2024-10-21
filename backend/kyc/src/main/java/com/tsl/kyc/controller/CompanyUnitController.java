@@ -48,7 +48,7 @@ public class CompanyUnitController {
     	return new ResponseEntity<CompanyUnit>(companyUnit, HttpStatus.OK);
     }
     
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<CompanyUnit> saveCompanyUnit(@RequestBody CompanyUnitDto cdto) {
         System.out.println("In Controller");
         CompanyUnit companyUnit=companyUnitService.saveUnit(cdto);
