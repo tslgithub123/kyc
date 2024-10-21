@@ -37,11 +37,11 @@ public class CompanyProfileController {
         return ResponseEntity.ok(companyProfile);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<CompanyProfile> createCompanyProfile(@RequestBody CompanyProfile companyProfile) {
-        CompanyProfile createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfile);
-        return new ResponseEntity<>(createdCompanyProfile, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<CompanyProfile> createCompanyProfile(@RequestBody CompanyProfile companyProfile) {
+//        CompanyProfile createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfile);
+//        return new ResponseEntity<>(createdCompanyProfile, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileAddDto companyProfileAddDto) {
@@ -54,7 +54,7 @@ public class CompanyProfileController {
     	return userService.getUserByCompanyProfileId(id);
     }
     
-    @PostMapping("/save")
+    @PostMapping("/create")
     public ResponseEntity<CompanyProfile> saveCompanyUnit(@RequestBody CompanyProfileAddDto cdto) {
         System.out.println("In Controller");
         CompanyProfile companyProfile=companyProfileService.saveCompanyProfile(cdto);
