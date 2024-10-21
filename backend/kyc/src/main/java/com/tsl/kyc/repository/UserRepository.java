@@ -1,6 +1,7 @@
 package com.tsl.kyc.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import com.tsl.kyc.entity.User;
@@ -20,8 +21,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     
     List<User> findAllById(Iterable<UUID> ids);
     
-    @Query("SELECT u FROM User u WHERE u.companyUnit = :companyProfileId")
+    @Query("SELECT u FROM User u WHERE u.companyUnit.companyProfile.id = :companyProfileId")
     List<User> findByCompanyProfileId(UUID companyProfileId);
+
+    @Query("SELECT u FROM User u WHERE u.companyUnit.id = :companyUnitId AND u.designation NOT IN ('Director', 'TSL')")
+    List<User> findSpecificByCompanyUnitId(UUID companyUnitId);
 
     List<User> findByCompanyUnitId(UUID companyUnitId);
 

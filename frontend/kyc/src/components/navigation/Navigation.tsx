@@ -4,7 +4,9 @@ import {
   Group,
   AppShellFooter,
   Transition,
-  Divider
+  Divider,
+  Paper,
+  Text
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { IconBrandMantine } from "@tabler/icons-react";
@@ -13,6 +15,8 @@ import ThemeButton from "../ui/ThemeButton";
 import Notifications from "../notifications/Notifications";
 import classes from './Navigation.module.css';
 import { useState, useCallback, useMemo, useEffect } from "react";
+import { useAuthStore } from "../../store/store";
+import { getUserTypeColor } from "../../utils/colorUtils";
 
 interface NavigationProps {
   navdata: Array<any>;
@@ -27,19 +31,19 @@ export default function Navigation({
   actions,
   menu,
 }: NavigationProps) {
-  
+
   const [opened, { close }] = useDisclosure();
   const [navbarVisible, setNavbarVisible] = useState(false);
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
 
+  const designation = useAuthStore((state) => state.user?.designation);
+
   useEffect(() => {
     setNavbarVisible(!isSmallScreen);
-    console.log()
   }, [isSmallScreen]);
 
   const memoizedRoutes = useMemo(() => routes, [routes]);
 
-  console.log('navbarVisible', navbarVisible);
 
   const handleLinkClick = useCallback(() => {
     if (opened) {
@@ -60,7 +64,7 @@ export default function Navigation({
 
   return (
     <AppShell
-    
+
       layout="default"
       header={{ height: { base: 60, md: 70, lg: 60 } }}
       navbar={{
@@ -69,7 +73,7 @@ export default function Navigation({
         collapsed: { mobile: !opened },
       }}
       padding="md"
-      
+
     >
       <AppShell.Header >
         <Group h="100%" px="md" justify="space-between">
@@ -78,15 +82,21 @@ export default function Navigation({
               opened={navbarVisible}
               onClick={toggleNavbar}
               size="sm"
-              
-
             />
-            <IconBrandMantine size={30} />
+          </Group>
+          <Group style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+            <Paper bg={getUserTypeColor(designation ?? '', '1')} m="sm" radius="sm">
+              <Group justify="center">
+                <Text size="1.3rem" p='7px' variant="text" c={getUserTypeColor(designation ?? '')}  gradient={{ from: 'blue', to: 'red', deg: 90 }}>
+                  {designation}
+                </Text>
+              </Group>
+            </Paper>
           </Group>
           <Group>
             {actions}
             <Notifications />
-            <Divider mt='xs' mb='xs' mr='sm' size='sm' orientation="vertical"/>
+            <Divider mt='xs' mb='xs' mr='sm' size='sm' orientation="vertical" />
             <ThemeButton />
             {menu}
           </Group>
@@ -100,7 +110,7 @@ export default function Navigation({
         timingFunction="ease"
       >
         {(styles) => (
-          <AppShell.Navbar  p="md" style={styles}>
+          <AppShell.Navbar p="md" style={styles}>
             {links}
             <AppShellFooter className={classes.footer}>
               <div className={classes.footerContent}>

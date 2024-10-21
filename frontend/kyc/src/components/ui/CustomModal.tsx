@@ -41,7 +41,7 @@ const CustomModal: React.FC<PromptModalProps> = ({
                         padding: '0',
                     }
                 }}
-                classNames={{ title: classes.title, header: `${userType === 'Environment Officer' ? classes.envHeader : userType === 'Manager' ? classes.manHeader : userType === 'Third Party' ? classes.thpHeader : userType === 'Director' ? classes.dirHeader : userType === 'TSL' ? classes.tslHeader : ''}` }}
+                classNames={{ title: classes.title, header: `${userType === 'Environment Officer' ? classes.envHeader : userType === 'Manager' ? classes.manHeader : userType === 'Third Party' ? classes.thpHeader : userType === 'Director' ? classes.dirHeader : userType === 'TSL' ? classes.tslHeader : userType === 'Administrator' ? classes.adminHeader : ''}` }}
                 title={title}
 
                 opened={opened}
@@ -49,17 +49,19 @@ const CustomModal: React.FC<PromptModalProps> = ({
                 onClose={close}
                 size={size}>
         {showComponent}
-        {JSON.stringify(userType)}
+        
       </Modal>
 
       <Button
         mr={'sm'}
-        style={{ minWidth: '140px' }}
+       
         leftSection={icon}
         onClick={open}
         disabled={disabled}
+        
       >
         {exportButtonText}
+        
       </Button>
     </>
   );

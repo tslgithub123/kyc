@@ -1,7 +1,7 @@
 import {CSSProperties } from 'react';
-import { useCurrentUser } from '../hooks/useCurrentUser';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
-export default function MpcbDashboard() {
+export default function DirectorDashboard() {
   const { data: currentUser, isLoading, error } = useCurrentUser();
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error fetching user data: {error.message}</p>;

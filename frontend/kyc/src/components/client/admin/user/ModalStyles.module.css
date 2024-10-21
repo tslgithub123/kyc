@@ -1,3 +1,9 @@
+.adminHeader {
+    background-color: var(--mantine-color-orange-2);
+    padding-left: rem(40px);
+    color: light-dark(var(--mantine-color-orange-9), var(--mantine-color-dark));
+}
+
 .envHeader {
     background-color: var(--mantine-color-green-2);
     padding-left: rem(40px);

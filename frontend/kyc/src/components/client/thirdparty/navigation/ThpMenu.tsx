@@ -52,7 +52,7 @@ const ThpMenu: React.FC = () => {
 
     const handleLogout = () => {
         logout();
-        navigate('/login');
+        navigate('/home');
     };
 
     return (

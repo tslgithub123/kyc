@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem } from '@mantine/core';
+import { Group, Box, Collapse, ThemeIcon, UnstyledButton, rem, Paper } from '@mantine/core';
 import { IconChevronRight } from '@tabler/icons-react';
 import global from '../ui/Global.module.css';
 import { NavLink } from 'react-router-dom';
@@ -33,14 +33,6 @@ const NavbarLinksGroup = ({
   const isSingleLink = typeof links === 'string';
   const [opened, setOpened] = useState(initiallyOpened);
 
-  useEffect(() => {
-    
-    if (iconColor) {
-      console.log({ iconColor });
-      console.log({ iconColor: iconColor.slice(0, -2) + '0' });
-    }
-  }, []);
-
   const handleLinkClick = useCallback(() => {
     if (onLinkClick) {
       onLinkClick();
@@ -51,6 +43,7 @@ const NavbarLinksGroup = ({
     const IconComponent = link.icon as React.ComponentType<{ style: React.CSSProperties }>;
     return (
       <>
+      
       <div className={classes.division}></div>
       <NavLink
         to={link.link}
@@ -81,6 +74,7 @@ const NavbarLinksGroup = ({
         </ThemeIcon>
         <Box ml="md">{label}</Box>
       </Box>
+      
       {hasLinks && (
         <IconChevronRight
           className={classes.chevron}
@@ -97,7 +91,9 @@ const NavbarLinksGroup = ({
 
   return (
     <>
+    
       {isSingleLink ? (
+        
         <NavLink
           to={links as string}
           style={{ textDecoration: 'none' }}
