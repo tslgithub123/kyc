@@ -26,7 +26,7 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{id}")
-    public Notification getNotificationByUserId(@PathVariable UUID id) {
-        return notificationService.getNotificationById(id);
+    public List<Notification> getNotificationByUserId(@PathVariable UUID id) {
+        return notificationService.getNotificationsForUser(id);
     }
 }

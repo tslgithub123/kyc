@@ -16,7 +16,7 @@ CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel
 CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
 CREATE TYPE designation_type AS ENUM ('TSL', 'Administrator', 'Manager', 'Director', 'Environment Officer', 'Third Party');
 CREATE TYPE request_type AS ENUM ('Account Creation');A new client has just registered. Click to review.
-CREATE TYPE notification_type AS ENUM ('Account Creation');
+CREATE TYPE notification_type AS ENUM ('Account Creation', 'Officer Creation');
 
 
 -- Create Role Table
@@ -244,7 +244,7 @@ CREATE TABLE notification (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
     message TEXT NOT NULL,
-    notification_type notification_type,
+    notification_type VARCHAR(50) NOT NULL,
     pinned BOOLEAN DEFAULT FALSE,
     is_read BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
