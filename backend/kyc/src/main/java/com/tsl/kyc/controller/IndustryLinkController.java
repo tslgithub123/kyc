@@ -28,7 +28,7 @@ public class IndustryLinkController {
 	
 	@PostMapping("/save")
 	public ResponseEntity<IndustryLink> saveIndustryLink(@RequestBody IndustryLinkDto dto) {
-		return new ResponseEntity<IndustryLink>(industryLinkService.saveIndustryLink(dto),HttpStatus.OK);
+		return new ResponseEntity<IndustryLink>(industryLinkService.saveIndustryLink(dto),HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/delete/{id}")
