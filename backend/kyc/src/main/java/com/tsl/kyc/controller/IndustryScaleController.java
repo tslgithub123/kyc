@@ -22,8 +22,8 @@ public class IndustryScaleController {
 	}
 	
 	@PostMapping("/save")
-	public ResponseEntity<IndustryScale> postMethodName(@RequestBody IndustryScaleDto dto) {
-		return new ResponseEntity<IndustryScale>(industryScaleService.saveIndustryScale(dto),HttpStatus.OK);
+	public ResponseEntity<IndustryScale> saveIndustryScale(@RequestBody IndustryScaleDto dto) {
+		return new ResponseEntity<IndustryScale>(industryScaleService.saveIndustryScale(dto),HttpStatus.CREATED);
 	}
 	
 }

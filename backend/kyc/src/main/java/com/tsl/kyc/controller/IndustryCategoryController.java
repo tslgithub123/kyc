@@ -21,7 +21,7 @@ public class IndustryCategoryController {
 	}
 	
 	@PostMapping("/save")
-	public ResponseEntity<IndustryCategory> postMethodName(@RequestBody IndustryCategoryDto dto) {
+	public ResponseEntity<IndustryCategory> saveIndustryCategory(@RequestBody IndustryCategoryDto dto) {
 		return new ResponseEntity<IndustryCategory>(industryCategoryService.saveIndustryCategory(dto),HttpStatus.OK);
 	}
 }
