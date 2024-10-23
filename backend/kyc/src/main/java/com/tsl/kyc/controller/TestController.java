@@ -3,7 +3,9 @@ package com.tsl.kyc.controller;
 import com.tsl.kyc.service.NotificationService;
 import com.tsl.kyc.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,13 +20,16 @@ public class TestController {
     private NotificationService notificationService;
 
     @PostMapping("/notify")
-    public void sendTestNotification() {
+    @SendTo("/notifications/topic/admin")
+    public void sendTestNotification(@RequestBody UUID uuid) {
+        System.out.println("Sending test notification to user: " + uuid);
         Notification notification = new Notification();
-        notification.setUserId(UUID.fromString("6413a162-927f-434f-8e6f-52527524b580"));
+        notification.setUserId(uuid);
         notification.setMessage("Test Notification");
+        notification.setPinned(false);
         notification.setNotificationType("ACCOUNT CREATION");
         notification.setTriggerDate(LocalDate.now());
 
-        notificationService.createNotification(notification);
+        notificationService.createNotification(notification, true);
     }
 }

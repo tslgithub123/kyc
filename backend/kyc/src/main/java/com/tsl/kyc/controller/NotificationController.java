@@ -20,13 +20,13 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @GetMapping("/all")
-    public List<Notification> getAllNotifications() {
-        return notificationService.getAllNotifications();
-    }
-
-    @GetMapping("/user/{id}")
-    public List<Notification> getNotificationByUserId(@PathVariable UUID id) {
-        return notificationService.getNotificationsForUser(id);
-    }
+//    @GetMapping("/all")
+//    public List<Notification> getAllNotifications() {
+//        return notificationService.getAllNotifications();
+//    }
+//
+//    @GetMapping("/user/{id}")
+//    public List<Notification> getNotificationByUserId(@PathVariable UUID id) {
+//        return notificationService.getNotificationsForUser(id);
+//    }
 }
