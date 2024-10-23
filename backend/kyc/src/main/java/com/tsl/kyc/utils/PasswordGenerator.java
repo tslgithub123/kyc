@@ -1,6 +1,5 @@
 package com.tsl.kyc.utils;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.security.SecureRandom;
 
 public class PasswordGenerator {

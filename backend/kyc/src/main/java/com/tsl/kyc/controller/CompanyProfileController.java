@@ -1,5 +1,6 @@
 package com.tsl.kyc.controller;
 
+import com.tsl.kyc.dto.CompanyProfileAddDto;
 import com.tsl.kyc.entity.CompanyProfile;
 import com.tsl.kyc.entity.User;
 import com.tsl.kyc.service.CompanyProfileService;
@@ -36,20 +37,27 @@ public class CompanyProfileController {
         return ResponseEntity.ok(companyProfile);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<CompanyProfile> createCompanyProfile(@RequestBody CompanyProfile companyProfile) {
-        CompanyProfile createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfile);
-        return new ResponseEntity<>(createdCompanyProfile, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<CompanyProfile> createCompanyProfile(@RequestBody CompanyProfile companyProfile) {
+//        CompanyProfile createdCompanyProfile = companyProfileService.createCompanyProfile(companyProfile);
+//        return new ResponseEntity<>(createdCompanyProfile, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfile companyProfile) {
-        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfile);
+    public ResponseEntity<CompanyProfile> updateCompanyProfile(@PathVariable UUID id, @RequestBody CompanyProfileAddDto companyProfileAddDto) {
+        CompanyProfile updatedCompanyProfile = companyProfileService.updateCompanyProfile(id, companyProfileAddDto);
         return new ResponseEntity<>(updatedCompanyProfile, HttpStatus.OK);
     }
     
     @GetMapping("/users/{id}")
     public List<User> getUsersByCompanyProfileId(@PathVariable UUID id){
     	return userService.getUserByCompanyProfileId(id);
+    }
+    
+    @PostMapping("/create")
+    public ResponseEntity<CompanyProfile> saveCompanyUnit(@RequestBody CompanyProfileAddDto cdto) {
+        System.out.println("In Controller");
+        CompanyProfile companyProfile=companyProfileService.saveCompanyProfile(cdto);
+        return new ResponseEntity<CompanyProfile>(companyProfile, HttpStatus.CREATED);
     }
 }

@@ -14,28 +14,31 @@ public class IndustryCategory {
     @Column(name = "name", unique = true)
     private String name;
 
-    public IndustryCategory() {
-        super();
-    }
+	public IndustryCategory() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-    public IndustryCategory(String name) {
-        super();
-        this.name = name;
-    }
+	public IndustryCategory(UUID id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
-    public UUID getId() {
-        return id;
-    }
+	public UUID getId() {
+		return id;
+	}
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }
