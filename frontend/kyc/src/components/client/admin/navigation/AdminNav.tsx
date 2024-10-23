@@ -4,6 +4,12 @@ import { AdminRoutes} from "../../../../routes/Routes";
 import Navigation from "../../../navigation/Navigation";
 import AdminMenu from "./AdminMenu";
 import AdminServices from "../services/AdminServices";
+import axios from "axios";
+
+
+const fetchNotifications = () => {
+  axios.get('http://localhost:8080/api/notifications')
+}
 
 
 const adminNavData = [

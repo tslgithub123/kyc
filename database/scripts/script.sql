@@ -15,6 +15,9 @@ CREATE TYPE unit_type AS ENUM ('length', 'weight', 'count', 'other');
 CREATE TYPE resource_type AS ENUM ('raw_material', 'product', 'byproduct', 'fuel','waste','other');
 CREATE TYPE transaction_type AS ENUM ('IN', 'OUT');
 CREATE TYPE designation_type AS ENUM ('TSL', 'Administrator', 'Manager', 'Director', 'Environment Officer', 'Third Party');
+CREATE TYPE request_type AS ENUM ('Account Creation');A new client has just registered. Click to review.
+CREATE TYPE notification_type AS ENUM ('Account Creation', 'Officer Creation');
+
 
 -- Create Role Table
 CREATE TABLE role (
@@ -236,38 +239,33 @@ AFTER INSERT ON company_unit
 FOR EACH ROW
 EXECUTE FUNCTION create_resource_transaction_partition();
 
-CREATE TABLE notifications (
+
+CREATE TABLE notification (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID NOT NULL,
     message TEXT NOT NULL,
-    type VARCHAR(50) NOT NULL,
+    notification_type VARCHAR(50) NOT NULL,
+    pinned BOOLEAN DEFAULT FALSE,
     is_read BOOLEAN DEFAULT FALSE,
-    email_sent BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     trigger_date DATE NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 
-CREATE TABLE request_type (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(255) NOT NULL UNIQUE,
-    description TEXT
-)
-
 CREATE TABLE request (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    request_type_id UUID NOT NULL,
+    request_type request_type,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
     status VARCHAR(50) DEFAULT 'pending',
     from_user UUID NOT NULL,
     to_user UUID NOT NULL,
     message TEXT,
-    FOREIGN KEY (request_type_id) REFERENCES request_type(id),
     FOREIGN KEY (from_user) REFERENCES users(id),
     FOREIGN KEY (to_user) REFERENCES users(id)
 )
+
 
 
 -------------------------------------------------------------------------------
@@ -1094,6 +1092,24 @@ INSERT INTO email_template (id, name, subject, body) VALUES
         '{companyAddress}\n' ||
         'TEL: {companyPhone}'
     );
+
+CREATE OR REPLACE FUNCTION notify_request_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO notification (id, user_id, message, notification_type, trigger_date)
+    VALUES (uuid_generate_v4(), NEW.from_user, 'Message from Client', 'Account Creation', CURRENT_DATE);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_request_insert
+AFTER INSERT ON request
+FOR EACH ROW
+EXECUTE FUNCTION notify_request_insert();
+
+INSERT INTO request (from_user, to_user, message, request_type)
+VALUES ((SELECT id FROM users WHERE username='admin1'), (SELECT id FROM users WHERE username='tsl'), 'Sample message', 'Account Creation');
+
 
 -------------------------------------------------------------------------------
 -- Commit Transaction
