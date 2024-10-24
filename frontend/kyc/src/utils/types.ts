@@ -3,6 +3,8 @@ export interface Credentials {
     password: string;
 }
 
+
+
 export interface IUserRegistration {
   employeeFullName: string;
   email: string;
