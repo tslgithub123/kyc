@@ -1,5 +1,5 @@
 -- Connect to the database
-\c new_kyc;
+-- \c new_kyc;
 
 -- Begin Transaction
 BEGIN;
