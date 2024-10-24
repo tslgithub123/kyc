@@ -93,6 +93,7 @@ public class CompanyProfileService {
         	companyProfile.setPhoneNumber(cDto.getCompanyPhoneNumber());
         	companyProfile.setWebsite(cDto.getCompanyWebsite());
         	companyProfile.setYearEstablished(cDto.getYearEstalished());
+            companyProfile.setRegistrationNo(cDto.getRegistrationNo());
 
         try {
         	CompanyProfile updatedCompanyProfile = companyProfileRepository.save(companyProfile);
@@ -170,7 +171,7 @@ public class CompanyProfileService {
         companyProfile.setPhoneNumber(cdto.getCompanyPhoneNumber());
         companyProfile.setWebsite(cdto.getCompanyWebsite());
         companyProfile.setYearEstablished(cdto.getYearEstalished());
-        
+        companyProfile.setRegistrationNo(cdto.getRegistrationNo());
         // Save CompanyUnit and return the saved instance
         try {
             CompanyProfile savedCompanyProfile= companyProfileRepository.save(companyProfile);
