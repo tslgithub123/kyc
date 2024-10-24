@@ -9,6 +9,7 @@ import com.tsl.kyc.factory.NotificationFactoryProvider;
 import com.tsl.kyc.service.NotificationService;
 import com.tsl.kyc.service.NotificationTypeService;
 import com.tsl.kyc.service.UserService;
+import com.tsl.kyc.utils.NotificationTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -45,7 +46,8 @@ public class TestController {
         String type = notificationTriggerDto.getType();
         NotificationFactory factory = notificationFactoryProvider.getFactory(type);
         if (factory == null) {
-            throw new IllegalArgumentException("No factory found for type: " + type);
+            throw new IllegalArgumentException("No factory found for type: '" + type
+                    + "'. Available types: " + notificationFactoryProvider.getAvailableTypes());
         }
         Notification notification = factory.createNotification(notificationTriggerDto);
         notificationService.createNotification(notification, true);
