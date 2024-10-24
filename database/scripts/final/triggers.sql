@@ -1,0 +1,4 @@
+CREATE TRIGGER create_resource_transaction_partition_trigger
+AFTER INSERT ON company_unit
+FOR EACH ROW
+EXECUTE FUNCTION create_resource_transaction_partition();

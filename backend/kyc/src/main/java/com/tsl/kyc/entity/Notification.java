@@ -1,7 +1,6 @@
 package com.tsl.kyc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,16 +13,17 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "notification")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @ColumnDefault("uuid_generate_v4()")
+    @Column(name = "id", nullable = false)
     private UUID id;
 
     @NotNull
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -41,9 +41,31 @@ public class Notification {
         this.user.setId(userId);
     }
 
-    @NotNull
-    @Column(name = "message", nullable = false, length = Integer.MAX_VALUE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JsonIgnore
+    @JoinColumn(name = "from_user")
+    private User fromUser;
+
+    public UUID getFromUserId() {
+        return fromUser != null ? fromUser.getId() : null;
+    }
+
+    public void setFromUserId(UUID userId) {
+        if (this.fromUser == null) {
+            this.fromUser = new User();
+        }
+        this.fromUser.setId(userId);
+    }
+
+    @Column(name = "message", length = Integer.MAX_VALUE)
     private String message;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "notification_type", nullable = false)
+    private NotificationType notificationType;
 
     @ColumnDefault("false")
     @Column(name = "pinned")
@@ -53,16 +75,13 @@ public class Notification {
     @Column(name = "is_read")
     private Boolean isRead;
 
-    @Column(name = "notification_type")
-    private String notificationType;
-
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private OffsetDateTime createdAt;
 
     @NotNull
     @Column(name = "trigger_date", nullable = false)
-    private LocalDate triggerDate;
+    private OffsetDateTime triggerDate;
 
     @ColumnDefault("false")
     @Column(name = "email_sent")
@@ -84,12 +103,28 @@ public class Notification {
         this.user = user;
     }
 
+    public User getFromUser() {
+        return fromUser;
+    }
+
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
+    }
+
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
     }
 
     public Boolean getPinned() {
@@ -116,11 +151,11 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getTriggerDate() {
+    public OffsetDateTime getTriggerDate() {
         return triggerDate;
     }
 
-    public void setTriggerDate(LocalDate triggerDate) {
+    public void setTriggerDate(OffsetDateTime triggerDate) {
         this.triggerDate = triggerDate;
     }
 
@@ -132,11 +167,4 @@ public class Notification {
         this.emailSent = emailSent;
     }
 
-    public String getNotificationType() {
-        return notificationType;
-    }
-
-    public void setNotificationType(String notificationType) {
-        this.notificationType = notificationType;
-    }
 }

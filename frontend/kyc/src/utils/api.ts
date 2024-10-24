@@ -35,7 +35,7 @@ const fetchCurrentUser = async (token: string): Promise<User> => {
   }
 };
 
-const fetchCompanies = async (): Promise<CompanyProfile[]> => {
+const fetchCompanies = async (token: string | null): Promise<CompanyProfile[]> => {
   try {
     const response = await base_api.get<CompanyProfile[]>(endpoints.companyProfile.all);
     return response.data;

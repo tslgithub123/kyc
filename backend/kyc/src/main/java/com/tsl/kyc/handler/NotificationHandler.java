@@ -3,7 +3,6 @@ package com.tsl.kyc.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsl.kyc.entity.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -13,7 +12,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+
 @Component
 public class NotificationHandler extends TextWebSocketHandler {
     private static final Map<String, WebSocketSession> userSessions = new ConcurrentHashMap<>();
