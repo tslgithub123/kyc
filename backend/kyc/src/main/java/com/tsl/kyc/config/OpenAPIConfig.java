@@ -31,9 +31,4 @@ public class OpenAPIConfig {
                 .contact(myContact);
         return new OpenAPI().info(information).servers(List.of(server));
     }
-    
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 }

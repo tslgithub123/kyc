@@ -41,5 +41,4 @@ public class IndustryCategory {
 		this.name = name;
 	}
 
-    
 }

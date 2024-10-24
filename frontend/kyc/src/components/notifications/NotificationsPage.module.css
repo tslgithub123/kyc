@@ -1,6 +1,6 @@
 .tab {
     position: relative;
-    border: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+    border: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
     background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
   
     &:first-of-type {
@@ -42,12 +42,12 @@
   
     &[data-active] {
       z-index: 1;
-      background-color: var(--mantine-color-blue-3);
-      border-color: var(--mantine-color-blue-3);
+      background-color: var(--mantine-color-gray-3);
+      border-color: var(--mantine-color-gray-3);
       color: var(--mantine-color-dark);
   
       @mixin hover {
-        background-color: var(--mantine-color-blue-3);
+        background-color: var(--mantine-color-gray-3);
       }
     }
 }

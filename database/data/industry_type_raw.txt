@@ -1,0 +1,270 @@
+<select name="Applicant[Industry_type]" id="ii-industry-type" label="* Industry Type" value="" data-trim="1" data-required="1" tabindex="-1" class="select2-hidden-accessible" aria-hidden="true">
+<option value="" selected="selected">Select Industry Type</option>
+<option value="00009816">Local Body</option>
+<option value="00001013">G95 CBG plants based on crop residue (paddy straw /wheat straw /corn sweet sorghum /napier grass, etc.)</option>
+<option value="00001014">O90A Ready mix cement concrete</option>
+<option value="30009817">O93 Without any surface treatment activity such as washing, metal surface finishing operations, pickling, plating, electroplating, phosphating &amp; without heat treatment</option>
+<option value="00009822">G64 Railway Stations(Waste Water Generation &lt; 10 KLD)</option>
+<option value="00009823">G65 Gaushalas</option>
+<option value="00001205">G24 Heat  treatment  with  any  of the new technology like ultrasound probe , induction hardening , ionization beam, gas carburizing etc.</option>
+<option value="00001223">G40 Rolling  mill  (  gas  fired)  and cold rolling mill</option>
+<option value="00000233">G01 Aluminium utensils from aluminium circles.</option>
+<option value="00000235">G2 Ayurvedic  and  homeopathic medicines (without boiler)</option>
+<option value="00000237">G3 Bakery/confectionery/sweets products (with production capacity &lt;1tpd (with gas or electrical oven)</option>
+<option value="00000184">G4 Bi-axially oriented PP film along with metalizing operations</option>
+<option value="00000239">G5 Biomass briquettes (sun drying) without using toxic hazardous  wastes</option>
+<option value="00000242">G6 Blending  of  melamine  resins &amp; different powder, additives by physical mixing</option>
+<option value="00000243">G7 Brass and bell metal utensils manufacturing from circles(dry mechanical operation without re-rolling facility)</option>
+<option value="00000244">G8 Candy</option>
+<option value="00000106">G9 Cardboard or corrugated box and paper products (excluding paper or pulp manufacturing and without using boilers)</option>
+<option value="00000123">G10 Carpentry &amp;  wooden furniture manufacturing (excluding saw mill) with the help of electrical (motorized) machines such as electrical wood planner, steel saw cutting circular blade, etc.</option>
+<option value="00000166">G11 Cement products (without using asbestos / boiler  / steam     curing) like pipe,pillar, jafri, well ring, block/tiles etc.(should  be done in closed covered shed to control fugitive emissions)</option>
+<option value="00000245">G12 Ceramic colour manufacturing by mixing &amp; blending only (not using boiler and wastewater recycling process)</option>
+<option value="00000093">G13 Chilling  plant,  cold   storage and ice making</option>
+<option value="00000189">G14 Coke     briquetting     (     sun drying)</option>
+<option value="00000252">G15 Cotton spinning and weaving (small scale)</option>
+<option value="00000089">G16 Dal Mills</option>
+<option value="00000253">G17 Decoration   of  ceramic  cups and plates by electric furnace</option>
+<option value="00000193">G18 Digital printing on PVC clothes</option>
+<option value="00000198">G19 Facility of handling, storage and transportation of food grains in bulk</option>
+<option value="00000064">G20 Flour mills (dry process)</option>
+<option value="00000261">G21 Glass,ceramic,earthen potteries, tile and tile manufacturing   using electrical kiln  or  not involving fossil fuel kiln</option>
+<option value="00000203">G22 Glue from starch (physical mixing)  with  gas  / electrically     operated     oven
+/boiler.</option>
+<option value="00000101">G23 Gold and silver smithy (purification with acid smelting operation and sulphuric acid polishing operation) (using less  or equal to 1 litre of  sulphuric acid/ nitric acid per month)</option>
+<option value="00000107">G25 Insulation and other coated papers (excluding paper or pipe manufacturing)</option>
+<option value="00000263">G26 Leather foot wear and leather
+products (excluding tanning and hide processing except cottage scale)</option>
+<option value="00000264">G27 Lubricating   oil,   greases    or
+petroleum based products (only blending at normal temperature)</option>
+<option value="00000267">G28 Manufacturing of pasted veneers using gas fired boiler or thermic fluid heater  and by sun drying</option>
+<option value="00000271">G29 Oil mill Ghani and extraction ( no hydrogenation  / refining)</option>
+<option value="00000215">G30 Packing materials manufacturing from non asbestos fibre, vegetable fibre yarn</option>
+<option value="00000275">G31 Phenyl/toilet cleaner formulation and bottling</option>
+<option value="00000113">G32 Polythene and plastic processed products manufacturing (virgin plastic)</option>
+<option value="00000172">G33 Poultry,        Hatchery        and
+Piggery</option>
+<option value="00000130">G34 Power   looms   (without   dye
+and bleaching)</option>
+<option value="00000277">G35 Puffed rice (muri)  (using gas or electrical heating system)</option>
+<option value="00000105">G36 Pulverization of bamboo and scrap wood</option>
+<option value="00000278">G38 Reprocessing of waste cotton</option>
+<option value="00000071">G39 Rice mill (Rice hullers only)</option>
+<option value="00000138">G41 Rubber goods  industry (with gas operated baby boiler)</option>
+<option value="00000173">G42 Saw mills</option>
+<option value="00000279">G43 Soap    manufacturing    (hand made  without  steam  boiling
+/ boiler)</option>
+<option value="00000281">G44 Spice  grinding  (upto-20   HP motor)</option>
+<option value="00000226">G45 Spice     grinding     (&gt;20     hp motor)</option>
+<option value="00000109">G46 Steel  furniture without spray
+painting</option>
+<option value="00000087">G47 Steeping   and   processing   of grains</option>
+<option value="00000285">G48 Tyres    and    tube    retreating (without boilers)</option>
+<option value="00000247">G49 Chilling      plant      and      ice
+making        without        using ammonia</option>
+<option value="00000251">G50 CO2 recovery</option>
+<option value="00000256">G51 Distilled water ( without boiler) with electricity as source of heat</option>
+<option value="00000262">G52 Hotels  (up  to  20  rooms  and
+without boilers)</option>
+<option value="00000129">G53 Manufacturing     of     optical
+lenses        (using        electrical furnace)</option>
+<option value="00000088">G54 Mineralized water</option>
+<option value="00000228">G55 Tamarind powder manufacturing</option>
+<option value="00000190">G56 Cutting, sizing  and  polishing  of marble stone</option>
+<option value="00000196">G57 Emery   powder   (   fine  dust  of sand)  manufacturing</option>
+<option value="00000073">G58 Flyash   export,   transport   &amp; disposal facilities</option>
+<option value="00000154">G59 Mineral stack yard / Railway sidings</option>
+<option value="00000137">G60 Oil   and   gas   transportation pipeline</option>
+<option value="00000224">G61 Seasoning   of   wood   in   steam heated chamber</option>
+<option value="00000283">G62 Synthetic detergent formulation</option>
+<option value="00000229">G63 Tea processing ( with boiler)</option>
+<option value="00000194">O1 Dismantling of rolling stocks ( wagons/ coaches)</option>
+<option value="00000183">O2 Bakery and confectionery units with production capacity &gt; 1 TPD. ( With ovens / furnaces)</option>
+<option value="00000188">O3 Chanachur and ladoo from puffed and beaten rice( muri  and  shira)  using husk fired oven</option>
+<option value="00000248">O4 Coated  electrode manufacturing</option>
+<option value="00000249">O5 Compact  disc  computer   floppy and cassette manufacturing / Reel manufacturing</option>
+<option value="00000068">O6 Flakes from rejected PET bottle</option>
+<option value="00000066">O7 Food  and  food  processing  including fruits and vegetable processing</option>
+<option value="00000208">O8 Jute processing without dyeing</option>
+<option value="00000269">O9 Manufacturing of silica gel</option>
+<option value="00000212">O10 Manufacturing of tooth powder, toothpaste, talcum powder and other cosmetic items</option>
+<option value="00000219">O11 Printing or etching of glass sheet using hydrofluoric  acid</option>
+<option value="00000225">O12 Silk  screen  printing,  sari   printing  by wooden blocks</option>
+<option value="00000030">O13 Synthetic detergents and soaps(excluding  formulation)</option>
+<option value="00000061">O15 Cotton     spinning     and     weaving     ( medium and large scale)</option>
+<option value="00000179">O16 Almirah,    Grill     Manufacturing     (Dry Mechanical Process )</option>
+<option value="00000180">O17 Aluminium &amp; copper extraction from scrap using oil fired furnace (dry process  only)</option>
+<option value="00000181">O18 Automobile servicing, repairing and painting (excluding  only  fuel dispensing)</option>
+<option value="00000182">O19 Ayurvedic and homeopathic medicine</option>
+<option value="00000185">O20 Brickfields   (   excluding   fly   ash   brick manufacturing using lime process)</option>
+<option value="00000146">O21 Building     and    construction    project more than 20,000 sq. m  built up area</option>
+<option value="00000147">O22 Ceramics and Refractories</option>
+<option value="00000026">O23 Coal washeries</option>
+<option value="00000191">O24 Dairy and dairy products ( small scale)</option>
+<option value="00000192">O25 DG set of capacity &gt;1MVA but &lt; 5MVA</option>
+<option value="00000048">O26 Dry coal processing, mineral processing,  industries   involving ore  sintering,  pelletisating, grinding    &amp; pulverization</option>
+<option value="00000042">O27 Fermentation industry including manufacture of yeast, beer, distillation of  alcohol  (Extra Neutral Alcohol)</option>
+<option value="00000140">O28 Ferrous   and   Non-   ferrous   metal
+extraction involving different furnaces through melting, refining, re-processing, casting and alloy- making</option>
+<option value="00000081">O29 Fertilizer  (granulation  /  formulation  / blending only)</option>
+<option value="00000199">O30 Fish feed, poultry feed and cattle feed</option>
+<option value="00000072">O31 Fish processing and packing (excluding chilling of fishes)</option>
+<option value="00000200">O32 Forging of ferrous and non- ferrous metals ( using oil and gas fired furnaces)</option>
+<option value="00000201">O33 Formulation/pelletization of camphor tablets, naphthalene balls from camphor/ naphthalene powders.</option>
+<option value="00000202">O34 Glass ceramics, earthen potteries and tile manufacturing using oil and gas fired kilns, coating on glasses using cerium fluorides and magnesium fluoride etc.</option>
+<option value="00000204">O35 Gravure  printing,  digital   printing  on flex, vinyl</option>
+<option value="00000100">O37 Hot mix plants</option>
+<option value="00000206">O38 Hotels (&lt; 3 star) or hotels having &gt; 20 rooms and less than 100 rooms.</option>
+<option value="00000094">O39 Ice cream</option>
+<option value="00000058">O42 Industry   or   processes    involving foundry  operations</option>
+<option value="00000046">O43 Lime   manufacturing   (using   lime kiln)</option>
+<option value="00000209">O44 Liquid floor cleaner, black phenyl, liquid soap, glycerol mono-stearate manufacturing</option>
+<option value="00000021">O45 Manufacturing of glass</option>
+<option value="00000210">O46 Manufacturing   of   iodized   salt   from crude/ raw salt</option>
+<option value="00000060">O47 Manufacturing  of  mirror   from  sheet glass</option>
+<option value="00000211">O48 Manufacturing  of  mosquito  repellent coil</option>
+<option value="00000118">O49 Manufacturing of Starch/Sago</option>
+<option value="00000213">O50 Mechanized   laundry   using   oil   fired boiler</option>
+<option value="00000214">O51 Modular wooden furniture  from particle board, MDF&lt; swan timber etc, Ceiling tiles/ partition board from saw dust, wood chips etc., and other agricultural waste using synthetic adhesive resin, wooden box making ( With boiler)</option>
+<option value="00000120">O52 New highway construction project</option>
+<option value="00000069">O53 Non-alcoholic beverages(soft drink)  &amp;  bottling  of  alcohol/non alcoholic products</option>
+<option value="00000216">O54 Paint blending and mixing (Ball mill)</option>
+<option value="00000121">O55 Paints  and  varnishes  (mixing  and blending)</option>
+<option value="00000217">O56 Ply-board manufacturing( including Veneer and laminate) with oil fired boiler/ thermic fluid heater(without resin plant)</option>
+<option value="00000059">O57 Potable  alcohol  (  IMFL)  by  blending, bottling of alcohol products</option>
+<option value="00000155">O58 Printing ink manufacturing</option>
+<option value="00000131">O59 Printing press</option>
+<option value="00000222">O60 Reprocessing of waste  plastic including PVC</option>
+<option value="00000227">O62 Spray   painting,   paint   baking,   paint shipping</option>
+<option value="00000043">O63 Steel    and    steel    products    using
+various  furnaces  like  blast furnace
+/open hearth furnace/induction furnace/arc   furnace/submerged arc  furnace / basic  oxygen  furnace
+/hot rolling reheated furnace</option>
+<option value="00000077">O64 Stone crushers</option>
+<option value="00000029">O65 Surgical    and    medical    products including prophylactics and latex</option>
+<option value="00000284">O66 Tephlon based products</option>
+<option value="00000047">O68 Tobacco products including cigarettes and tobacco/opium processes</option>
+<option value="00000231">O69 Transformer  repairing/  manufacturing ( dry process only)</option>
+<option value="00000079">O70 Tyres   and   tubes   vulcanization/   hot retreating</option>
+<option value="00000037">O71 Vegetable  oil manufacturing including   solvent   extraction   and refinery /hydrogenated   oils</option>
+<option value="00000076">O72 Wire drawing and wire netting</option>
+<option value="00000195">O73 Dry cell battery ( excluding manufacturing
+of electrodes) and assembling  &amp; charging of acid lead battery on micro scale</option>
+<option value="00000082">O74 Pharmaceutical  formulation and for  R
+&amp; D  purpose ( For sustained release/ extended release of drugs only  and not for commercial purpose)</option>
+<option value="00000025">O75 Synthetic resins</option>
+<option value="00000020">O76 Synthetic rubber excluding molding</option>
+<option value="00000186">O77 Cashew nut processing</option>
+<option value="00000067">O78 Coffee seed processing</option>
+<option value="00000151">O79 Parboiled Rice Mills</option>
+<option value="00000175">O80 Foam  manufacturing</option>
+<option value="00000220">O83 Producer gas plant using conventional up drift coal gasification ( linked to rolling mills glass and ceramic industry refectories for dedicated fuel supply)</option>
+<option value="00002133">O14 Thermometer  manufacturing</option>
+<option value="00000205">O36 Heat treatment using oil fired furnace ( without  cyaniding)</option>
+<option value="00005164">O40 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008 - Items namely -B148Paint and ink sludge/residues</option>
+<option value="00006164">O41 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under  schedule iv of HW( M, H&amp; TBM) rules, 2008
+- Items namely - Brass Dross ,, CopperDross,,
+Copper       Oxide       Mill       Scale,,
+Copper Reverts, Cake &amp; Residues,, Waste Copper and copper alloys in dispersible form,,
+Slags from copper processing for further processing or refining ,, Insulated Copper Wire,, Scrap/copper with PVC sheathing including ISRI-code material namely “Druid” ,,
+Jelly filled Copper cables ,, Zinc Dross-Hot dip Galvanizers
+SLAB,, Zinc Dross-Bottom Dross,, Zinc ash/Skimming arising from galvanizing and die casting operations,,
+Zinc ash/Skimming/other zinc bearing wastes arising from
+smelting and refining,, Zinc ash and residues including
+zinc alloy residues in dispersible from ,,</option>
+<option value="00000223">O61 Rolling mill  (oil  or coal  fired) and cold rolling mill</option>
+<option value="00000133">O67 Thermocol     manufacturing(with boiler)</option>
+<option value="00007164">O81 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008 - Items namely -Used Oil – As per specifications prescribed from time to time.</option>
+<option value="00008164">O82 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008 - Items namely                                                          -
+Waste    Oil    ---As    per    specifications
+prescribed from time to time.</option>
+<option value="00009814">Restaurant activity having overall waste water generated upto 10 KLD</option>
+<option value="00009818">O84 Railway Stations (Waste Water Generation &gt;= 10 KLD, but &lt; 100 KLD)</option>
+<option value="00009819">O85 Scrapping Centers (for End of Life if Vehicles and other scraps such as plant and machineries, structural materail, railway coaches and wagons etc.)
+a. Collection, De-Pollution, Dismantling Centers and Shredding Centers.
+b. Collection, De-Pollution, Dismantling Centers and Shredding Centers.
+c. Shredding Centers (can include white goods*/other scraps also).</option>
+<option value="000098201">O86 Compressed/Refined Bio-Gas Production from Bio-degradables Wastes</option>
+<option value="00009820">O87 Dairy farms</option>
+<option value="00001015">O90A Ready mix cement concrete</option>
+<option value="121298235">Assaying &amp; hallmarking centers</option>
+<option value="00001011">O89 CBG plants based on Municipal Solid Waste (MSW)</option>
+<option value="00001012">O90 CBG plants based on process waste (industrial/process liquid effluent &amp; solid waste like press mud, organic sludge, molasses, etc.)</option>
+<option value="100098236">R61 Dead Animal incineration plant ( Carcass disposal plant)
+</option>
+<option value="00009817">R89 (i.e. Sterilization process by using Gamma Rays using COBALT-60).</option>
+<option value="00009821">R61 Railway Stations (Waste Water Generation &gt;= 100 KLD)</option>
+<option value="100098234">Pyrolysis oil from plastic waste</option>
+<option value="100098235">Municipal corporation stp</option>
+<option value="00009815">Restaurant activity having overall waste water generated more than 10 KLD</option>
+<option value="00000164">R3 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008  - Items namely - Spent cleared metal catalyst containing copper, Spent cleared metal catalyst containing zinc.</option>
+<option value="00001164">R10 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008  - Items namely - Spent catalyst containing nickel, cadmium, Zinc, copper, arsenic, vanadium and cobalt,</option>
+<option value="00002164">R15 Industries engaged in recycling / reprocessing/ recovery/reuse of Hazardous  Waste  under schedule iv of HW( M, H&amp; TBM) rules, 2008 - Items namely - Dismantlers Recycling Plants -- Components of waste electrical and electronic assembles comprising accumulators and other batteries included  on  list A, mercury-switches, activated glass cullets from cathode-ray tubes and other activated glass and PCB-capacitors, or any other component contaminated with Schedule 2 constituents (e.g. cadmium, mercury, lead, polychlorinated biphenyl) to an extent that they exhibit hazard characteristics indicated  in  part C of this Schedule.</option>
+<option value="00000004">R18 Pulp &amp; Paper ( waste paper based without bleaching process to manufacture Kraft paper)</option>
+<option value="00003164">R32 Industries  engaged  in   recycling  /reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008</option>
+<option value="00004164">R33 Industries  engaged  in   recycling  /
+reprocessing/ recovery/reuse of Hazardous Waste under schedule iv of HW( M, H&amp; TBM) rules, 2008 - Items namely - Integrated Recycling Plants -- Components of waste electrical and electronic assembles comprising accumulators and other batteries included on list A, mercury- switches, acti va ted glass cullets from cathode-ray tubes and other acti va ted glass and PCB-capacitors, or any other  component contaminated with Schedule 2 constituents (e.g. cadmium, mercury, lead, polychlorinated biphenyl ) to an extent that they exhibit hazard characteristics indicated in part C of this Schedule.</option>
+<option value="00011114">R54 Pulp &amp; Paper ( waste paper based units with bleaching process to manufacture writing &amp; printing paper)</option>
+<option value="00022224">R59 Pulp &amp; Paper ( Large-Agro + wood) , Small Pulp &amp; Paper ( agro based-wheat straw/rice husk)</option>
+<option value="00000115">R1 Isolated   storage   of   hazardous
+chemicals (as per schedule of manufacturing, storage of hazardous chemicals rules ,1989 as amended)</option>
+<option value="00000143">R2 Automobile Manufacturing (integrated facilities)</option>
+<option value="00000027">R4 Manufacturing of lubricating oils
+,grease   and   petroleum   based products</option>
+<option value="30000000">R5 DG Set of capacity  &gt; 5 MVA</option>
+<option value="00000022">R6 Industrial carbon including electrodes and graphite blocks, activated carbon, carbon black</option>
+<option value="00000018">R7 Lead  acid battery
+manufacturing(excluding assembling and charging of lead- acid battery in micro scale)</option>
+<option value="00000049">R8 Phosphate rock processing plant</option>
+<option value="00000045">R9 Power  generation  plant  [except
+Wind and Solar renewable power plants of all capacities and Mini Hydel power plant of capacity &lt;25MW]</option>
+<option value="00000054">R11 Processes  involving  chlorinated hydrocarbons</option>
+<option value="00000002">R12 Sugar ( excluding Khandsari)</option>
+<option value="00000039">R13 Fibre    glass    production    and processing (excluding moulding)</option>
+<option value="00000053">R14 Fire crackers manufacturing and bulk storage facilities</option>
+<option value="00000057">R16 Milk  processes     and     dairy products(integrated project)</option>
+<option value="00000051">R17 Phosphorous and its compounds</option>
+<option value="00000050">R19 Coke making , liquefaction, coal tar distillation or fuel gas making</option>
+<option value="00000052">R20 Manufacturing    of    explosives,
+detonators, fuses including management and handling activities</option>
+<option value="00000023">R21 Manufacturing of paints varnishes, pigments and intermediate (excluding blending/mixing)</option>
+<option value="00000139">R22 Organic Chemicals manufacturing</option>
+<option value="00000005">R23 Airports   and   Commercial   Air Strips</option>
+<option value="00000040">R24 Asbestos   and   asbestos   based
+industries</option>
+<option value="00000024">R25 Basic chemicals and electro chemicals and its derivatives including manufacturing of acid</option>
+<option value="00000012">R26 Cement</option>
+<option value="00000034">R27 Chlorates,       per-chlorates       &amp; peroxides</option>
+<option value="00000055">R28 Chlorine,     fluorine,     bromine, iodine and their compounds</option>
+<option value="00000007">R29 Dyes and Dye- Intermediates</option>
+<option value="00000063">R31 Hotels having overall waste- water generation @ 100 KLD and more.</option>
+<option value="00000035">R34 Manufacturing     of    glue    and gelatin</option>
+<option value="00000149">R35 Mining and ore beneficiation</option>
+<option value="00000135">R36 Nuclear power plant</option>
+<option value="00000008">R37 Pesticides  (technical)  (excluding formulation)</option>
+<option value="00000031">R38 Photographic film  and  its chemicals</option>
+<option value="00000163">R39 Railway  locomotive workshop/Integrated road transport workshop/Authorized service centers</option>
+<option value="00000036">R40 Yarn / Textile processing involving any effluent/emission generating processes including bleaching, dyeing, printing and colouring</option>
+<option value="00000019">R41 Chlor Alkali</option>
+<option value="00000171">R42 Ship Breaking Industries</option>
+<option value="00000136">R43 Oil and gas extraction including CBM (offshore &amp; on-shore extraction through drilling wells)</option>
+<option value="00000144">R44 Industry   or   process   involving
+metal surface treatment or process such as pickling/ electroplating/paint stripping/ heat treatment using cyanide bath/ phosphating or finishing and anodizing / enamellings/ galvanizing</option>
+<option value="00000010">R45 Tanneries</option>
+<option value="00000153">R46 Ports  and  harbour,  jetties  and dredging operations</option>
+<option value="00000028">R47 Synthetic fibers including rayon
+,tyre   cord,   polyester   filament yarn</option>
+<option value="00000013">R48 Thermal Power Plants</option>
+<option value="00000041">R49 Slaughter house (as per notification S.O.270(E)dated 26.03.2001)and meat processing industries, bone mill, processing of animal horn, hoofs and other body parts</option>
+<option value="00000017">R50 Aluminium Smelter</option>
+<option value="00000016">R51 Copper Smelter</option>
+<option value="00000003">R52 Fertilizer(basic) (excluding formulation)</option>
+<option value="00000014">R53 Iron &amp; Steel (involving processing from ore/ integrated steel plants) and or Sponge Iron units</option>
+<option value="00000015">R55 Zinc Smelter</option>
+<option value="00000009">R56 Oil   Refinery   (mineral   Oil or Petro Refineries)</option>
+<option value="00000011">R57 Petrochemicals Manufacturing ( including processing of Emulsions of oil and water )</option>
+<option value="00000006">R58 Pharmaceuticals</option>
+<option value="00000001">R60 Distillery    ( molasses / grain /yeast based)</option>
+<option value="00001010">W38 CBG plants (irrespective of the type of feed) producing Fermented Organic Manure (FOM) &amp; Liquid Fermented Organic Manure (LFOM) as by-products</option>
+<option value="other">Other</option>
+</select>

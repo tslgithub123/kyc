@@ -1,0 +1,11 @@
+.notification {
+    box-shadow: none;
+    transition: 
+      box-shadow 150ms ease,
+      transform 100ms ease;
+}
+
+.notification:hover {
+    box-shadow: var(--mantine-shadow-sm);
+    transform: scale(1.01);
+}
