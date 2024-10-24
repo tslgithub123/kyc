@@ -63,6 +63,9 @@ public class CompanyProfile {
     @JsonBackReference
     private List<CompanyUnit> companyUnits;
 
+    @Column(name = "com_registration_no")
+    private String registrationNo;
+
     public UUID getId() {
         return id;
     }
@@ -149,5 +152,13 @@ public class CompanyProfile {
 
     public void setCompanyUnits(List<CompanyUnit> companyUnits) {
         this.companyUnits = companyUnits;
+    }
+
+    public String getRegistrationNo() {
+        return registrationNo;
+    }
+
+    public void setRegistrationNo(String registrationNo) {
+        this.registrationNo = registrationNo;
     }
 }

@@ -54,12 +54,6 @@ public class Employee {
     @Column(name = "profile_status", length = 100)
     private String profileStatus;
 
-    @Column(name = "profile_picture", length = 30)
-    private String profilePicture;
-
-    @Column(name = "marital_status")
-    private String maritalStatus;
-
     public UUID getId() {
         return id;
     }
@@ -156,22 +150,6 @@ public class Employee {
         this.profileStatus = profileStatus;
     }
 
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
-    }
-
-    public String getMaritalStatus() {
-        return maritalStatus;
-    }
-
-    public void setMaritalStatus(String maritalStatus) {
-        this.maritalStatus = maritalStatus;
-    }
-
     @Override
     public String toString() {
         return "Employee{" +
@@ -187,8 +165,6 @@ public class Employee {
                 ", status=" + status +
                 ", emailStatus='" + emailStatus + '\'' +
                 ", profileStatus='" + profileStatus + '\'' +
-                ", profilePicture='" + profilePicture + '\'' +
-                ", maritalStatus='" + maritalStatus + '\'' +
                 '}';
     }
 }
