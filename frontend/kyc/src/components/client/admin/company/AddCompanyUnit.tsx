@@ -7,7 +7,8 @@ import global from "./../../../ui/Global.module.css";
 import AddUserForm from "../user/AddUserForm";
 
 const CompanyModalContent = (
-    <AddUserForm />
+    // <AddUserForm />
+    <h1>company</h1>
 );
 
 export default function AddCompanyUnit() {

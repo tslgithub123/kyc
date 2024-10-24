@@ -128,7 +128,6 @@ public class UserController {
                 employee.setGender(userRegistrationDto.getGender());
                 employee.setBirthday(userRegistrationDto.getBirthday());
                 employee.setEmail(userRegistrationDto.getEmail());
-                employee.setMaritalStatus(userRegistrationDto.getMaritalStatus());
 //                employee.setProfileStatus(userRegistrationDto.getProfileStatus());
 //                employee.setEmailStatus(userRegistrationDto.getEmailStatus());
 //                employee.setContactPerson(userRegistrationDto.getContactPersonId());
@@ -176,8 +175,6 @@ public class UserController {
         response.put("gender", employee != null ? employee.getGender() : null);
         response.put("birthday", employee != null ? employee.getBirthday() : null);
         response.put("email", employee != null ? employee.getEmail() : null);
-//        response.put("maritalStatus", employee != null ? employee.getMaritalStatus() : null);
-//        response.put("profileStatus", employee != null ? employee.getProfileStatus() : null);
         response.put("emailStatus", employee != null ? employee.getEmailStatus() : null);
         response.put("designation", user.getDesignation());
         response.put("companyUnit", user.getCompanyUnit() != null ? user.getCompanyUnit().getName() : null);

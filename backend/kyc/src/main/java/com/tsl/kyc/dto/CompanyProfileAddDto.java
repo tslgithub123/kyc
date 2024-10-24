@@ -26,6 +26,8 @@ public class CompanyProfileAddDto {
 	
 	private Integer yearEstalished;
 
+	private String registrationNo;
+
 	public CompanyProfileAddDto() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -33,7 +35,7 @@ public class CompanyProfileAddDto {
 
 	public CompanyProfileAddDto(String personName, String personDesignation, String personPhone, String personEmail,
 			Long mpcbId, String companyName, String companyEmail, String companyFax, String lastEnvironment,
-			String companyPhoneNumber, String companyWebsite, Integer yearEstalished) {
+			String companyPhoneNumber, String companyWebsite, Integer yearEstalished, String registrationNo) {
 		super();
 		this.personName = personName;
 		this.personDesignation = personDesignation;
@@ -47,6 +49,7 @@ public class CompanyProfileAddDto {
 		this.companyPhoneNumber = companyPhoneNumber;
 		this.companyWebsite = companyWebsite;
 		this.yearEstalished = yearEstalished;
+		this.registrationNo = registrationNo;
 	}
 
 	public String getPersonName() {
@@ -144,7 +147,12 @@ public class CompanyProfileAddDto {
 	public void setYearEstalished(Integer yearEstalished) {
 		this.yearEstalished = yearEstalished;
 	}
-	
-	
-	
+
+	public String getRegistrationNo() {
+		return registrationNo;
+	}
+
+	public void setRegistrationNo(String registrationNo) {
+		this.registrationNo = registrationNo;
+	}
 }

@@ -1,7 +1,7 @@
-export default () => {
-    return (
-        <div>
+export default function ClientRegistration() {
+     return (
+      <div>
         <h1>Client Registration</h1>
-        </div>
-    );
+      </div>
+      );
 }
