@@ -1,4 +1,8 @@
 package com.tsl.kyc.factory;
 
-public interface Notificationfactory {
+import com.tsl.kyc.entity.Notification;
+import com.tsl.kyc.dto.NotificationTriggerDto;
+
+public interface NotificationFactory {
+    Notification createNotification(NotificationTriggerDto dto);
 }
